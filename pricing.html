@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrio AI | Service Solutions Catalog & Pricing</title>
+  <meta name="description" content="Explore simple, scalable flat-fee catalog pricing for Zentrio AI's web applications, mobile platforms, RAG chatbots, analytics pipelines, UI/UX, and neural modules.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/pricing.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+  <!-- Skip Link for Accessibility -->
+  <a href="#mainContent" class="skip-to-content">Skip to Main Content</a>
+
+  <!-- Header Sticky Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="/LOGOO.png" alt="Zentrio Logo">
+        <span>Zentrio</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/solutions">Solutions</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <!-- Mobile Specific Actions Inside Drawer -->
+          <li class="nav-actions-mobile">
+            <div class="portal-dropdown-container" style="width: 100%;">
+              <button class="portal-toggle-btn" type="button" style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.875rem;">
+                <span>Portal Login</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="portal-dropdown-menu" style="display: none; padding: 4px 0 10px 12px; border: none; background: transparent; box-shadow: none; width: 100%; position: static;">
+                <a href="/portal/client-login" class="portal-dropdown-item" style="padding: 8px 0;">Client Portal</a>
+                <a href="/portal/worker-login" class="portal-dropdown-item" style="padding: 8px 0;">Worker Portal</a>
+                <a href="/portal/admin-login" class="portal-dropdown-item" style="padding: 8px 0;">Admin Access</a>
+                <a href="/portal/client-register" class="portal-dropdown-item" style="padding: 8px 0; color: #00dfd8; font-weight:600;">Register New Client</a>
+              </div>
+            </div>
+            <a href="/signup" class="btn btn-primary" style="width: 100%;">Get Started</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Desktop Actions -->
+      <div class="nav-actions">
+        <div class="theme-toggle-container">
+          <button class="theme-toggle-btn" aria-label="Toggle Theme" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+            </svg>
+          </button>
+        </div>
+        <div class="divider"></div>
+        <div class="portal-dropdown-container">
+          <button class="portal-toggle-btn" type="button">
+            Portal Login
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="portal-dropdown-menu">
+            <a href="/portal/client-login" class="portal-dropdown-item">
+              <div class="portal-item-icon client-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Client Portal</div>
+                <div class="portal-item-desc">Track project status & milestones</div>
+              </div>
+            </a>
+            <a href="/portal/worker-login" class="portal-dropdown-item">
+              <div class="portal-item-icon worker-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Worker Portal</div>
+                <div class="portal-item-desc">Submit engineering tasks & logs</div>
+              </div>
+            </a>
+            <a href="/portal/admin-login" class="portal-dropdown-item divider-top">
+              <div class="portal-item-icon admin-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Admin Access</div>
+                <div class="portal-item-desc">Manage teams & client requests</div>
+              </div>
+            </a>
+            <div class="portal-dropdown-footer">
+              <a href="/portal/client-register" class="btn-register-link">Register New Client</a>
+            </div>
+          </div>
+        </div>
+        <a href="/signup" class="btn btn-primary btn-signup-nav">Get Started</a>
+      </div>
+
+      <!-- Hamburger Menu for Mobile -->
+      <button class="hamburger" aria-label="Open Navigation Menu" aria-expanded="false" type="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="mainContent" class="container">
+    
+    <div class="pricing-header reveal-init">
+      <span class="section-tag">Catalog Pricing</span>
+      <h1 style="font-size: 3rem; margin-bottom: 1rem; line-height: 1.1;">Flexible Service Pricing</h1>
+      <p style="color: var(--text-secondary); font-size: 1.05rem;">Select premium flat-fee modules custom-tailored to accelerate your business scale.</p>
+    </div>
+
+    <!-- 3x3 Service Cards Grid -->
+    <div class="pricing-grid">
+      
+      <!-- Card 1: Web Application Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale" data-project-id="1">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Web Application</div>
+          <p class="pricing-desc">Custom web applications, enterprise portals, SaaS platforms, dashboards and management systems.</p>
+        </div>
+        
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹14,999</span>
+            <span class="discount-badge">33% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹9,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>React / Next.js Frameworks</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Secure JWT User Database</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Optimized Backend API Routes</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Custom Admin Dashboard Panel</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 2: Mobile Application Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale delay-100">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Mobile Application</div>
+          <p class="pricing-desc">Cross-platform and native mobile applications with offline-first capabilities.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹34,999</span>
+            <span class="discount-badge">28% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹24,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>iOS & Android Unified Builds</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Biometric Authentication Keys</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Offline SQLite Sync Engine</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Live Push Notification Center</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 3: AI Chatbot Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale delay-200">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">AI Chatbot</div>
+          <p class="pricing-desc">Custom AI assistants, customer support bots and conversational automation systems.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹29,999</span>
+            <span class="discount-badge">36% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹18,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Custom RAG Vector Ingestion</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Gemini & Claude API Routing</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Context-aware Reference Links</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Prompt Tuning Dashboard Panel</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 4: Data Analytics Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"/>
+              <line x1="12" y1="20" x2="12" y2="4"/>
+              <line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Data Analytics</div>
+          <p class="pricing-desc">Business intelligence charts and automated analytic dashboard systems.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹19,999</span>
+            <span class="discount-badge">35% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹12,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Data Parsing Clusters</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Statistical Anomaly Flags</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Weekly PDF Summary Emailers</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Interactive Chart Panel Syncs</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 5: Branding & Logo Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale delay-100">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 8v8M8 12h8"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Branding & Logo</div>
+          <p class="pricing-desc">Modern startup branding, professional vector logo assets and brand guidelines.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹7,999</span>
+            <span class="discount-badge">50% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹3,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Original Vector Responsive Logos</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Figma Spacing & Color Libraries</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Print-ready High-density Packs</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Interactive 3D Brand Book page</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 6: Invitation Design Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale delay-200">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="16" rx="2" ry="2"/>
+              <line x1="16" y1="2" x2="16" y2="4"/>
+              <line x1="8" y1="2" x2="8" y2="4"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Invitation Design</div>
+          <p class="pricing-desc">Professional digital invitations, creative event RSVP cards and event branding.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹2,999</span>
+            <span class="discount-badge">66% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Generative Layout Variations</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Custom Typography Wrapping</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Integrated Online RSVP database</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>High-res vector PDF exports</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 7: Documentation Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Project Report</div>
+          <p class="pricing-desc">Professional technical documentation templates and project specifications compilation.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹6,999</span>
+            <span class="discount-badge">57% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹2,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Standard LaTeX Spec Layouts</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Git Repository Comments Parsing</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Multi-format compiles (PDF/MD)</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Consistent Typography guidelines</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 8: UI/UX Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale delay-100">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">UI/UX Design</div>
+          <p class="pricing-desc">Modern user experiences, visual wireframes, high-fidelity prototypes and interface spacing maps.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹14,999</span>
+            <span class="discount-badge">40% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹8,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>High-fidelity Framer Prototypes</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Responsive Screen Wireframe Flows</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Visual Hierarchy & Spacing guides</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Keyboard Accessibility Audits</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+      <!-- Card 9: Machine Learning Solutions -->
+      <div class="pricing-card glass-panel reveal-init hover-lift reveal-scale delay-200">
+        <div class="pricing-card-glow"></div>
+        <div class="pricing-card-header">
+          <div class="pricing-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+              <rect x="9" y="9" width="6" height="6"/>
+            </svg>
+          </div>
+          <div class="pricing-tier">Machine Learning</div>
+          <p class="pricing-desc">Edge computer vision models, predictive analytical forecasting and automation workflows.</p>
+        </div>
+
+        <div class="price-section">
+          <div class="original-price-row">
+            <span class="price-original">₹39,999</span>
+            <span class="discount-badge">37% OFF</span>
+          </div>
+          <div class="price-offer-row">
+            <span class="price-offer">₹24,999</span>
+            <span class="price-offer-label">Fixed fee</span>
+          </div>
+        </div>
+
+        <ul class="pricing-features-list">
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>YOLO object recognition vision weights</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Low-latency real-time video feeds</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Edge GPU Inference endpoints</span>
+          </li>
+          <li class="pricing-feature-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Trained neural weights package files</span>
+          </li>
+        </ul>
+        <a href="/contact" class="btn btn-secondary">Get Started</a>
+      </div>
+
+    </div>
+
+    <!-- Special Offers Section -->
+    <section class="special-offers-section">
+      <div class="section-header reveal-init" style="max-width: 600px; text-align: center; margin: 0 auto 3rem auto;">
+        <span class="section-tag">Value Additions</span>
+        <h2 style="font-size: 2.25rem;">Client Special Offers</h2>
+        <p style="color: var(--text-secondary); font-size: 0.95rem;">Every contract with Zentrio AI comes packed with professional guarantees.</p>
+      </div>
+
+      <div class="offers-grid">
+        <!-- 1. Free Consultation -->
+        <div class="offer-item-card glass-panel reveal-init">
+          <div class="offer-item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <div class="offer-item-title">Free Consultation</div>
+        </div>
+
+        <!-- 2. Fast Delivery -->
+        <div class="offer-item-card glass-panel reveal-init delay-100">
+          <div class="offer-item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <div class="offer-item-title">Fast Delivery</div>
+        </div>
+
+        <!-- 3. 10% OFF on Second Project -->
+        <div class="offer-item-card glass-panel reveal-init delay-200">
+          <div class="offer-item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+              <path d="M6 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16"/>
+            </svg>
+          </div>
+          <div class="offer-item-title">10% OFF on Second Project</div>
+        </div>
+
+        <!-- 4. Free Technical Support -->
+        <div class="offer-item-card glass-panel reveal-init delay-300">
+          <div class="offer-item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <div class="offer-item-title">Free Technical Support</div>
+        </div>
+
+        <!-- 5. Custom Solutions Available -->
+        <div class="offer-item-card glass-panel reveal-init delay-400">
+          <div class="offer-item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 2 12 22Z"/>
+              <path d="M12 8v8M8 12h8"/>
+            </svg>
+          </div>
+          <div class="offer-item-title">Custom Solutions Available</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Optional CTA Section -->
+    <section class="pricing-cta-box glass-panel reveal-init">
+      <div class="cta-glow"></div>
+      <h2>Let's Build Your Next Digital Solution</h2>
+      <p>Connect with our lead software engineers and design architects to request custom pricing matrices, schedule platform audits, or scope enterprise licensing packages.</p>
+      
+      <div class="pricing-cta-buttons">
+        <a href="/contact" class="btn btn-gradient">Get Free Quote</a>
+        <a href="/contact" class="btn btn-secondary">Contact Us</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Component -->
+  <footer>
+    <div class="container" style="padding-top: 5rem; padding-bottom: 5rem; border-top: 1px solid var(--border-color);">
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 4rem;" class="footer-grid">
+        <div style="display:flex; flex-direction:column; gap:1.2rem;">
+          <a href="/" class="logo">
+            <img src="/LOGOO.png" alt="Zentrio Logo" style="height: 24px; width: auto; object-fit: contain;">
+            <span>Zentrio</span>
+          </a>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5; max-width: 260px;">
+            Constructing enterprise-tier digital architectures, custom intelligence nodes, and premium user experiences.
+          </p>
+        </div>
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Company</h4>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+            <li><a href="/" style="color:var(--text-secondary);">Home</a></li>
+            <li><a href="/projects" style="color:var(--text-secondary);">Projects</a></li>
+            <li><a href="/solutions" style="color:var(--text-secondary);">Solutions</a></li>
+            <li><a href="/pricing" style="color:var(--text-secondary);">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Resources</h4>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+            <li><a href="/contact" style="color:var(--text-secondary);">Contact</a></li>
+            <li><a href="/login" style="color:var(--text-secondary);">Log In</a></li>
+            <li><a href="/signup" style="color:var(--text-secondary);">Sign Up</a></li>
+            <li><a href="https://github.com" target="_blank" rel="noopener" style="color:var(--text-secondary);">GitHub</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Stay Updated</h4>
+          <p style="color:var(--text-secondary); font-size: 0.875rem; margin-bottom: 1rem; line-height: 1.4;">Subscribe for our quarterly engineering releases.</p>
+          <form style="display:flex; gap:8px;" onsubmit="event.preventDefault(); alert('Subscribed successfully!'); this.reset();">
+            <input type="email" placeholder="email@address.com" required style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:8px 12px; font-size:0.875rem; color:white; flex-grow:1; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent-indigo)'" onblur="this.style.borderColor='var(--border-color)'">
+            <button type="submit" class="btn btn-primary" style="padding:8px 16px; font-size:0.8125rem;">Join</button>
+          </form>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:2rem; font-size:0.75rem; color:var(--text-muted);" class="footer-bottom">
+        <span>&copy; 2026 Zentrio AI Corp. All rights reserved.</span>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#" style="color:var(--text-muted);">Privacy Policy</a>
+          <a href="#" style="color:var(--text-muted);">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
+    <linearGradient id="indigo-violet-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </svg>
+
+  <style>
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start !important;
+      }
+    }
+  </style>
+
+  <!-- External Library CDNs -->
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+  
+  <!-- Custom JS Modules -->
+  <script src="/js/app.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/pricing.js"></script>
+</body>
+</html>

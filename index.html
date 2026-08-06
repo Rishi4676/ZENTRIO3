@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrio AI | Build AI Solutions For The Future</title>
+  <meta name="description" content="Zentrio AI architects production-ready artificial intelligence solutions, web applications, mobile platforms, and neural systems for forward-thinking enterprises.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/home.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+  <!-- Premium Splash Screen Welcome Loader -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <img src="/LOGOO.png" alt="Zentrio Logo" class="splash-logo">
+      <h1 class="splash-title">ZENTRIO</h1>
+      <div class="splash-loader-bar">
+        <div class="splash-loader-fill"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Skip Link for Accessibility -->
+  <a href="#mainContent" class="skip-to-content">Skip to Main Content</a>
+
+  <!-- Header Sticky Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo" id="logoLink">
+        <img src="/LOGOO.png" alt="Zentrio Logo">
+        <span>Zentrio</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/solutions">Solutions</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <!-- Mobile Specific Actions Inside Drawer -->
+          <li class="nav-actions-mobile">
+            <div class="portal-dropdown-container" style="width: 100%;">
+              <button class="portal-toggle-btn" type="button" style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.875rem;">
+                <span>Portal Login</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="portal-dropdown-menu" style="display: none; padding: 4px 0 10px 12px; border: none; background: transparent; box-shadow: none; width: 100%; position: static;">
+                <a href="/portal/client-login" class="portal-dropdown-item" style="padding: 8px 0;">Client Portal</a>
+                <a href="/portal/worker-login" class="portal-dropdown-item" style="padding: 8px 0;">Worker Portal</a>
+                <a href="/portal/admin-login" class="portal-dropdown-item" style="padding: 8px 0;">Admin Access</a>
+                <a href="/portal/client-register" class="portal-dropdown-item" style="padding: 8px 0; color: #00dfd8; font-weight:600;">Register New Client</a>
+              </div>
+            </div>
+            <a href="/signup" class="btn btn-primary" style="width: 100%;">Get Started</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Desktop Actions -->
+      <div class="nav-actions">
+        <!-- Injected dynamically via app.js -->
+        <div class="theme-toggle-container">
+          <button class="theme-toggle-btn" aria-label="Toggle Theme" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+            </svg>
+          </button>
+        </div>
+        <div class="divider"></div>
+        <div class="portal-dropdown-container">
+          <button class="portal-toggle-btn" type="button">
+            Portal Login
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="portal-dropdown-menu">
+            <a href="/portal/client-login" class="portal-dropdown-item">
+              <div class="portal-item-icon client-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Client Portal</div>
+                <div class="portal-item-desc">Track project status & milestones</div>
+              </div>
+            </a>
+            <a href="/portal/worker-login" class="portal-dropdown-item">
+              <div class="portal-item-icon worker-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Worker Portal</div>
+                <div class="portal-item-desc">Submit engineering tasks & logs</div>
+              </div>
+            </a>
+            <a href="/portal/admin-login" class="portal-dropdown-item divider-top">
+              <div class="portal-item-icon admin-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Admin Access</div>
+                <div class="portal-item-desc">Manage teams & client requests</div>
+              </div>
+            </a>
+            <div class="portal-dropdown-footer">
+              <a href="/portal/client-register" class="btn-register-link">Register New Client</a>
+            </div>
+          </div>
+        </div>
+        <a href="/signup" class="btn btn-primary btn-signup-nav">Get Started</a>
+      </div>
+
+      <!-- Hamburger Menu for Mobile -->
+      <button class="hamburger" aria-label="Open Navigation Menu" aria-expanded="false" type="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="mainContent">
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero-bg">
+        <div class="hero-gradient"></div>
+        <div class="grid-overlay"></div>
+        <div class="floating-shapes">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+        </div>
+        <canvas id="particleCanvas" class="particle-canvas"></canvas>
+      </div>
+
+      <div class="container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span></span>
+            Introducing Zentrio Platform
+          </div>
+          <h1>
+            Build <span class="gradient-accent-text animate-gradient">AI Solutions</span><br>For The Future
+          </h1>
+          <p class="hero-subtitle">
+            Accelerate your product cycles, automate customer support networks, and unlock intelligent insight pipelines with our premium software architecture and machine learning engineering.
+          </p>
+          <div class="hero-ctas">
+            <a href="/projects" class="btn btn-gradient shimmer-btn">Explore Projects</a>
+            <a href="/solutions" class="btn btn-secondary shimmer-btn">Watch Demo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll Down Indicator -->
+      <a href="#about" class="scroll-indicator" aria-label="Scroll Down">
+        <span></span>
+        Scroll
+      </a>
+    </section>
+
+    <!-- About Startup Section -->
+    <section class="section about" id="about">
+      <div class="container">
+        <div class="about-grid">
+          
+          <!-- Left: Narrative Details -->
+          <div class="about-text reveal-init reveal-left">
+            <span class="section-tag">Who We Are</span>
+            <h2 class="section-title">Architecting Intelligent Digital Systems</h2>
+            <p>
+              Zentrio AI is a premier software engineering and design collective. We partner with growth-focused businesses to construct robust, high-performance digital products infused with machine learning models.
+            </p>
+            <p>
+              Our multidisciplinary engineers operate at the intersection of database scaling, predictive algorithm tuning, and responsive UI design—ensuring your system runs smoothly at any tier of user demand.
+            </p>
+            
+            <!-- Dynamic Stats Grid -->
+            <div class="about-stats">
+              <div class="stat-item glass-panel hover-lift">
+                <div class="stat-number" data-target="7" data-suffix="+">0</div>
+                <div class="stat-label">Years Exp</div>
+              </div>
+              <div class="stat-item glass-panel hover-lift">
+                <div class="stat-number" data-target="140" data-suffix="+">0</div>
+                <div class="stat-label">Projects Done</div>
+              </div>
+              <div class="stat-item glass-panel hover-lift">
+                <div class="stat-number" data-target="99" data-suffix="%">0</div>
+                <div class="stat-label">Happy Clients</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Interactive Timeline -->
+          <div class="about-timeline reveal-init reveal-right delay-200">
+            <h3 style="margin-bottom: 2rem; font-size: 1.5rem;">Our Progression</h3>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Q1 2024</div>
+                <h4 class="timeline-title">Zentrio Founded</h4>
+                <p class="timeline-desc">Launched with a core team of 3 developers, providing specialized AI consulting and model tuning services.</p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Q3 2025</div>
+                <h4 class="timeline-title">V2 Architecture Release</h4>
+                <p class="timeline-desc">Scaled our portfolio to over 80 clients and deployed custom LLM integration nodes globally.</p>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-dot"></div>
+                <div class="timeline-date">Active</div>
+                <h4 class="timeline-title">Enterprise CRM & Vector Solutions</h4>
+                <p class="timeline-desc">Pioneering real-time streaming interfaces, RAG architectures, and custom YOLO vision classifiers.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Services / Expertise Section -->
+    <section class="section services" id="services">
+      <div class="container">
+        
+        <div class="section-header reveal-init">
+          <span class="section-tag">Core Expertise</span>
+          <h2 class="section-title">End-to-End Development & Intelligence</h2>
+          <p class="section-subtitle">We develop high-performance software modules, wrapping cutting-edge logic into beautiful, accessible interfaces.</p>
+        </div>
+
+        <div class="services-grid">
+          
+          <!-- Card 1: Web Dev -->
+          <div class="service-card glass-panel reveal-init hover-lift reveal-scale">
+            <div class="service-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+            </div>
+            <h3>Web Application</h3>
+            <p>Constructing high-performance React and Node.js web portals equipped with secure cookie-based JWT sessions, database nodes, and smooth GSAP layouts.</p>
+          </div>
+
+          <!-- Card 2: Mobile Apps -->
+          <div class="service-card glass-panel reveal-init hover-lift reveal-scale delay-100">
+            <div class="service-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                <line x1="12" y1="18" x2="12.01" y2="18"/>
+              </svg>
+            </div>
+            <h3>Mobile Application</h3>
+            <p>Deploying native iOS and Android apps via Flutter and React Native. Connected to high-speed serverless backends like Supabase and Firebase.</p>
+          </div>
+
+          <!-- Card 3: Chatbots & RAG -->
+          <div class="service-card glass-panel reveal-init hover-lift reveal-scale delay-200">
+            <div class="service-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3>Chatbot & AI Assistant</h3>
+            <p>Designing custom support pipelines using Gemini, Claude, and GPT. Equipped with RAG engines and vector index search parameters.</p>
+          </div>
+
+          <!-- Card 4: Machine Learning -->
+          <div class="service-card glass-panel reveal-init hover-lift reveal-scale">
+            <div class="service-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                <rect x="9" y="9" width="6" height="6"/>
+                <line x1="9" y1="1" x2="9" y2="4"/>
+                <line x1="15" y1="1" x2="15" y2="4"/>
+                <line x1="9" y1="20" x2="9" y2="23"/>
+                <line x1="15" y1="20" x2="15" y2="23"/>
+                <line x1="20" y1="9" x2="23" y2="9"/>
+                <line x1="20" y1="15" x2="23" y2="15"/>
+                <line x1="1" y1="9" x2="4" y2="9"/>
+                <line x1="1" y1="15" x2="4" y2="15"/>
+              </svg>
+            </div>
+            <h3>Machine Learning</h3>
+            <p>Training neural networks for predictive scoring, natural language parsing, computer vision sorting, and automated media generations.</p>
+          </div>
+
+          <!-- Card 5: Data Analytics -->
+          <div class="service-card glass-panel reveal-init hover-lift reveal-scale delay-100">
+            <div class="service-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"/>
+                <line x1="12" y1="20" x2="12" y2="4"/>
+                <line x1="6" y1="20" x2="6" y2="14"/>
+              </svg>
+            </div>
+            <h3>Data Analytics</h3>
+            <p>Integrating large-scale data pipelines via Python, Pandas, and Spark, producing responsive business intelligence charts and reporting sheets.</p>
+          </div>
+
+          <!-- Card 6: UI & UX Prototyping -->
+          <div class="service-card glass-panel reveal-init hover-lift reveal-scale delay-200">
+            <div class="service-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 2 12 22Z"/>
+                <path d="M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z"/>
+              </svg>
+            </div>
+            <h3>UI & UX Design</h3>
+            <p>Crafting high-fidelity interactive wireframes in Figma and Framer. Standardizing components, spacing layers, and styling guidelines.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer Component -->
+  <footer>
+    <div class="container" style="padding-top: 5rem; padding-bottom: 5rem; border-top: 1px solid var(--border-color);">
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 4rem;" class="footer-grid">
+        
+        <!-- Col 1: Brand Info -->
+        <div style="display:flex; flex-direction:column; gap:1.2rem;">
+          <a href="/" class="logo">
+            <img src="/LOGOO.png" alt="Zentrio Logo" style="height: 24px; width: auto; object-fit: contain;">
+            <span>Zentrio</span>
+          </a>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5; max-width: 260px;">
+            Constructing enterprise-tier digital architectures, custom intelligence nodes, and premium user experiences.
+          </p>
+        </div>
+
+        <!-- Col 2: Navigation Links -->
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Company</h4>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+            <li><a href="/" style="color:var(--text-secondary);">Home</a></li>
+            <li><a href="/projects" style="color:var(--text-secondary);">Projects</a></li>
+            <li><a href="/solutions" style="color:var(--text-secondary);">Solutions</a></li>
+            <li><a href="/pricing" style="color:var(--text-secondary);">Pricing</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Resource Links -->
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Resources</h4>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+            <li><a href="/contact" style="color:var(--text-secondary);">Contact</a></li>
+            <li><a href="/login" style="color:var(--text-secondary);">Log In</a></li>
+            <li><a href="/signup" style="color:var(--text-secondary);">Sign Up</a></li>
+            <li><a href="https://github.com" target="_blank" rel="noopener" style="color:var(--text-secondary);">GitHub</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Newsletter -->
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Stay Updated</h4>
+          <p style="color:var(--text-secondary); font-size:0.875rem; margin-bottom: 1rem; line-height: 1.4;">Subscribe for our quarterly engineering releases.</p>
+          <form style="display:flex; gap:8px;" onsubmit="event.preventDefault(); alert('Subscribed successfully!'); this.reset();">
+            <input type="email" placeholder="email@address.com" required style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:8px 12px; font-size:0.875rem; color:white; flex-grow:1; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent-indigo)'" onblur="this.style.borderColor='var(--border-color)'">
+            <button type="submit" class="btn btn-primary" style="padding:8px 16px; font-size:0.8125rem;">Join</button>
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Footer Bottom -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:2rem; font-size:0.75rem; color:var(--text-muted);" class="footer-bottom">
+        <span>&copy; 2026 Zentrio AI Corp. All rights reserved.</span>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#" style="color:var(--text-muted);">Privacy Policy</a>
+          <a href="#" style="color:var(--text-muted);">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SVG gradient definition for service card icons -->
+  <svg style="width:0; height:0; position:absolute;" aria-hidden="true" focusable="false">
+    <linearGradient id="indigo-violet-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </svg>
+
+  <style>
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start !important;
+      }
+    }
+  </style>
+
+  <!-- External Library CDNs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+  
+  <!-- Custom JS Modules -->
+  <script src="/js/app.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/animation.js"></script>
+</body>
+</html>

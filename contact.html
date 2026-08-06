@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrio AI | Contact & Team Directory</title>
+  <meta name="description" content="Reach out to Zentrio AI's engineering team or request custom architecture assessments for your enterprise platforms.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  <link rel="stylesheet" href="/css/contact.css">
+  <link rel="stylesheet" href="/css/animations.css">
+</head>
+<body>
+
+  <!-- Skip Link for Accessibility -->
+  <a href="#mainContent" class="skip-to-content">Skip to Main Content</a>
+
+  <!-- Header Sticky Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <img src="/LOGOO.png" alt="Zentrio Logo">
+        <span>Zentrio</span>
+      </a>
+
+      <!-- Desktop Links -->
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/solutions">Solutions</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <!-- Mobile Specific Actions Inside Drawer -->
+          <li class="nav-actions-mobile">
+            <div class="portal-dropdown-container" style="width: 100%;">
+              <button class="portal-toggle-btn" type="button" style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; background: rgba(255,255,255,0.05); padding: 10px 14px; border-radius: var(--border-radius-sm); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.875rem;">
+                <span>Portal Login</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+              <div class="portal-dropdown-menu" style="display: none; padding: 4px 0 10px 12px; border: none; background: transparent; box-shadow: none; width: 100%; position: static;">
+                <a href="/portal/client-login" class="portal-dropdown-item" style="padding: 8px 0;">Client Portal</a>
+                <a href="/portal/worker-login" class="portal-dropdown-item" style="padding: 8px 0;">Worker Portal</a>
+                <a href="/portal/admin-login" class="portal-dropdown-item" style="padding: 8px 0;">Admin Access</a>
+                <a href="/portal/client-register" class="portal-dropdown-item" style="padding: 8px 0; color: #00dfd8; font-weight:600;">Register New Client</a>
+              </div>
+            </div>
+            <a href="/signup" class="btn btn-primary" style="width: 100%;">Get Started</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Desktop Actions -->
+      <div class="nav-actions">
+        <div class="theme-toggle-container">
+          <button class="theme-toggle-btn" aria-label="Toggle Theme" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"/>
+            </svg>
+          </button>
+        </div>
+        <div class="divider"></div>
+        <div class="portal-dropdown-container">
+          <button class="portal-toggle-btn" type="button">
+            Portal Login
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="dropdown-chevron"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+          <div class="portal-dropdown-menu">
+            <a href="/portal/client-login" class="portal-dropdown-item">
+              <div class="portal-item-icon client-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Client Portal</div>
+                <div class="portal-item-desc">Track project status & milestones</div>
+              </div>
+            </a>
+            <a href="/portal/worker-login" class="portal-dropdown-item">
+              <div class="portal-item-icon worker-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Worker Portal</div>
+                <div class="portal-item-desc">Submit engineering tasks & logs</div>
+              </div>
+            </a>
+            <a href="/portal/admin-login" class="portal-dropdown-item divider-top">
+              <div class="portal-item-icon admin-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              </div>
+              <div class="portal-item-content">
+                <div class="portal-item-title">Admin Access</div>
+                <div class="portal-item-desc">Manage teams & client requests</div>
+              </div>
+            </a>
+            <div class="portal-dropdown-footer">
+              <a href="/portal/client-register" class="btn-register-link">Register New Client</a>
+            </div>
+          </div>
+        </div>
+        <a href="/signup" class="btn btn-primary btn-signup-nav">Get Started</a>
+      </div>
+
+      <!-- Hamburger Menu for Mobile -->
+      <button class="hamburger" aria-label="Open Navigation Menu" aria-expanded="false" type="button">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main id="mainContent" class="container">
+    
+    <div class="contact-header reveal-init">
+      <span class="section-tag">Get in Touch</span>
+      <h1 style="font-size: 3rem; margin-bottom: 1rem; line-height: 1.1;">Connect With Our Team</h1>
+      <p style="color: var(--text-secondary); font-size: 1.05rem;">Click on any profile card to view background experiences and skill sets directly.</p>
+    </div>
+
+    <!-- Team Profiles Grid Section -->
+    <section class="team-section">
+      <div class="team-grid">
+        
+        <!-- Member 1: CEO -->
+        <div class="profile-card glass-panel reveal-init" data-member="ceo">
+          <div class="profile-avatar-wrapper">
+            <img src="/assets/syed.jpg" alt="Syed" class="profile-avatar">
+          </div>
+          <h3 class="profile-name">Syed</h3>
+          <div class="profile-role">CEO & Co-Founder</div>
+          <div class="profile-socials">
+            <a href="#" aria-label="LinkedIn Profile">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" aria-label="GitHub Repository">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Member 2: AI Engineer -->
+        <div class="profile-card glass-panel reveal-init delay-100" data-member="engineer">
+          <div class="profile-avatar-wrapper">
+            <img src="/assets/rishi.png" alt="Rishi" class="profile-avatar">
+          </div>
+          <h3 class="profile-name">Rishi</h3>
+          <div class="profile-role">Lead AI Engineer</div>
+          <div class="profile-socials">
+            <a href="#" aria-label="LinkedIn Profile">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" aria-label="GitHub Repository">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Member 3: UI UX -->
+        <div class="profile-card glass-panel reveal-init delay-200" data-member="designer">
+          <div class="profile-avatar-wrapper">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80" alt="Pushpa" class="profile-avatar">
+          </div>
+          <h3 class="profile-name">Pushpa</h3>
+          <div class="profile-role">Lead UI/UX Designer</div>
+          <div class="profile-socials">
+            <a href="#" aria-label="LinkedIn Profile">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" aria-label="GitHub Repository">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Project Contact Form Section -->
+    <section class="section reveal-init">
+      <div class="contact-form-section glass-panel">
+        <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem; text-align: center;">Inquire About Integrations</h2>
+        <p style="color:var(--text-secondary); font-size: 0.9rem; text-align: center; margin-bottom: 2.5rem;">Tell us about your technical specs or schedule an architecture review.</p>
+        
+        <form id="contactForm">
+          <div class="form-group">
+            <label class="form-label" for="contactName">Full Name</label>
+            <input type="text" id="contactName" class="form-control" placeholder="John Doe" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactEmail">Work Email</label>
+            <input type="email" id="contactEmail" class="form-control" placeholder="j.doe@company.com" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contactMessage">Project Details / Message</label>
+            <textarea id="contactMessage" class="form-control" placeholder="Describe the solutions you are looking to deploy (e.g. CRM, custom ML vision pipelines)..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-gradient">Send Inquiry</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Team Member Details Modal (Populated Dynamically via contact.js) -->
+  <div class="project-modal" id="teamModal" role="dialog" aria-modal="true" aria-labelledby="modalMemberName">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" style="max-width: 600px;">
+      <button class="modal-close-btn" aria-label="Close Modal" type="button">&times;</button>
+      
+      <div class="member-modal-body">
+        <!-- Centered Profile Card Header -->
+        <div class="member-modal-header">
+          <div class="profile-avatar-wrapper">
+            <img src="" alt="" class="profile-avatar modal-left-avatar">
+          </div>
+          <h2 id="modalMemberName" class="modal-left-name" style="font-size: 1.75rem; margin-bottom: 6px;">Member Name</h2>
+          <div class="profile-role modal-left-role" style="font-size: 0.875rem; font-weight: 600; color: var(--accent-cyan); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.5rem;">Role</div>
+          <blockquote class="member-quote">"Quote content..."</blockquote>
+        </div>
+        
+        <!-- Biography -->
+        <div class="member-modal-section">
+          <div class="member-section-title">Biography</div>
+          <p class="member-bio">Biography text goes here...</p>
+        </div>
+
+        <!-- Skills Progress Bars -->
+        <div class="member-modal-section">
+          <div class="member-section-title">Core Skills</div>
+          <div class="skills-list">
+            <!-- Skill bar lines injected here -->
+          </div>
+        </div>
+
+        <!-- Contact Coordinates -->
+        <div class="member-modal-section">
+          <div class="member-section-title">Contact & Coordinates</div>
+          <div class="member-details-grid">
+            <div>
+              <div class="detail-label">Experience</div>
+              <div class="detail-value" id="modalExp">N/A</div>
+            </div>
+            <div>
+              <div class="detail-label">Direct Email</div>
+              <div class="detail-value"><a href="" id="modalEmail">N/A</a></div>
+            </div>
+            <div>
+              <div class="detail-label">Office Phone</div>
+              <div class="detail-value" id="modalPhone">N/A</div>
+            </div>
+            <div>
+              <div class="detail-label">LinkedIn</div>
+              <div class="detail-value" id="modalLinkedIn">N/A</div>
+            </div>
+            <div style="grid-column: span 2;">
+              <div class="detail-label">GitHub Account</div>
+              <div class="detail-value" id="modalGitHub">N/A</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer Component -->
+  <footer>
+    <div class="container" style="padding-top: 5rem; padding-bottom: 5rem; border-top: 1px solid var(--border-color);">
+      <div style="display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 3rem; margin-bottom: 4rem;" class="footer-grid">
+        <div style="display:flex; flex-direction:column; gap:1.2rem;">
+          <a href="/" class="logo">
+            <img src="/LOGOO.png" alt="Zentrio Logo" style="height: 24px; width: auto; object-fit: contain;">
+            <span>Zentrio</span>
+          </a>
+          <p style="color: var(--text-secondary); font-size: 0.875rem; line-height: 1.5; max-width: 260px;">
+            Constructing enterprise-tier digital architectures, custom intelligence nodes, and premium user experiences.
+          </p>
+        </div>
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Company</h4>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+            <li><a href="/" style="color:var(--text-secondary);">Home</a></li>
+            <li><a href="/projects" style="color:var(--text-secondary);">Projects</a></li>
+            <li><a href="/solutions" style="color:var(--text-secondary);">Solutions</a></li>
+            <li><a href="/pricing" style="color:var(--text-secondary);">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Resources</h4>
+          <ul style="display:flex; flex-direction:column; gap:0.75rem; font-size:0.875rem;">
+            <li><a href="/contact" style="color:var(--text-secondary);">Contact</a></li>
+            <li><a href="/login" style="color:var(--text-secondary);">Log In</a></li>
+            <li><a href="/signup" style="color:var(--text-secondary);">Sign Up</a></li>
+            <li><a href="https://github.com" target="_blank" rel="noopener" style="color:var(--text-secondary);">GitHub</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Stay Updated</h4>
+          <p style="color:var(--text-secondary); font-size:0.875rem; margin-bottom: 1rem; line-height: 1.4;">Subscribe for our quarterly engineering releases.</p>
+          <form style="display:flex; gap:8px;" onsubmit="event.preventDefault(); alert('Subscribed successfully!'); this.reset();">
+            <input type="email" placeholder="email@address.com" required style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:8px 12px; font-size:0.875rem; color:white; flex-grow:1; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent-indigo)'" onblur="this.style.borderColor='var(--border-color)'">
+            <button type="submit" class="btn btn-primary" style="padding:8px 16px; font-size:0.8125rem;">Join</button>
+          </form>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:2rem; font-size:0.75rem; color:var(--text-muted);" class="footer-bottom">
+        <span>&copy; 2026 Zentrio AI Corp. All rights reserved.</span>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#" style="color:var(--text-muted);">Privacy Policy</a>
+          <a href="#" style="color:var(--text-muted);">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    @media (max-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 2rem !important;
+      }
+      .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start !important;
+      }
+    }
+  </style>
+
+  <!-- External Library CDNs -->
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+  
+  <!-- Custom JS Modules -->
+  <script src="/js/app.js"></script>
+  <script src="/js/navbar.js"></script>
+  <script src="/js/contact.js"></script>
+  <script>
+    // Reveal Observer fallback
+    document.addEventListener('DOMContentLoaded', () => {
+      const revealElements = document.querySelectorAll('.reveal-init');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-active');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      revealElements.forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+</html>

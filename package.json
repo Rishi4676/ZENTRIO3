@@ -1,0 +1,31 @@
+{
+  "name": "zentrio-ai-startup",
+  "version": "1.0.0",
+  "description": "Production-ready website for Zentrio AI Startup company",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon --ignore *.json server.js",
+    "build": "cd admin0 && npm install --include=dev && npm run build && cd ../portal-login && npm install --include=dev && npm run build"
+  },
+  "dependencies": {
+    "axios": "^1.18.1",
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.6.1",
+    "firebase-admin": "^14.1.0",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^9.0.3",
+    "razorpay": "^2.9.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
+}

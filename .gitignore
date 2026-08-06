@@ -1,0 +1,37 @@
+# Environment variables - NEVER commit these
+.env
+.env.local
+.env.production
+.env.txt
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# JSON databases (local data - auto-generated, not needed in repo)
+users_db.json
+otp_db.json
+reset_db.json
+audit_logs.json
+
+# NOTE: admin0/dist IS committed so Vercel can serve the built admin panel
+# admin0/dist/
+
+# Firebase Admin SDK service account keys - NEVER commit these
+*-firebase-adminsdk-*.json
+
+# Payment & data backup files - contain sensitive records
+*_db_backup.json
+payments_db_backup.json
+users_db_backup.json
+
+# Scratch directories
+scratch/
+
