@@ -31,21 +31,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     }, 3000);
 
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      clearTimeout(timer);
-      setUser(currentUser);
-      if (currentUser) {
-        try {
-          const profile = await AuthService.fetchOrCreateProfile(currentUser);
-          setUserProfile(profile);
-        } catch (err) {
-          console.error('Failed to load user profile:', err);
+    let unsubscribe = () => {};
+    if (auth) {
+      unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        clearTimeout(timer);
+        setUser(currentUser);
+        if (currentUser) {
+          try {
+            const profile = await AuthService.fetchOrCreateProfile(currentUser);
+            setUserProfile(profile);
+          } catch (err) {
+            console.error('Failed to load user profile:', err);
+          }
+        } else {
+          setUserProfile(null);
         }
-      } else {
-        setUserProfile(null);
-      }
+        setLoading(false);
+      });
+    } else {
+      clearTimeout(timer);
       setLoading(false);
-    });
+    }
 
     return () => {
       clearTimeout(timer);
