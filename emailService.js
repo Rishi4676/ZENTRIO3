@@ -15,13 +15,15 @@ let transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS || ''
   }
 });
-transporter.verify((error, success) => {
-  if (error) {
-    console.warn(`⚠️ [EmailService] SMTP Transporter connection test failed: ${error.message}. (Server will start but emails may not send).`);
-  } else {
-    console.log('✅ [EmailService] SMTP Transporter ready to dispatch mail.');
-  }
-});
+if (!process.env.VERCEL) {
+  transporter.verify((error, success) => {
+    if (error) {
+      console.warn(`⚠️ [EmailService] SMTP Transporter connection test failed: ${error.message}. (Server will start but emails may not send).`);
+    } else {
+      console.log('✅ [EmailService] SMTP Transporter ready to dispatch mail.');
+    }
+  });
+}
 
 const ADMIN_EMAIL = process.env.EMAIL_USER || 'zentriotechnology3@gmail.com';
 const FROM_SENDER = process.env.RESEND_API_KEY ? 'onboarding@resend.dev' : ADMIN_EMAIL;

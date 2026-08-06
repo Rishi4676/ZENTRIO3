@@ -10,10 +10,12 @@ const { initializeFirestoreSync } = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Initialize Firestore Sync
-initializeFirestoreSync().catch(err => {
-  console.error('❌ Failed to run initial Firestore sync:', err.message);
-});
+// Initialize Firestore Sync (only when not running on Vercel serverless to avoid cold-start timeouts)
+if (!process.env.VERCEL) {
+  initializeFirestoreSync().catch(err => {
+    console.error('❌ Failed to run initial Firestore sync:', err.message);
+  });
+}
 
 // Production HTTPS enforcement
 app.use((req, res, next) => {

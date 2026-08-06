@@ -14,7 +14,7 @@ const contactLimiter = rateLimiter({
 // Get all contact enquiries
 router.get('/', async (req, res) => {
   try {
-    const enquiries = await dbHelper.enquiries.getAll();
+    const enquiries = await dbHelper.enquiries.find();
     // Sort by createdAt descending
     const sorted = [...enquiries].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     return res.json({ success: true, enquiries: sorted });
