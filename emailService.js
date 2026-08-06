@@ -26,7 +26,9 @@ if (!process.env.VERCEL) {
 }
 
 const ADMIN_EMAIL = process.env.EMAIL_USER || 'zentriotechnology3@gmail.com';
-const FROM_SENDER = process.env.RESEND_API_KEY ? 'onboarding@resend.dev' : ADMIN_EMAIL;
+const FROM_SENDER = process.env.RESEND_API_KEY 
+  ? '"Zentrio AI Support" <onboarding@resend.dev>' 
+  : `"Zentrio AI Operations" <${ADMIN_EMAIL}>`;
 
 // Core send helper to prevent failures (e.g., handles Resend free tier email sandbox restrictions)
 const sendEmail = async (options) => {
@@ -270,8 +272,8 @@ const sendWelcomeEmail = async (to, name) => {
 
 // 2. sendVerificationOTPEmail()
 const sendVerificationOTPEmail = async (to, name, otpCode) => {
-  const subject = 'Verify Your Zentrio Workspace';
-  const text = `Your Zentrio verification OTP is ${otpCode}. It will expire in 10 minutes.`;
+  const subject = `Zentrio AI — Verification Code: ${otpCode}`;
+  const text = `Hello ${name},\n\nYour one-time verification code is: ${otpCode}\n\nThis code is valid for 10 minutes. If you did not request this code, please ignore this email.`;
   
   const innerHtml = `
     <h1 class="body-title">Verification Required</h1>
