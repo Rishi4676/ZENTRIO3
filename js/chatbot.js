@@ -203,14 +203,6 @@ function initChatbot() {
     sessionStorage.setItem('zentrio_chat_lead_data', JSON.stringify(leadData));
   }
 
-  // Load chat window state
-  const isChatOpen = sessionStorage.getItem('zentrio_chat_open') === 'true';
-  if (isChatOpen) {
-    chatWindow.classList.add('active');
-    triggerBtn.classList.add('active');
-    if (triggerBadge) triggerBadge.style.display = 'none';
-  }
-
   // Render initial history
   if (chatHistory.length > 0) {
     chatHistory.forEach(msg => {
@@ -226,7 +218,6 @@ function initChatbot() {
   triggerBtn.addEventListener('click', () => {
     const isActive = chatWindow.classList.toggle('active');
     triggerBtn.classList.toggle('active', isActive);
-    sessionStorage.setItem('zentrio_chat_open', isActive ? 'true' : 'false');
     
     // Hide trigger badge once opened
     if (isActive && triggerBadge) {
@@ -241,7 +232,6 @@ function initChatbot() {
   closeBtn.addEventListener('click', () => {
     chatWindow.classList.remove('active');
     triggerBtn.classList.remove('active');
-    sessionStorage.setItem('zentrio_chat_open', 'false');
   });
 
   // ESC key to close chatbot
@@ -249,7 +239,6 @@ function initChatbot() {
     if (e.key === 'Escape' && chatWindow.classList.contains('active')) {
       chatWindow.classList.remove('active');
       triggerBtn.classList.remove('active');
-      sessionStorage.setItem('zentrio_chat_open', 'false');
     }
   });
 
