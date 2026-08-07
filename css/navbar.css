@@ -268,12 +268,13 @@ header.scrolled {
     -webkit-backdrop-filter: blur(20px);
     border-left: 1px solid var(--border-color);
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
-    padding: 3rem;
-    gap: 2.5rem;
+    padding: 6rem 2.5rem 3rem 2.5rem;
+    gap: 2rem;
     z-index: 1000;
     transition: right var(--transition-slow);
+    overflow-y: auto;
   }
 
   .nav-links.active {

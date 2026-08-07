@@ -136,13 +136,6 @@ function initChatbot() {
 
       <!-- Messages Body with data-lenis-prevent -->
       <div class="chatbot-messages-body" id="chatbotMessagesBody" data-lenis-prevent>
-        <!-- Initial Greetings -->
-        <div class="chatbot-msg-wrapper bot">
-          <div class="chatbot-msg-bubble">
-            Hello! I am Zentrio's intelligent assistant. Please type any question below about our AI services, pricing, projects, or our team, and I will answer you immediately.
-          </div>
-          <div class="chatbot-msg-time">${getCurrentTime()}</div>
-        </div>
       </div>
 
       <!-- Input Footer -->
@@ -183,14 +176,57 @@ function initChatbot() {
   const sendBtn = document.getElementById('chatbotSendBtn');
   const inputForm = document.getElementById('chatbotInputForm');
 
-  let isLeadCollectionMode = false;
+  // Load chat history & lead collection status from sessionStorage
+  let chatHistory = [];
+  try {
+    const savedHistory = sessionStorage.getItem('zentrio_chat_history');
+    if (savedHistory) {
+      chatHistory = JSON.parse(savedHistory);
+    }
+  } catch (e) {
+    console.error('Failed to parse chat history:', e);
+  }
+
+  let isLeadCollectionMode = sessionStorage.getItem('zentrio_chat_lead_mode') === 'true';
   let leadData = { name: '', email: '', phone: '', company: '', message: '' };
-  let leadStep = 0; // 1: Name, 2: Email, 3: Phone, 4: Company, 5: Message
+  try {
+    const savedLeadData = sessionStorage.getItem('zentrio_chat_lead_data');
+    if (savedLeadData) {
+      leadData = JSON.parse(savedLeadData);
+    }
+  } catch (e) {}
+  let leadStep = parseInt(sessionStorage.getItem('zentrio_chat_lead_step') || '0', 10);
+
+  function saveLeadState() {
+    sessionStorage.setItem('zentrio_chat_lead_mode', isLeadCollectionMode ? 'true' : 'false');
+    sessionStorage.setItem('zentrio_chat_lead_step', leadStep.toString());
+    sessionStorage.setItem('zentrio_chat_lead_data', JSON.stringify(leadData));
+  }
+
+  // Load chat window state
+  const isChatOpen = sessionStorage.getItem('zentrio_chat_open') === 'true';
+  if (isChatOpen) {
+    chatWindow.classList.add('active');
+    triggerBtn.classList.add('active');
+    if (triggerBadge) triggerBadge.style.display = 'none';
+  }
+
+  // Render initial history
+  if (chatHistory.length > 0) {
+    chatHistory.forEach(msg => {
+      appendMessageToDOM(msg.text, msg.sender, msg.time);
+    });
+  } else {
+    // Initial Greeting
+    const initialText = "Hello! I am Zentrio's intelligent assistant. Please type any question below about our AI services, pricing, projects, or our team, and I will answer you immediately.";
+    appendMessage(initialText, 'bot');
+  }
 
   // Trigger Open/Close Toggle
   triggerBtn.addEventListener('click', () => {
     const isActive = chatWindow.classList.toggle('active');
     triggerBtn.classList.toggle('active', isActive);
+    sessionStorage.setItem('zentrio_chat_open', isActive ? 'true' : 'false');
     
     // Hide trigger badge once opened
     if (isActive && triggerBadge) {
@@ -205,6 +241,7 @@ function initChatbot() {
   closeBtn.addEventListener('click', () => {
     chatWindow.classList.remove('active');
     triggerBtn.classList.remove('active');
+    sessionStorage.setItem('zentrio_chat_open', 'false');
   });
 
   // ESC key to close chatbot
@@ -212,6 +249,7 @@ function initChatbot() {
     if (e.key === 'Escape' && chatWindow.classList.contains('active')) {
       chatWindow.classList.remove('active');
       triggerBtn.classList.remove('active');
+      sessionStorage.setItem('zentrio_chat_open', 'false');
     }
   });
 
@@ -307,6 +345,7 @@ function initChatbot() {
   function startLeadCollection() {
     isLeadCollectionMode = true;
     leadStep = 1;
+    saveLeadState();
     appendMessage("Alright, let's register your inquiry. First, what is your <strong>Full Name</strong>?", 'bot');
     scrollToBottom();
   }
@@ -315,6 +354,7 @@ function initChatbot() {
     if (leadStep === 1) {
       leadData.name = text;
       leadStep = 2;
+      saveLeadState();
       appendMessage(`Thanks, ${leadData.name}. What is your <strong>Work Email</strong>?`, 'bot');
     } else if (leadStep === 2) {
       // Basic email check
@@ -324,19 +364,23 @@ function initChatbot() {
       }
       leadData.email = text;
       leadStep = 3;
+      saveLeadState();
       appendMessage("Excellent! What is your <strong>Phone Number</strong>?", 'bot');
     } else if (leadStep === 3) {
       leadData.phone = text;
       leadStep = 4;
+      saveLeadState();
       appendMessage("Got it. What is your <strong>Company Name</strong>?", 'bot');
     } else if (leadStep === 4) {
       leadData.company = text;
       leadStep = 5;
+      saveLeadState();
       appendMessage("Finally, please describe your <strong>project details or message</strong>:", 'bot');
     } else if (leadStep === 5) {
       leadData.message = text;
       isLeadCollectionMode = false;
       leadStep = 0;
+      saveLeadState();
       
       // Send data to server contact inquiries endpoint
       appendMessage("Sending your inquiry to our engineering team...", 'bot');
@@ -444,6 +488,16 @@ function initChatbot() {
   }
 
   function appendMessage(text, sender) {
+    const time = getCurrentTime();
+    chatHistory.push({ text, sender, time });
+    try {
+      sessionStorage.setItem('zentrio_chat_history', JSON.stringify(chatHistory));
+    } catch (e) {}
+    
+    appendMessageToDOM(text, sender, time);
+  }
+
+  function appendMessageToDOM(text, sender, time) {
     const msgWrapper = document.createElement('div');
     msgWrapper.className = `chatbot-msg-wrapper ${sender}`;
     
@@ -452,7 +506,7 @@ function initChatbot() {
     
     msgWrapper.innerHTML = `
       <div class="chatbot-msg-bubble">${contentHtml}</div>
-      <div class="chatbot-msg-time">${getCurrentTime()}</div>
+      <div class="chatbot-msg-time">${time || getCurrentTime()}</div>
     `;
     
     messagesBody.appendChild(msgWrapper);
