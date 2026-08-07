@@ -100,12 +100,18 @@ function initChatbot() {
     link.id = 'chatbotStylesheet';
     link.rel = 'stylesheet';
     link.href = '/css/chatbot.css';
+    link.onload = () => {
+      buildChatbotDOM();
+    };
     document.head.appendChild(link);
+  } else {
+    buildChatbotDOM();
   }
 
-  // Create Chatbot Container
-  const chatbotContainer = document.createElement('div');
-  chatbotContainer.className = 'zentrio-chatbot-container';
+  function buildChatbotDOM() {
+    // Create Chatbot Container
+    const chatbotContainer = document.createElement('div');
+    chatbotContainer.className = 'zentrio-chatbot-container';
   
   // Note the inclusion of data-lenis-prevent on scrollable regions to prevent Lenis scroll hijacking
   chatbotContainer.innerHTML = `
@@ -550,4 +556,5 @@ function initChatbot() {
     minutes = minutes < 10 ? '0' + minutes : minutes;
     return `${hours}:${minutes} ${ampm}`;
   }
+}
 }

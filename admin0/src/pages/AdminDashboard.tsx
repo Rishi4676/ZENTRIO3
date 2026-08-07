@@ -946,8 +946,19 @@ export const AdminDashboard: React.FC = () => {
 
               {/* Project rows */}
               <div className="grid gap-6">
-                {projects.map(proj => (
-                  <div key={proj.id} className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm space-y-4">
+                {projects.map(proj => {
+                  const projectImage = proj.image || 
+                    (proj.category?.toLowerCase().includes('mobile') ? '/assets/mobile_app.jpg' :
+                     proj.category?.toLowerCase().includes('ai') || proj.category?.toLowerCase().includes('machine') ? 'https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?auto=format&fit=crop&w=800&q=80' :
+                     proj.category?.toLowerCase().includes('e-commerce') || proj.category?.toLowerCase().includes('web') ? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80' :
+                     'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80');
+
+                  return (
+                    <div key={proj.id} className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm space-y-4">
+                      {/* Project Image */}
+                      <div className="w-full h-36 overflow-hidden rounded-xl border border-slate-200/30 dark:border-slate-800">
+                        <img src={projectImage} alt={proj.title} className="w-full h-full object-cover transform hover:scale-102 transition duration-300" />
+                      </div>
                     
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
@@ -1094,9 +1105,9 @@ export const AdminDashboard: React.FC = () => {
                         </select>
                       </div>
                     </div>
-
                   </div>
-                ))}
+                );
+              })}
               </div>
             </div>
           )}

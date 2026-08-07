@@ -359,19 +359,30 @@ export const ClientDashboard: React.FC = () => {
                 </div>
               ) : (
                 <div className="grid gap-6">
-                  {clientProjects.map(project => (
-                    <div key={project.id} className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm relative overflow-hidden">
-                      {/* Top Row */}
-                      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
-                        <div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{project.id}</span>
-                            <span className="text-[10px] bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold px-2 py-0.5 rounded">
-                              {project.category}
-                            </span>
-                          </div>
-                          <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1.5">{project.title}</h3>
+                  {clientProjects.map(project => {
+                    const projectImage = project.image || 
+                      (project.category?.toLowerCase().includes('mobile') ? '/assets/mobile_app.jpg' :
+                       project.category?.toLowerCase().includes('ai') || project.category?.toLowerCase().includes('machine') ? 'https://images.unsplash.com/photo-1531747118685-ca8fa6e08806?auto=format&fit=crop&w=800&q=80' :
+                       project.category?.toLowerCase().includes('e-commerce') || project.category?.toLowerCase().includes('web') ? 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80' :
+                       'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80');
+
+                    return (
+                      <div key={project.id} className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm relative overflow-hidden">
+                        {/* Project Header Image */}
+                        <div className="w-full h-36 overflow-hidden rounded-xl mb-4 border border-slate-200/30 dark:border-slate-800">
+                          <img src={projectImage} alt={project.title} className="w-full h-full object-cover transform hover:scale-102 transition duration-300" />
                         </div>
+                        {/* Top Row */}
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4">
+                          <div>
+                            <div className="flex items-center space-x-2">
+                              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">{project.id}</span>
+                              <span className="text-[10px] bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-semibold px-2 py-0.5 rounded">
+                                {project.category}
+                              </span>
+                            </div>
+                            <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1.5">{project.title}</h3>
+                          </div>
                         
                         <div className="flex items-center space-x-2">
                           <span className={`text-[10px] font-extrabold uppercase tracking-widest text-white px-2.5 py-1 rounded-full ${statusProgressColor(project.status)}`}>
@@ -461,8 +472,9 @@ export const ClientDashboard: React.FC = () => {
                         </div>
                       </div>
 
-                    </div>
-                  ))}
+                      </div>
+                    );
+                  })}
                 </div>
               )}
             </div>
