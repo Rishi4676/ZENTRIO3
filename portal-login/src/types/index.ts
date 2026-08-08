@@ -63,6 +63,7 @@ export interface Project {
   milestones: Milestone[];
   deliverables: Deliverable[];
   additionalNotes?: string;
+  image?: string;
   createdAt: string;
 }
 
