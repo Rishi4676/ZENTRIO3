@@ -94,7 +94,7 @@ const csrfInit = (req, res, next) => {
     res.cookie('csrfToken', csrfToken, {
       httpOnly: false, // Must be readable by frontend JavaScript to attach to headers
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
   }
