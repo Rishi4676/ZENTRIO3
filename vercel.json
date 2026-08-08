@@ -1,12 +1,29 @@
 {
   "version": 2,
-  "buildCommand": "cd admin0 && npm install --include=dev && npm run build && cd ../portal-login && npm install --include=dev && npm run build",
+  "buildCommand": "npm run build",
   "functions": {
     "api/index.js": {
-      "excludeFiles": "{admin0/src/**,portal-login/src/**}"
+      "includeFiles": "audit_logs.json",
+      "excludeFiles": "{admin0/**,portal-login/**}"
     }
   },
   "rewrites": [
+    {
+      "source": "/admin/payments",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/admin/revenue",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/admin/refunds",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/admin/subscriptions",
+      "destination": "/api/index.js"
+    },
     {
       "source": "/admin/assets/(.*)",
       "destination": "/admin0/dist/assets/$1"
@@ -32,6 +49,10 @@
       "destination": "/portal-login/dist/favicon.svg"
     },
     {
+      "source": "/portal/icons.svg",
+      "destination": "/portal-login/dist/icons.svg"
+    },
+    {
       "source": "/portal(.*)",
       "destination": "/portal-login/dist/index.html"
     },
@@ -42,6 +63,34 @@
     {
       "source": "/signup",
       "destination": "/portal-login/dist/index.html"
+    },
+    {
+      "source": "/projects",
+      "destination": "/project.html"
+    },
+    {
+      "source": "/solutions",
+      "destination": "/solution.html"
+    },
+    {
+      "source": "/pricing",
+      "destination": "/pricing.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact.html"
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy-policy.html"
+    },
+    {
+      "source": "/refund-policy",
+      "destination": "/refund-policy.html"
+    },
+    {
+      "source": "/terms-of-service",
+      "destination": "/terms-of-service.html"
     },
     {
       "source": "/api/(.*)",
