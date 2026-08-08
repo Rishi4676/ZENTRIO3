@@ -101,10 +101,10 @@ app.get('/LOGOO.png', (req, res) => {
   res.sendFile(path.join(__dirname, 'LOGOO.png'));
 });
 app.get('/syed.jpg', (req, res) => {
-  res.sendFile(path.join(__dirname, 'syed.jpg'));
+  res.sendFile(path.join(__dirname, 'assets', 'syed.jpg'));
 });
 app.get('/rishi.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'rishi.png'));
+  res.sendFile(path.join(__dirname, 'assets', 'rishi.png'));
 });
 
 // Page Routing

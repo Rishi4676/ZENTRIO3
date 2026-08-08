@@ -21,8 +21,9 @@ otp_db.json
 reset_db.json
 audit_logs.json
 
-# NOTE: admin0/dist IS committed so Vercel can serve the built admin panel
-# admin0/dist/
+# Ignore built directories since Vercel now builds them dynamically
+admin0/dist/
+portal-login/dist/
 
 # Firebase Admin SDK service account keys - NEVER commit these
 *-firebase-adminsdk-*.json
