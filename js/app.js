@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollReveals(); // Register scroll reveals globally!
   initChatbotScript(); // Dynamically inject the chatbot widget!
   initPortalDropdown(); // Initialize portal dropdown logic!
+  initLoginInterceptor(); // Intercept actions for guest users!
+  initGlobalConstellation(); // Initialize the dynamic site-wide background animation!
 });
 
 // Dynamic Chatbot Script Loader
@@ -99,6 +101,7 @@ async function checkAuthStatus() {
 }
 
 function updateNavbarForLoggedInUser(user) {
+  window.isLoggedIn = true;
   const navActions = document.querySelector('.nav-actions');
   if (navActions) {
     // Desktop Navbar actions update
@@ -189,6 +192,7 @@ function updateNavbarForLoggedInUser(user) {
 }
 
 function updateNavbarForGuestUser() {
+  window.isLoggedIn = false;
   const navActions = document.querySelector('.nav-actions');
   if (navActions) {
     navActions.innerHTML = `
@@ -477,3 +481,330 @@ function initPortalDropdown() {
     });
   });
 }
+
+// Intercept clicks on protected actions for guest users
+function initLoginInterceptor() {
+  window.isLoggedIn = false; // default fallback state
+
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a');
+    if (!link) return;
+    
+    const href = link.getAttribute('href');
+    if (!href) return;
+    
+    // Check if user is logged in
+    if (window.isLoggedIn) return;
+    
+    // Intercept signup, contact, and feedback navigation if guest
+    if (href === '/signup' || href === '/contact' || href === '/feedback') {
+      showLoginPromptModal(e, href);
+    }
+  });
+}
+
+// Display modern glassmorphic login prompt overlay
+function showLoginPromptModal(e, redirectUrl) {
+  e.preventDefault(); // Intercept standard transition
+  
+  let modal = document.getElementById('globalLoginPromptModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'globalLoginPromptModal';
+    modal.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    `;
+    
+    modal.innerHTML = `
+      <div style="
+        background: rgba(18, 18, 22, 0.85);
+        backdrop-filter: blur(20px) saturate(180%);
+        -webkit-backdrop-filter: blur(20px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+        transform: translateY(20px);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      ">
+        <button id="closePromptBtn" style="
+          position: absolute;
+          top: 16px;
+          right: 18px;
+          background: none;
+          border: none;
+          color: rgba(255, 255, 255, 0.4);
+          font-size: 1.75rem;
+          cursor: pointer;
+          line-height: 1;
+          transition: color 0.2s;
+        " onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
+        
+        <div style="
+          width: 56px;
+          height: 56px;
+          background: rgba(0, 223, 216, 0.1);
+          border: 1px solid rgba(0, 223, 216, 0.2);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin: 0 auto 1.25rem auto;
+          color: #00dfd8;
+        ">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        </div>
+        
+        <h3 style="
+          font-family: 'Outfit', sans-serif;
+          font-size: 1.45rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 0.5rem;
+        ">Portal Login Required</h3>
+        
+        <p style="
+          font-family: 'Inter', sans-serif;
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.6);
+          line-height: 1.5;
+          margin-bottom: 2rem;
+        ">Please log in to your portal to continue with this action.</p>
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a href="/portal/client-login" style="
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: linear-gradient(135deg, #00dfd8 0%, #0072ff 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 223, 216, 0.25);
+            transition: opacity 0.2s, transform 0.1s;
+          " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'" onclick="document.getElementById('globalLoginPromptModal').style.display='none'">Login to Portal</a>
+          
+          <a href="/portal/client-register" style="
+            display: block;
+            width: 100%;
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+          " onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(255, 255, 255, 0.08)'" onclick="document.getElementById('globalLoginPromptModal').style.display='none'">Register Account</a>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Close actions
+    const closeModalFunc = () => {
+      modal.style.opacity = '0';
+      modal.firstElementChild.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+    };
+    
+    modal.querySelector('#closePromptBtn').addEventListener('click', closeModalFunc);
+    modal.addEventListener('click', (ev) => {
+      if (ev.target === modal) closeModalFunc();
+    });
+  }
+  
+  // Show Modal
+  modal.style.display = 'flex';
+  // Trigger animation reflow
+  modal.offsetHeight;
+  modal.style.opacity = '1';
+  modal.firstElementChild.style.transform = 'translateY(0)';
+}
+
+// Global Constellation Dynamic Background Animation
+function initGlobalConstellation() {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'globalQuantumCanvas';
+  canvas.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; opacity: 0.65; transition: opacity 0.5s ease;';
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  const particles = [];
+  const connectionDistance = 140;
+  
+  const mouse = {
+    x: null,
+    y: null,
+    radius: 170
+  };
+
+  // Determine count dynamically based on device size for optimization
+  let particleCount = window.innerWidth < 768 ? 15 : 30;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    // Re-adjust particle count on large resizes
+    const newCount = window.innerWidth < 768 ? 15 : 30;
+    if (newCount !== particleCount) {
+      particleCount = newCount;
+      adjustParticlesCount();
+    }
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Mouse listeners
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+  });
+
+  window.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+
+  class ConstellationParticle {
+    constructor() {
+      this.reset(true);
+    }
+
+    reset(initial = false) {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.35;
+      this.vy = (Math.random() - 0.5) * 0.35;
+      this.radius = Math.random() * 2 + 1.5;
+      this.color = Math.random() > 0.5 ? 'rgba(0, 223, 216, 0.45)' : 'rgba(99, 102, 241, 0.45)'; // Cyan or Indigo
+    }
+
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      // Bounce off screen boundaries
+      if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+      if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+
+      // Mouse magnetic pull effect
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const distSq = dx * dx + dy * dy;
+        const radiusSq = mouse.radius * mouse.radius;
+
+        if (distSq < radiusSq) {
+          const distance = Math.sqrt(distSq);
+          const force = (mouse.radius - distance) / mouse.radius;
+          // Gently attract to cursor position
+          this.x -= (dx / distance) * force * 0.65;
+          this.y -= (dy / distance) * force * 0.65;
+        }
+      }
+    }
+  }
+
+  function adjustParticlesCount() {
+    while (particles.length < particleCount) {
+      particles.push(new ConstellationParticle());
+    }
+    if (particles.length > particleCount) {
+      particles.splice(particleCount);
+    }
+  }
+
+  // Populate constellation particles
+  adjustParticlesCount();
+
+  function animateConstellation() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw lines between nearby particles
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const distSq = dx * dx + dy * dy;
+        const limitSq = connectionDistance * connectionDistance;
+
+        if (distSq < limitSq) {
+          const dist = Math.sqrt(distSq); // Only calculate square root when within range
+          const opacity = (1 - (dist / connectionDistance)) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(99, 102, 241, ${opacity})`;
+          ctx.lineWidth = 0.6;
+          ctx.stroke();
+        }
+      }
+
+      // Draw cursor vector lines
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = particles[i].x - mouse.x;
+        const dy = particles[i].y - mouse.y;
+        const distSq = dx * dx + dy * dy;
+        const mouseRadiusSq = mouse.radius * mouse.radius;
+
+        if (distSq < mouseRadiusSq) {
+          const dist = Math.sqrt(distSq);
+          const opacity = (1 - (dist / mouse.radius)) * 0.16;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(0, 223, 216, ${opacity})`;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(animateConstellation);
+  }
+
+  // Run the loop
+  animateConstellation();
+}
+
+

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrio AI | Marketing & Publicity Assets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #08080C;
+      --bg-card: rgba(20, 20, 25, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --accent-cyan: #00dfd8;
+      --accent-indigo: #6366f1;
+      --text-primary: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.6);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: var(--bg-primary);
+      font-family: 'Inter', sans-serif;
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 4rem 2rem;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.06) 0%, transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(0, 223, 216, 0.06) 0%, transparent 40%);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.75rem;
+      margin-bottom: 0.75rem;
+      background: linear-gradient(135deg, #FFF 30%, rgba(255,255,255,0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p.subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+    }
+
+    .assets-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+    }
+
+    .card-title span {
+      background: rgba(0, 223, 216, 0.1);
+      border: 1px solid rgba(0, 223, 216, 0.2);
+      color: var(--accent-cyan);
+      padding: 2px 10px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .image-preview {
+      width: 100%;
+      aspect-ratio: 1/1;
+      background: #0f0f15;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+
+    .image-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .image-preview img:hover {
+      transform: scale(1.02);
+    }
+
+    .video-preview {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 9/16;
+      background: #0f0f15;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      margin: 0 auto 1.5rem auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .video-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .caption-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+      max-height: 280px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-copy {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, var(--accent-cyan) 0%, var(--accent-indigo) 100%);
+      color: #08080C;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-copy:hover {
+      opacity: 0.9;
+    }
+
+    .timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .timeline-item {
+      padding: 1rem;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 3px solid var(--accent-indigo);
+    }
+
+    .timeline-time {
+      font-weight: 700;
+      color: var(--accent-cyan);
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .timeline-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 992px) {
+      .assets-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Zentrio AI Campaign Assets</h1>
+      <p class="subtitle">Instagram Post & Reels storyboards created inside the <code>publicity/</code> directory.</p>
+    </header>
+
+    <div class="assets-grid">
+      
+      <!-- Left Column: Instagram Post Card -->
+      <div class="card">
+        <div class="card-title">
+          Instagram Post Asset
+          <span>1:1 Square</span>
+        </div>
+        
+        <div class="image-preview">
+          <img src="/publicity/images/instagram_post_banner.jpg" alt="Instagram Post Image">
+        </div>
+        
+        <div class="caption-box" id="captionText">🚀 Architecting the Future of Enterprise Intelligence.
+
+Are you looking to scale your business with custom digital architectures, predictive algorithms, or next-generation interfaces? 
+
+At **Zentrio AI**, our elite engineering collective is built to turn complex computational logic into fast, secure, and beautiful user experiences. From database tuning to model deployment, we have you covered.
+
+💻 Web & Mobile Applications: Starting at ₹15,000
+🧠 Custom Machine Learning Nodes: Starting at ₹20,000
+🎨 Branding & Logo Design Systems: Starting at ₹2,000
+📊 Project Engineering Reports: Starting at ₹1,500
+
+Meet the Engineering Core:
+🎓 Rishi (CEO): AI/ML & RAG Architect.
+🐍 Pushpa (Co-Founder): Computer Vision Expert.
+💼 Syed (Co-Founder): Solutions Architect.
+
+Ready to build? Link in bio to request a custom quote instantly!
+
+#ZentrioAI #ArtificialIntelligence #MachineLearning #WebDevelopment #MobileApps #FlutterDev #ReactJS #PythonCoding #ComputerVision #RAG #LLM</div>
+        
+        <button class="btn-copy" onclick="copyCaption()">Copy Caption</button>
+      </div>
+
+      <!-- Right Column: Instagram Reels/Video Card -->
+      <div class="card">
+        <div class="card-title">
+          Instagram Reel Asset
+          <span>9:16 Vertical</span>
+        </div>
+        
+        <div class="video-preview">
+          <img src="/publicity/video/instagram_reel_cover.jpg" alt="Reels Video Cover">
+        </div>
+
+        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.15rem; margin-bottom: 1rem;">Video Storyboard</h3>
+        
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="timeline-time">0.0 - 2.5s</div>
+            <div class="timeline-title">Hook Scene</div>
+            <div class="timeline-desc">Fast cuts of glowing code. "Stop building boring software."</div>
+          </div>
+          <div class="timeline-item" style="border-left-color: var(--accent-cyan);">
+            <div class="timeline-time">2.5 - 5.0s</div>
+            <div class="timeline-title">Focus Shift</div>
+            <div class="timeline-desc">Developer hands typing code. "Let's build intelligence."</div>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-time">5.0 - 10.0s</div>
+            <div class="timeline-title">Core Messaging</div>
+            <div class="timeline-desc">Visual custom dashboard. "Custom AI modules & database scaling."</div>
+          </div>
+          <div class="timeline-item" style="border-left-color: var(--accent-cyan);">
+            <div class="timeline-time">10.0 - 15.0s</div>
+            <div class="timeline-title">The Engineering Core</div>
+            <div class="timeline-desc">Rishi, Pushpa, and Syed profiles. "AI algorithms & Flutter apps."</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function copyCaption() {
+      const text = document.getElementById('captionText').innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Caption copied to clipboard!');
+      }).catch(err => {
+        console.error('Copy failed:', err);
+      });
+    }
+  </script>
+</body>
+</html>

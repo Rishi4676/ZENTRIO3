@@ -59,6 +59,7 @@ const ENQUIRIES_FILE = path.join(MOCK_DIR, 'enquiries_db_backup.json');
 const TASKS_FILE = path.join(MOCK_DIR, 'tasks_db_backup.json');
 const LEAVES_FILE = path.join(MOCK_DIR, 'leaves_db_backup.json');
 const PAYSLIPS_FILE = path.join(MOCK_DIR, 'payslips_db_backup.json');
+const FEEDBACKS_FILE = path.join(MOCK_DIR, 'feedbacks_db_backup.json');
 
 // Write Permission check
 let fsWritable = true;
@@ -98,6 +99,7 @@ let localEnquiries = readJsonFile(ENQUIRIES_FILE, []);
 let localTasks = readJsonFile(TASKS_FILE, []);
 let localLeaves = readJsonFile(LEAVES_FILE, []);
 let localPayslips = readJsonFile(PAYSLIPS_FILE, []);
+let localFeedbacks = readJsonFile(FEEDBACKS_FILE, []);
 
 // Sync initial seed data if files are empty
 if (localUsers.length === 0) {
@@ -460,6 +462,18 @@ const initializeFirestoreSync = async () => {
       console.log(`✅ Synced ${list.length} payslips from Firestore.`);
     }
 
+    // Feedbacks Sync
+    const feedbacksSnapshot = await db.collection('feedbacks').get().catch(() => null);
+    if (feedbacksSnapshot && !feedbacksSnapshot.empty) {
+      const list = [];
+      feedbacksSnapshot.forEach(doc => {
+        list.push({ id: doc.id, ...doc.data() });
+      });
+      localFeedbacks = list;
+      writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+      console.log(`✅ Synced ${list.length} feedbacks from Firestore.`);
+    }
+
   } catch (err) {
     console.error('❌ Error during Firestore synchronization:', err.message);
   }
@@ -752,6 +766,27 @@ const dbHelper = {
         localPayslips.push(payslipData);
       }
       writeJsonFile(PAYSLIPS_FILE, localPayslips);
+    }
+  },
+  feedbacks: {
+    find: async () => {
+      if (db) {
+        const snapshot = await db.collection('feedbacks').get();
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      }
+      return localFeedbacks;
+    },
+    save: async (id, feedbackData) => {
+      if (db) {
+        await db.collection('feedbacks').doc(id).set(feedbackData);
+      }
+      const existingIdx = localFeedbacks.findIndex(f => f.id === id);
+      if (existingIdx !== -1) {
+        localFeedbacks[existingIdx] = feedbackData;
+      } else {
+        localFeedbacks.push(feedbackData);
+      }
+      writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
     }
   }
 };

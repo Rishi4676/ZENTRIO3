@@ -486,13 +486,7 @@ export const ClientRegister: React.FC = () => {
           </div>
         </form>
 
-        {/* Social Google Login */}
-        <div className="pt-4 border-t border-slate-100 dark:border-slate-900 text-center">
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Or onboarding with</span>
-          <div className="flex justify-center">
-            <GoogleAuthButton mode="signup" />
-          </div>
-        </div>
+
 
       </div>
     </div>

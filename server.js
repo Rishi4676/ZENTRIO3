@@ -33,7 +33,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://checkout.razorpay.com"],
       frameSrc: ["'self'", "https://api.razorpay.com", "https://checkout.razorpay.com"],
       connectSrc: ["'self'", "https://api.razorpay.com"],
-      imgSrc: ["'self'", "data:", "https://checkout.razorpay.com"],
+      imgSrc: ["'self'", "data:", "https://checkout.razorpay.com", "https://images.unsplash.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"]
     }
@@ -72,6 +72,7 @@ app.use('/js', express.static(path.join(__dirname, 'js')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/admin', express.static(path.join(__dirname, 'admin0', 'dist')));
 app.use('/portal', express.static(path.join(__dirname, 'portal-login', 'dist')));
+app.use('/publicity', express.static(path.join(__dirname, 'publicity')));
 
 
 // Mount API Routers
@@ -82,6 +83,7 @@ app.use('/api/messages', require('./routes/messages'));
 app.use('/api/email', require('./routes/email'));
 app.use('/api/chat', require('./routes/chat'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/api/feedback', require('./routes/feedback'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/tasks', require('./routes/tasks'));
 app.use('/api/leaves', require('./routes/leaves'));
@@ -116,8 +118,8 @@ app.get('/projects', (req, res) => {
   res.sendFile(path.join(__dirname, 'project.html'));
 });
 
-app.get('/solutions', (req, res) => {
-  res.sendFile(path.join(__dirname, 'solution.html'));
+app.get('/feedback', (req, res) => {
+  res.sendFile(path.join(__dirname, 'feedback.html'));
 });
 
 app.get('/pricing', (req, res) => {

@@ -1,7 +1,6 @@
 /* Zentrio AI - GSAP and Canvas Animations */
 
 document.addEventListener('DOMContentLoaded', () => {
-  initHeroParticles();
   initGSAPHeroEntrance();
   initMouseParallax();
   initAnimatedCounters();

@@ -462,3 +462,68 @@
   font-size: 0.9rem;
   line-height: 1.5;
 }
+
+/* Responsive Mobile Fixes */
+@media (max-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 2rem !important;
+  }
+  .stat-number {
+    font-size: 2rem !important;
+  }
+  .about-stats {
+    gap: 1rem;
+  }
+  .service-card {
+    padding: 1.75rem;
+  }
+  .services-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .about-stats {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .stat-item {
+    padding: 1.25rem;
+  }
+  .about-timeline {
+    margin-top: 2.5rem;
+  }
+  .about-timeline h3 {
+    text-align: left;
+    margin-bottom: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 2.25rem !important;
+    line-height: 1.2;
+  }
+  .hero-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    width: 100% !important;
+    max-width: 290px !important;
+    margin: 0 auto !important;
+  }
+  .hero-ctas .btn {
+    width: 100% !important;
+  }
+}

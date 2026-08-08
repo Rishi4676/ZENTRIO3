@@ -69,8 +69,8 @@
       "destination": "/project.html"
     },
     {
-      "source": "/solutions",
-      "destination": "/solution.html"
+      "source": "/feedback",
+      "destination": "/feedback.html"
     },
     {
       "source": "/pricing",

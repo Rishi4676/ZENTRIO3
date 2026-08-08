@@ -16,7 +16,7 @@ const CHATBOT_KB = {
   },
   about: {
     patterns: ['who are you', 'what is zentrio', 'tell me about zentrio', 'what do you do', 'who we are', 'about the company', 'founded', 'history', 'progression', 'years'],
-    response: "<strong>Zentrio AI</strong> is a premier software engineering and design collective founded in <strong>Q1 2024</strong>. We partner with growth-focused businesses to construct robust, high-performance digital products infused with machine learning models.<br><br>Over our progression, we've completed <strong>140+ projects</strong> for happy clients worldwide with a collective <strong>7+ years of experience</strong> in database scaling, predictive algorithm tuning, and responsive UI design."
+    response: "<strong>Zentrio AI</strong> is a premier software engineering and design collective founded in <strong>Q1 2024</strong>. We partner with growth-focused businesses to construct robust, high-performance digital products infused with machine learning models.<br><br>Over our progression, we've completed <strong>15+ projects</strong> for happy clients worldwide with a collective <strong>2+ years of experience</strong> in database scaling, predictive algorithm tuning, and responsive UI design."
   },
   services: {
     patterns: ['services', 'expertise', 'what do you offer', 'web app', 'mobile app', 'ios', 'android', 'machine learning', 'data analytics', 'ui', 'ux', 'design', 'development'],
@@ -27,26 +27,27 @@ const CHATBOT_KB = {
               "• <strong>Machine Learning</strong>: Neural network training, vision models (YOLO), and analytics.<br>" +
               "• <strong>Data Analytics</strong>: Large-scale data pipelines via Python/Spark and BI charts.<br>" +
               "• <strong>UI & UX Design</strong>: Figma & Framer spacing libraries and glassmorphic designs.<br><br>" +
-              "Learn more details on our <a href='/solutions' class='chat-link'>Solutions Blueprint Page</a>."
+              "Learn more details on our <a href='/projects' class='chat-link'>Selected Engagements Page</a>."
   },
   pricing: {
     patterns: ['price', 'pricing', 'cost', 'how much', 'fees', 'fixed fee', 'plans', 'discount', 'cheap'],
     response: "We offer simple flat-fee catalog pricing for our modules:<br><br>" +
               "• <strong>Web Application</strong>: ₹9,999 (Fixed fee, 33% Off)<br>" +
-              "• <strong>Mobile Application</strong>: ₹24,999 (Fixed fee, 28% Off)<br>" +
+              "• <strong>Mobile Application</strong>: ₹15,000 (Fixed fee, 25% Off)<br>" +
               "• <strong>AI Chatbot</strong>: ₹18,999 (Fixed fee, 36% Off)<br>" +
               "• <strong>Data Analytics</strong>: ₹12,999 (Fixed fee, 35% Off)<br>" +
-              "• <strong>Branding & Logo</strong>: ₹3,999 (Fixed fee, 50% Off)<br>" +
+              "• <strong>Branding & Logo</strong>: ₹2,000 (Fixed fee, 50% Off)<br>" +
               "• <strong>Invitation Design</strong>: ₹999 (Fixed fee, 66% Off)<br>" +
-              "• <strong>Project Report</strong>: ₹2,999 (Fixed fee, 57% Off)<br><br>" +
+              "• <strong>Project Report</strong>: ₹1,500 (Fixed fee, 50% Off)<br>" +
+              "• <strong>Machine Learning</strong>: ₹20,000 (Fixed fee, 33% Off)<br><br>" +
               "Browse details and options on our <a href='/pricing' class='chat-link'>Catalog & Pricing Page</a>."
   },
   team: {
     patterns: ['team', 'who works here', 'members', 'ethan', 'sophia', 'marcus', 'ceo', 'engineer', 'designer', 'founder', 'founders', 'syed', 'rishi'],
     response: "Our core multidisciplinary team consists of:<br><br>" +
-              "• <strong>Syed (CEO & Co-Founder)</strong>: 12+ years experience in software architecture and developer platforms (syed@zentrio.ai).<br>" +
-              "• <strong>Rishi (Lead AI Engineer)</strong>: 8 years experience, neural network optimization, former OpenAI research scientist (rishi@zentrio.ai).<br>" +
-              "• <strong>Marcus Kaelen (Lead UI/UX Designer)</strong>: 7 years experience, expert in glassmorphic layouts and micro-interactions (marcus.kaelen@zentrio.ai).<br><br>" +
+              "• <strong>Syed (Co-Founder)</strong>: 2 years experience in software architecture and developer platforms (syed@zentrio.ai).<br>" +
+              "• <strong>Rishi (CEO)</strong>: 2 years experience, AI Engineer, expert in neural networks and optimization (rishi@zentrio.ai).<br>" +
+              "• <strong>Pushpa (Co-Founder)</strong>: 2 years experience, expert in Python and computer vision (pushpa@zentrio.ai).<br><br>" +
               "You can interact with their profile cards, bios, and skills on our <a href='/contact' class='chat-link'>Team Directory Page</a>."
   },
   contact: {

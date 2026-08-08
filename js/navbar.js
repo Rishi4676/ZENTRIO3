@@ -55,7 +55,7 @@ function highlightActiveLink() {
       link.classList.add('active');
     } else if (normalizedPath.startsWith('/projects') && normalizedHref.startsWith('/projects')) {
       link.classList.add('active');
-    } else if (normalizedPath.startsWith('/solutions') && normalizedHref.startsWith('/solutions')) {
+    } else if (normalizedPath.startsWith('/feedback') && normalizedHref.startsWith('/feedback')) {
       link.classList.add('active');
     } else if (normalizedPath.startsWith('/pricing') && normalizedHref.startsWith('/pricing')) {
       link.classList.add('active');

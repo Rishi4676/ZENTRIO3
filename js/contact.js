@@ -3,8 +3,8 @@
 const TEAM_DATA = {
   ceo: {
     name: "Syed",
-    role: "CEO & Co-Founder",
-    bio: "Syed has over 12 years of experience leading software architecture teams at tech giants and startups alike. He focuses on scaling Zentrio's technological vision, building robust developer platforms, and aligning client digital transformations with next-generation machine learning infrastructures.",
+    role: "Co-Founder",
+    bio: "Syed is the Co-Founder. Syed has over 2 years of experience leading software architecture teams at tech giants and startups alike. He focuses on scaling Zentrio's technological vision, building robust developer platforms, and aligning client digital transformations with next-generation machine learning infrastructures.",
     quote: "The best way to predict the future is to build it with automated intelligence.",
     skills: [
       { name: "System Architecture", level: 95 },
@@ -12,7 +12,7 @@ const TEAM_DATA = {
       { name: "Product Strategy", level: 88 }
     ],
     details: {
-      experience: "12+ Years",
+      experience: "2 Years",
       email: "syed@zentrio.ai",
       phone: "+1 (555) 234-5678",
       linkedin: "linkedin.com/in/syed-zentrio",
@@ -22,39 +22,39 @@ const TEAM_DATA = {
   },
   engineer: {
     name: "Rishi",
-    role: "Lead AI Engineer",
-    bio: "Rishi is an expert in neural network optimizations and large language models. Previously a research scientist at OpenAI, he specializes in custom RAG (Retrieval-Augmented Generation) setups, prompt tuning protocols, and deploying high-performance vision models onto localized edge devices.",
+    role: "CEO",
+    bio: "Rishi is the AI Engineer. He specializes in neural network optimizations and large language models, joining and leading large-scale AI system deployments. Previously a research scientist at OpenAI, he specializes in custom RAG (Retrieval-Augmented Generation) setups, prompt tuning protocols, and deploying high-performance vision models onto localized edge devices.",
     quote: "Code is poetry, but trained model parameters are the symphony of raw data.",
     skills: [
-      { name: "PyTorch & ML", level: 98 },
-      { name: "RAG & LLM Architectures", level: 95 },
-      { name: "Model Optimization", level: 92 }
+      { name: "Data Analytics", level: 70 },
+      { name: "AI & ML", level: 90 },
+      { name: "RAG & LLM Architectures", level: 80 }
     ],
     details: {
-      experience: "8 Years",
+      experience: "2 Years",
       email: "rishi@zentrio.ai",
-      phone: "+1 (555) 345-6789",
+      phone: "6369634756",
       linkedin: "linkedin.com/in/rishi-zentrio",
       github: "github.com/rishi-zentrio"
     },
     image: "/assets/rishi.png"
   },
   designer: {
-    name: "Marcus Kaelen",
-    role: "Lead UI/UX Designer",
-    bio: "Marcus shapes the aesthetic interface of Zentrio systems. Guided by minimalist Vercel/Linear design theories, he orchestrates typography grids, micro-interactions, dark glassmorphic components, and dynamic 3D layouts in Spline to bring premium clarity to complex analytical tools.",
+    name: "Pushpa",
+    role: "Co-Founder",
+    bio: "Pushpa is the Co-Founder. Expert in python and computer vision, specializing in low-latency real-time video processing, image detection systems, and premium frontend and backend interfaces.",
     quote: "Simplicity is not the absence of clutter, but the presence of premium utility.",
     skills: [
-      { name: "UI/UX Design & Prototyping", level: 96 },
-      { name: "Figma & Framer", level: 94 },
-      { name: "Front-end Integration", level: 85 }
+      { name: "Python", level: 90 },
+      { name: "Computer Vision", level: 80 },
+      { name: "Frontend & Backend", level: 95 }
     ],
     details: {
-      experience: "7 Years",
-      email: "marcus.kaelen@zentrio.ai",
+      experience: "2 Years",
+      email: "pushpa@zentrio.ai",
       phone: "+1 (555) 456-7890",
-      linkedin: "linkedin.com/in/marcusk-zentrio",
-      github: "github.com/mkaelen-zentrio"
+      linkedin: "linkedin.com/in/pushpa-zentrio",
+      github: "github.com/pushpa-zentrio"
     },
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80"
   }
