@@ -19,6 +19,14 @@
 </head>
 <body>
 
+  <!-- Ambient Animated Page Background -->
+  <div class="page-bg" aria-hidden="true">
+    <div class="page-bg-blob page-bg-blob-1"></div>
+    <div class="page-bg-blob page-bg-blob-2"></div>
+    <div class="page-bg-blob page-bg-blob-3"></div>
+    <div class="page-bg-grid"></div>
+  </div>
+
   <!-- Premium Splash Screen Welcome Loader -->
   <div id="splashScreen" class="splash-screen">
     <div class="splash-content">
@@ -398,19 +406,6 @@
     </linearGradient>
   </svg>
 
-  <style>
-    @media (max-width: 768px) {
-      .footer-grid {
-        grid-template-columns: 1fr !important;
-        gap: 2rem !important;
-      }
-      .footer-bottom {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start !important;
-      }
-    }
-  </style>
 
   <!-- External Library CDNs -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>

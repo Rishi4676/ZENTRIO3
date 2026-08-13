@@ -66,13 +66,18 @@ app.use((req, res, next) => {
 app.use(xssSanitizer);
 app.use(csrfInit);
 
-// Static Files - serve everything in the root or assets/css/js folders
-app.use('/css', express.static(path.join(__dirname, 'css')));
-app.use('/js', express.static(path.join(__dirname, 'js')));
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
-app.use('/admin', express.static(path.join(__dirname, 'admin0', 'dist')));
-app.use('/portal', express.static(path.join(__dirname, 'portal-login', 'dist')));
-app.use('/publicity', express.static(path.join(__dirname, 'publicity')));
+// Static Files - serve with production caching headers to boost load speeds and avoid roundtrip jank
+const cacheControlOptions = {
+  maxAge: '1d',
+  etag: true,
+  lastModified: true
+};
+app.use('/css', express.static(path.join(__dirname, 'css'), cacheControlOptions));
+app.use('/js', express.static(path.join(__dirname, 'js'), cacheControlOptions));
+app.use('/assets', express.static(path.join(__dirname, 'assets'), { ...cacheControlOptions, maxAge: '7d' }));
+app.use('/admin', express.static(path.join(__dirname, 'admin0', 'dist'), cacheControlOptions));
+app.use('/portal', express.static(path.join(__dirname, 'portal-login', 'dist'), cacheControlOptions));
+app.use('/publicity', express.static(path.join(__dirname, 'publicity'), cacheControlOptions));
 
 
 // Mount API Routers

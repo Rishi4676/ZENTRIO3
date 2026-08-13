@@ -429,17 +429,6 @@ export const AdminDashboard: React.FC = () => {
             <span>Financials Ledger</span>
           </button>
 
-          <button
-            onClick={() => setActiveTab('support')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
-              activeTab === 'support'
-                ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
-            }`}
-          >
-            <Ticket className="w-4 h-4 shrink-0" />
-            <span>Support Tickets</span>
-          </button>
 
           <button
             onClick={() => setActiveTab('reports')}
@@ -554,7 +543,7 @@ export const AdminDashboard: React.FC = () => {
               </div>
 
               {/* Quick logs */}
-              <div className="grid lg:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 gap-6">
                 {/* Active Projects Quick tracker */}
                 <div className="glass-card p-5 rounded-2xl border border-slate-200/50 dark:border-slate-850">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Pipeline Status</h3>
@@ -570,28 +559,6 @@ export const AdminDashboard: React.FC = () => {
                             {p.status.toUpperCase()}
                           </span>
                           <div className="text-[10px] font-extrabold text-slate-900 dark:text-white mt-1">{p.progress}%</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Open Ticket tracker */}
-                <div className="glass-card p-5 rounded-2xl border border-slate-200/50 dark:border-slate-850">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Support Ticket Backlog</h3>
-                  <div className="space-y-3">
-                    {tickets.slice(0, 3).map(t => (
-                      <div key={t.id} className="flex justify-between items-center p-3 rounded-xl bg-slate-100/60 dark:bg-slate-900/35 border border-slate-200/30 dark:border-slate-850">
-                        <div>
-                          <div className="text-xs font-bold text-slate-900 dark:text-white">{t.subject}</div>
-                          <div className="text-[9px] text-slate-400 mt-1 uppercase font-semibold">{t.clientName}</div>
-                        </div>
-                        <div>
-                          <span className={`text-[9px] font-bold px-2 py-0.5 rounded ${
-                            t.status === 'open' ? 'bg-emerald-500 text-white' : 'bg-slate-400 text-white'
-                          }`}>
-                            {t.status.toUpperCase()}
-                          </span>
                         </div>
                       </div>
                     ))}
@@ -977,6 +944,66 @@ export const AdminDashboard: React.FC = () => {
                       </div>
                     </div>
 
+                    {/* ── CLIENT & PROJECT DETAILS PANEL ── */}
+                    <div className="grid sm:grid-cols-3 gap-3 p-4 rounded-xl bg-indigo-500/5 border border-indigo-500/15 dark:bg-indigo-500/8">
+                      {/* Client Name */}
+                      <div className="flex items-start space-x-3">
+                        <div className="w-8 h-8 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[11px] font-extrabold shrink-0 mt-0.5">
+                          {(proj.clientName || proj.clientId || '?').charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Client Name</div>
+                          <div className="text-xs font-extrabold text-slate-900 dark:text-white">{proj.clientName || proj.clientId || 'Unknown'}</div>
+                          {proj.clientCompany && (
+                            <div className="text-[9px] text-slate-500 font-semibold mt-0.5">{proj.clientCompany}</div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Deadline */}
+                      <div className="flex items-start space-x-3">
+                        <div className="w-8 h-8 rounded-full bg-rose-500/15 flex items-center justify-center shrink-0 mt-0.5">
+                          <Clock className="w-4 h-4 text-rose-500" />
+                        </div>
+                        <div>
+                          <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-0.5">Deadline</div>
+                          <div className={`text-xs font-extrabold ${
+                            proj.deadline && new Date(proj.deadline) < new Date()
+                              ? 'text-rose-500'
+                              : 'text-slate-900 dark:text-white'
+                          }`}>
+                            {proj.deadline || 'Not set'}
+                          </div>
+                          {proj.deadline && (
+                            <div className={`text-[9px] font-semibold mt-0.5 ${
+                              new Date(proj.deadline) < new Date() ? 'text-rose-400' : 'text-slate-500'
+                            }`}>
+                              {new Date(proj.deadline) < new Date() ? '⚠ Overdue' : `${Math.ceil((new Date(proj.deadline).getTime() - Date.now()) / 86400000)} days left`}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Requirements / Tech Stack */}
+                      <div>
+                        <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">Tech Requirements</div>
+                        <div className="flex flex-wrap gap-1">
+                          {(proj.techRequired || []).slice(0, 4).map((tech: string, i: number) => (
+                            <span key={i} className="text-[8px] font-bold bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 px-1.5 py-0.5 rounded border border-indigo-500/20">
+                              {tech}
+                            </span>
+                          ))}
+                          {(proj.techRequired || []).length > 4 && (
+                            <span className="text-[8px] font-bold text-slate-400 px-1 py-0.5">+{(proj.techRequired || []).length - 4} more</span>
+                          )}
+                          {(!proj.techRequired || proj.techRequired.length === 0) && (
+                            <span className="text-[9px] text-slate-400 italic">Not specified</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Project Description */}
                     <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{proj.description}</p>
 
                     {/* Milestone items checklist & add milestone */}
@@ -1301,128 +1328,7 @@ export const AdminDashboard: React.FC = () => {
             </div>
           )}
 
-          {/* TAB 6: SUPPORT TICKETS */}
-          {activeTab === 'support' && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-extrabold tracking-tight">Support Management</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Coordinate client inquiries and assign tickets directly.</p>
-              </div>
 
-              <div className="grid lg:grid-cols-3 gap-6">
-                {/* Tickets list */}
-                <div className="lg:col-span-1 glass-card p-5 rounded-2xl border border-slate-200/50 dark:border-slate-850">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Backlog Inquiries ({tickets.length})</h3>
-                  <div className="space-y-3">
-                    {tickets.map(t => (
-                      <div
-                        key={t.id}
-                        onClick={() => setActiveTicketId(t.id)}
-                        className={`p-4 rounded-xl border transition cursor-pointer text-left ${
-                          activeTicketId === t.id
-                            ? 'bg-indigo-500/10 border-indigo-500'
-                            : 'bg-slate-100/40 dark:bg-slate-900/30 border-slate-200/50 dark:border-slate-800/40 hover:bg-slate-200/30'
-                        }`}
-                      >
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="text-[9px] font-bold text-slate-400 uppercase">{t.id} | {t.category}</span>
-                          <span className={`text-[8px] font-bold px-2 py-0.5 rounded-full ${
-                            t.status === 'open' ? 'bg-emerald-500 text-white' : 'bg-slate-400 text-white'
-                          }`}>
-                            {t.status}
-                          </span>
-                        </div>
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-white mt-1">{t.subject}</h4>
-                        <div className="text-[9px] text-slate-500 font-semibold mt-1">Client: {t.clientName}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* selected ticket thread */}
-                <div className="lg:col-span-2">
-                  {activeTicketId ? (
-                    <div className="glass-card p-5 rounded-2xl border border-slate-200/50 dark:border-slate-850 space-y-4 text-left">
-                      {(() => {
-                        const ticket = tickets.find(t => t.id === activeTicketId);
-                        if (!ticket) return null;
-                        return (
-                          <>
-                            <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-850 pb-3">
-                              <div>
-                                <span className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest">{ticket.id} Support Terminal</span>
-                                <h3 className="text-sm font-bold text-slate-900 dark:text-white mt-1">{ticket.subject}</h3>
-                              </div>
-                              <div className="flex space-x-2">
-                                {ticket.status === 'open' && (
-                                  <button
-                                    onClick={() => resolveTicket(ticket.id)}
-                                    className="px-2.5 py-1 text-[10px] font-bold bg-emerald-500 text-white rounded-lg hover:bg-emerald-600 transition"
-                                  >
-                                    Resolve Ticket
-                                  </button>
-                                )}
-                                <button
-                                  onClick={() => setActiveTicketId(null)}
-                                  className="text-xs text-slate-400 hover:text-slate-600"
-                                >
-                                  Close
-                                </button>
-                              </div>
-                            </div>
-
-                            <div className="h-64 overflow-y-auto space-y-3 p-2 bg-slate-100/50 dark:bg-slate-950/20 rounded-xl">
-                              {ticket.messages.map(msg => {
-                                const isClient = msg.senderRole === 'client';
-                                return (
-                                  <div key={msg.id} className={`flex ${isClient ? 'justify-start' : 'justify-end'}`}>
-                                    <div className={`max-w-[75%] p-3 rounded-2xl text-xs leading-relaxed ${
-                                      isClient
-                                        ? 'bg-slate-200 dark:bg-slate-900 text-slate-800 dark:text-slate-200 rounded-tl-none'
-                                        : 'bg-indigo-600 text-white rounded-tr-none'
-                                    }`}>
-                                      <div className="text-[9px] font-bold uppercase tracking-wider mb-1 opacity-75">
-                                        {msg.senderName} ({msg.senderRole.toUpperCase()})
-                                      </div>
-                                      <div>{msg.content}</div>
-                                      <div className="text-[8px] text-right mt-1.5 opacity-60">
-                                        {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                      </div>
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </div>
-
-                            <div className="flex space-x-2">
-                              <input
-                                type="text"
-                                placeholder="Type response to client..."
-                                value={adminChatReply}
-                                onChange={(e) => setAdminChatReply(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleSendAdminChat(ticket.id)}
-                                className="flex-grow text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none"
-                              />
-                              <button
-                                onClick={() => handleSendAdminChat(ticket.id)}
-                                className="p-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow transition"
-                              >
-                                <Send className="w-4 h-4" />
-                              </button>
-                            </div>
-                          </>
-                        );
-                      })()}
-                    </div>
-                  ) : (
-                    <div className="glass-card p-8 rounded-2xl border border-slate-200/50 dark:border-slate-850 text-center text-xs text-slate-500 italic">
-                      Select a ticket from the left queue backlog to view conversation context.
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          )}
 
           {/* TAB 7: REPORTS & ANALYTICS */}
           {activeTab === 'reports' && (

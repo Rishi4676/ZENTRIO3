@@ -118,7 +118,7 @@ if (localUsers.length === 0) {
   writeJsonFile(USERS_FILE, localUsers);
 }
 
-if (localProjects.length === 0) {
+if (false && localProjects.length === 0) {
   localProjects = [
     {
       id: 'PRJ-8012',
@@ -201,7 +201,7 @@ if (localProjects.length === 0) {
   writeJsonFile(PROJECTS_FILE, localProjects);
 }
 
-if (localPayments.length === 0) {
+if (false && localPayments.length === 0) {
   localPayments = [
     {
       id: 'TXN-902148',
@@ -231,7 +231,7 @@ if (localPayments.length === 0) {
   writeJsonFile(PAYMENTS_FILE, localPayments);
 }
 
-if (localMessages.length === 0) {
+if (false && localMessages.length === 0) {
   localMessages = [
     {
       id: 'cht1',
@@ -360,7 +360,7 @@ const initializeFirestoreSync = async () => {
 
     // Projects
     const projectsSnapshot = await db.collection('projects').get();
-    if (projectsSnapshot.empty) {
+    if (projectsSnapshot.empty && localProjects.length > 0) {
       console.log('🌱 Firestore projects collection is empty. Seeding default projects...');
       for (const p of localProjects) {
         await db.collection('projects').doc(p.id).set(p);
@@ -376,7 +376,7 @@ const initializeFirestoreSync = async () => {
 
     // Payments
     const paymentsSnapshot = await db.collection('payments').get();
-    if (paymentsSnapshot.empty) {
+    if (paymentsSnapshot.empty && localPayments.length > 0) {
       console.log('🌱 Firestore payments collection is empty. Seeding default payments...');
       for (const p of localPayments) {
         await db.collection('payments').doc(p.id).set(p);
@@ -396,7 +396,7 @@ const initializeFirestoreSync = async () => {
 
     // Messages
     const messagesSnapshot = await db.collection('messages').get();
-    if (messagesSnapshot.empty) {
+    if (messagesSnapshot.empty && localMessages.length > 0) {
       console.log('🌱 Firestore messages collection is empty. Seeding default messages...');
       for (const m of localMessages) {
         await db.collection('messages').doc(m.id).set(m);

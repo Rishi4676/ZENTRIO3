@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Dynamic Chatbot Script Loader
 function initChatbotScript() {
   const chatbotScript = document.createElement('script');
-  chatbotScript.src = '/js/chatbot.js?v=' + Date.now();
+  chatbotScript.src = '/js/chatbot.js';
   chatbotScript.defer = true;
   document.body.appendChild(chatbotScript);
 }
@@ -428,7 +428,7 @@ function initSplashScreen() {
     setTimeout(() => {
       splash.remove();
     }, 800);
-  }, 2000);
+  }, 650);
 }
 
 // Initialize Portal Dropdown triggers and events (Desktop and Mobile)
@@ -652,6 +652,9 @@ function showLoginPromptModal(e, redirectUrl) {
 
 // Global Constellation Dynamic Background Animation
 function initGlobalConstellation() {
+  // Disable on mobile/tablet viewports to save memory/CPU and render pages lag-free
+  if (window.innerWidth < 768) return;
+
   const canvas = document.createElement('canvas');
   canvas.id = 'globalQuantumCanvas';
   canvas.style.cssText = 'position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:-2; pointer-events:none; opacity: 0.65; transition: opacity 0.5s ease;';

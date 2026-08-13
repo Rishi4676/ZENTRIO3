@@ -22,6 +22,18 @@
       text-align: center;
       padding: 6rem 0 3rem 0;
     }
+
+    @media (max-width: 768px) {
+      .feedback-hero {
+        padding: calc(var(--navbar-height) + 2.5rem) 0 2rem 0;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .feedback-hero {
+        padding: calc(var(--navbar-height) + 1.5rem) 0 1.5rem 0;
+      }
+    }
     
     .feedback-container {
       display: grid;
@@ -43,6 +55,19 @@
       top: 100px;
     }
 
+    @media (max-width: 992px) {
+      .feedback-form-card {
+        position: static;
+        padding: 2rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .feedback-form-card {
+        padding: 1.5rem;
+      }
+    }
+
     .rating-selector {
       display: flex;
       flex-direction: row-reverse;
@@ -60,6 +85,15 @@
       color: rgba(255, 255, 255, 0.15);
       cursor: pointer;
       transition: color 0.2s ease, transform 0.1s ease;
+    }
+
+    @media (max-width: 480px) {
+      .rating-selector label {
+        font-size: 1.75rem;
+      }
+      .rating-selector {
+        gap: 4px;
+      }
     }
 
     .rating-selector label:hover,
@@ -219,9 +253,39 @@
         position: static;
       }
     }
+
+    @media (max-width: 768px) {
+      .feedback-container {
+        gap: 2rem;
+        margin-bottom: 3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .feedback-container {
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+      }
+      .feedback-feed-header {
+        font-size: 1.2rem;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .feedback-card {
+        padding: 1.25rem;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <!-- Ambient Animated Page Background -->
+  <div class="page-bg" aria-hidden="true">
+    <div class="page-bg-blob page-bg-blob-1"></div>
+    <div class="page-bg-blob page-bg-blob-2"></div>
+    <div class="page-bg-blob page-bg-blob-3"></div>
+    <div class="page-bg-grid"></div>
+  </div>
 
   <!-- Skip Link for Accessibility -->
   <a href="#mainContent" class="skip-to-content">Skip to Main Content</a>

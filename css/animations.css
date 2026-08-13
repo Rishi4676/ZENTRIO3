@@ -38,7 +38,7 @@
 .reveal-init {
   opacity: 0;
   transform: translateY(30px);
-  filter: blur(5px);
+  filter: blur(4px);
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
               transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
               filter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
@@ -195,6 +195,23 @@
   background-clip: text;
 }
 
+@media (max-width: 480px) {
+  .splash-logo {
+    height: 70px;
+    width: 70px;
+    padding: 10px;
+    margin-bottom: 1.5rem;
+  }
+  .splash-title {
+    font-size: 2.25rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 2rem;
+  }
+  .splash-loader-bar {
+    width: 180px;
+  }
+}
+
 .splash-loader-bar {
   width: 220px;
   height: 3px;
@@ -236,4 +253,13 @@
 @keyframes splash-load {
   0% { width: 0%; }
   100% { width: 100%; }
+}
+
+@media (max-width: 768px) {
+  .reveal-init.reveal-left {
+    transform: translateX(0) translateY(20px) !important;
+  }
+  .reveal-init.reveal-right {
+    transform: translateX(0) translateY(20px) !important;
+  }
 }

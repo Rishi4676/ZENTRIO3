@@ -253,6 +253,9 @@ header.scrolled {
 
 /* Mobile responsive menu */
 @media (max-width: 992px) {
+  .nav-container {
+    padding: 0 1.5rem;
+  }
   .hamburger {
     display: flex;
   }
@@ -495,5 +498,11 @@ header.scrolled {
 /* Hide mobile-specific actions on desktop by default */
 .nav-actions-mobile {
   display: none;
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0 1.25rem;
+  }
 }
 
