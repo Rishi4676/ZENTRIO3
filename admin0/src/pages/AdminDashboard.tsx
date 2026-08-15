@@ -2168,7 +2168,7 @@ export const AdminDashboard: React.FC = () => {
                   <input
                     type="text"
                     required
-                    placeholder="WORKER004"
+                    placeholder="worker_ID (e.g. w4)"
                     value={workerForm.id}
                     onChange={(e) => setWorkerForm({ ...workerForm, id: e.target.value })}
                     className="w-full text-xs px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none"
