@@ -18,6 +18,7 @@ export const ClientRegister: React.FC = () => {
     agreeTerms: false
   });
 
+  const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [captchaAnswer, setCaptchaAnswer] = useState('');
   const [captchaNum1, setCaptchaNum1] = useState(3);
