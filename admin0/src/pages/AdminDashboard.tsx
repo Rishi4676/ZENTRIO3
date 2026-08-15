@@ -68,7 +68,7 @@ export const AdminDashboard: React.FC = () => {
     updateLeaveStatus
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'clients' | 'workers' | 'projects' | 'finance' | 'support' | 'reports' | 'settings' | 'enquiries' | 'chat' | 'audit'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'clients' | 'workers' | 'projects' | 'finance' | 'support' | 'reports' | 'settings' | 'enquiries' | 'chat' | 'audit' | 'ai'>('overview');
   const [kanbanFilterWorkerId, setKanbanFilterWorkerId] = useState('all');
 
   // Meeting Modal State
