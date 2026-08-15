@@ -1317,6 +1317,7 @@ export const WorkerDashboard: React.FC = () => {
               <button onClick={() => setMeetModalOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-400 cursor-pointer transition">
                 <X className="w-4 h-4" />
               </button>
+            </div>
             {activeMeeting ? (
               <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3">
                 <div className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider">🔴 Live Admin Meeting Active</div>
