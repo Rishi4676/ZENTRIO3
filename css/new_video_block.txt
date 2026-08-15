@@ -1,0 +1,15 @@
+.video-container-wrapper {
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float-video 5s ease-in-out infinite alternate;
+}

@@ -1,0 +1,17 @@
+.video-container-wrapper {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(10, 10, 15, 0.9) 0%, rgba(5, 5, 10, 0.45) 100%);
+  border: 2px solid rgba(0, 223, 216, 0.25);
+  padding: 6px;
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.6),
+    0 0 25px rgba(99, 102, 241, 0.2),
+    0 0 50px rgba(0, 223, 216, 0.15);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float-video 5s ease-in-out infinite alternate;

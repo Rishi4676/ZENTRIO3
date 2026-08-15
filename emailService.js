@@ -548,22 +548,36 @@ const sendContactInquiryToAdmin = async (details) => {
 // 10. sendContactConfirmationToCustomer
 const sendContactConfirmationToCustomer = async (to, name) => {
   const subject = 'Thank You for Contacting Zentrio Technology';
-  const text = `Hello ${name},\n\nThank you for reaching out to Zentrio AI. We have received your inquiry and our team will get back to you within 24 hours.`;
+  const text = `Hello ${name},\n\nThank you for reaching out to Zentrio AI. We have received your inquiry and our team will get back to you within 24 hours.\n\nConnect with us:\n💬 WhatsApp: https://chat.whatsapp.com/E5S9aCFY4vj0fglz8874Yj\n📸 Instagram: https://instagram.com/zentrio3\n📧 Email: zentriotechnology3@gmail.com`;
   
   const innerHtml = `
     <h1 class="body-title">Inquiry Logged Successfully</h1>
     <p class="body-text">Hello <strong>${name}</strong>,</p>
     <p class="body-text">Thank you for contacting Zentrio AI. We have successfully received your inquiry and logged it into our developer dashboard.</p>
-    
     <div class="badge-box">
       <div class="badge-label">Response Commitment</div>
       <div class="badge-value">Within 24 Hours</div>
     </div>
-
     <p class="body-text">An engineer or account representative is currently reviewing your message and will reply to you directly at this email address.</p>
-    
     <div style="text-align: center; margin: 30px 0;">
       <a href="${APP_URL}" class="action-btn">Visit Our Website</a>
+    </div>
+    <div style="margin: 28px 0 0; padding: 20px 24px; background: rgba(99,102,241,0.06); border: 1px solid rgba(99,102,241,0.15); border-radius: 12px;">
+      <p style="margin: 0 0 14px; color: #a0a0b8; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;">Connect With Us</p>
+      <table cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+          <td style="padding: 0 6px 0 0; width: 25%;"><a href="https://chat.whatsapp.com/E5S9aCFY4vj0fglz8874Yj" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">💬</div><div style="color:#25d366;font-size:11px;font-weight:700;">WhatsApp</div></a></td>
+          <td style="padding: 0 6px; width: 25%;"><a href="https://instagram.com/zentrio3" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(225,48,108,0.1);border:1px solid rgba(225,48,108,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">📸</div><div style="color:#e1306c;font-size:11px;font-weight:700;">Instagram</div></a></td>
+          <td style="padding: 0 6px; width: 25%;"><a href="#" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">▶️</div><div style="color:#ff0000;font-size:11px;font-weight:700;">YouTube</div></a></td>
+          <td style="padding: 0 0 0 6px; width: 25%;"><a href="mailto:zentriotechnology3@gmail.com" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">📧</div><div style="color:#6366f1;font-size:11px;font-weight:700;">Email</div></a></td>
+        </tr>
+        <tr>
+          <td style="padding: 10px 6px 0 0; width: 25%;"><a href="#" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">𝕏</div><div style="color:#ffffff;font-size:11px;font-weight:700;">X / Twitter</div></a></td>
+          <td style="padding: 10px 6px 0; width: 25%;"><a href="#" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(10,102,194,0.1);border:1px solid rgba(10,102,194,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">💼</div><div style="color:#0a66c2;font-size:11px;font-weight:700;">LinkedIn</div></a></td>
+          <td style="padding: 10px 6px 0; width: 25%;"><a href="#" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">🎮</div><div style="color:#5865f2;font-size:11px;font-weight:700;">Discord</div></a></td>
+          <td style="padding: 10px 0 0 6px; width: 25%;"><a href="#" target="_blank" style="display:block;text-decoration:none;text-align:center;padding:10px 6px;background:rgba(255,69,0,0.1);border:1px solid rgba(255,69,0,0.25);border-radius:10px;"><div style="font-size:18px;margin-bottom:4px;">🔴</div><div style="color:#ff4500;font-size:11px;font-weight:700;">Reddit</div></a></td>
+        </tr>
+      </table>
     </div>
   `;
   
@@ -583,5 +597,142 @@ module.exports = {
   sendQuotationNotification,
   sendInvoiceNotification,
   sendContactInquiryToAdmin,
-  sendContactConfirmationToCustomer
+  sendContactConfirmationToCustomer,
+  sendSubscribeWelcomeEmail
 };
+
+// ─── Subscribe Welcome Email ─────────────────────────────────────────────────
+async function sendSubscribeWelcomeEmail(toEmail) {
+  const subject = '🎉 Welcome to Zentrio — You\'re In!';
+
+  const html = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to Zentrio</title>
+</head>
+<body style="margin:0;padding:0;background:#0a0a0f;font-family:'Segoe UI',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#0a0a0f;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="100%" style="max-width:560px;background:#111118;border-radius:16px;overflow:hidden;border:1px solid rgba(99,102,241,0.2);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#6366f1 0%,#00dfd8 100%);padding:36px 32px;text-align:center;">
+              <h1 style="margin:0;color:#fff;font-size:28px;font-weight:800;letter-spacing:-0.5px;">ZENTRIO</h1>
+              <p style="margin:8px 0 0;color:rgba(255,255,255,0.85);font-size:14px;letter-spacing:0.04em;">AI Engineering &amp; Solutions</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:36px 32px;">
+              <h2 style="margin:0 0 12px;color:#ffffff;font-size:22px;font-weight:700;">You're now subscribed! 🚀</h2>
+              <p style="margin:0 0 24px;color:#a0a0b8;font-size:15px;line-height:1.7;">
+                Thank you for joining the Zentrio community. You'll receive our quarterly engineering releases, AI insights, and product updates directly in your inbox.
+              </p>
+              <p style="margin:0 0 28px;color:#a0a0b8;font-size:15px;line-height:1.7;">
+                In the meantime, connect with us across our community channels:
+              </p>
+
+              <!-- Community Links -->
+              <table width="100%" cellpadding="0" cellspacing="0">
+
+                <!-- WhatsApp -->
+                <tr>
+                  <td style="padding:0 0 14px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(37,211,102,0.08);border:1px solid rgba(37,211,102,0.25);border-radius:12px;">
+                      <tr>
+                        <td style="padding:16px 20px;">
+                          <table cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding-right:14px;vertical-align:middle;">
+                                <div style="width:40px;height:40px;background:rgba(37,211,102,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;text-align:center;line-height:40px;font-size:20px;">💬</div>
+                              </td>
+                              <td style="vertical-align:middle;">
+                                <p style="margin:0 0 2px;color:#25d366;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">WhatsApp Community</p>
+                                <a href="https://chat.whatsapp.com/E5S9aCFY4vj0fglz8874Yj" style="color:#ffffff;font-size:14px;text-decoration:none;word-break:break-all;">Join our WhatsApp Group →</a>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Instagram -->
+                <tr>
+                  <td style="padding:0 0 14px 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(225,48,108,0.08);border:1px solid rgba(225,48,108,0.25);border-radius:12px;">
+                      <tr>
+                        <td style="padding:16px 20px;">
+                          <table cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding-right:14px;vertical-align:middle;">
+                                <div style="width:40px;height:40px;background:rgba(225,48,108,0.15);border-radius:50%;text-align:center;line-height:40px;font-size:20px;">📸</div>
+                              </td>
+                              <td style="vertical-align:middle;">
+                                <p style="margin:0 0 2px;color:#e1306c;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">Instagram</p>
+                                <a href="https://instagram.com/zentrio3" style="color:#ffffff;font-size:14px;text-decoration:none;">@zentrio3 →</a>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+                <!-- Gmail -->
+                <tr>
+                  <td style="padding:0 0 0 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.25);border-radius:12px;">
+                      <tr>
+                        <td style="padding:16px 20px;">
+                          <table cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td style="padding-right:14px;vertical-align:middle;">
+                                <div style="width:40px;height:40px;background:rgba(99,102,241,0.15);border-radius:50%;text-align:center;line-height:40px;font-size:20px;">📧</div>
+                              </td>
+                              <td style="vertical-align:middle;">
+                                <p style="margin:0 0 2px;color:#6366f1;font-size:13px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;">Email Us</p>
+                                <a href="mailto:zentriotechnology3@gmail.com" style="color:#ffffff;font-size:14px;text-decoration:none;">zentriotechnology3@gmail.com →</a>
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;border-top:1px solid rgba(255,255,255,0.06);text-align:center;">
+              <p style="margin:0;color:#555570;font-size:12px;line-height:1.6;">
+                © 2026 Zentrio AI Corp. · You're receiving this because you subscribed at zentrio.in<br/>
+                <a href="mailto:zentriotechnology3@gmail.com" style="color:#6366f1;text-decoration:none;">Unsubscribe</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+  const text = `Welcome to Zentrio!\n\nThank you for subscribing. Connect with us:\n\n💬 WhatsApp: https://chat.whatsapp.com/E5S9aCFY4vj0fglz8874Yj\n📸 Instagram: @zentrio3 — https://instagram.com/zentrio3\n📧 Email: zentriotechnology3@gmail.com\n\n© 2026 Zentrio AI Corp.`;
+
+  return sendEmail({ to: toEmail, subject, html, text });
+}
+

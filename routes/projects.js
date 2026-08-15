@@ -80,7 +80,7 @@ router.post('/', authenticate, async (req, res) => {
         { id: 'm_init', title: 'Project Proposal Review', status: 'pending' },
         { id: 'm_spec', title: 'Detailed Requirement Specification', status: 'pending' }
       ],
-      deliverables: [],
+      deliverables: req.body.deliverables || [],
       createdAt: new Date().toISOString() 
     };
 

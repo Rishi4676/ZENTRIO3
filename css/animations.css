@@ -171,12 +171,13 @@
   width: 90px;
   border-radius: 50%;
   object-fit: contain;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
   border: 2px solid var(--border-color);
   padding: 12px;
   margin-bottom: 2rem;
   animation: splash-logo-entry 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards, floating 6s ease-in-out infinite 1.2s;
   filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.4));
+  mix-blend-mode: lighten;
 }
 
 .splash-title {

@@ -46,6 +46,9 @@ export const WorkerDashboard: React.FC = () => {
   const [delName, setDelName] = useState('');
   const [delUrl, setDelUrl] = useState('');
   const [delSuccess, setDelSuccess] = useState('');
+  const [delFile, setDelFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   // Internal Chat State
   const [teamMessage, setTeamMessage] = useState('');
@@ -115,21 +118,60 @@ export const WorkerDashboard: React.FC = () => {
     markAttendance(currentUser.id, 'absent');
   };
 
-  const handleUploadDeliverable = (e: React.FormEvent) => {
+  const getCsrfToken = () => {
+    if (typeof document === 'undefined') return '';
+    return document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1] || '';
+  };
+
+  const handleUploadDeliverable = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!delProjectId || !delName) return;
+
+    let finalUrl = delUrl || '#';
+    setIsUploading(true);
+    setUploadError('');
+
+    if (delFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', delFile);
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': getCsrfToken()
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          finalUrl = data.url;
+        } else {
+          throw new Error(data.message || 'File upload failed');
+        }
+      } catch (err: any) {
+        console.error('Deliverable upload error:', err);
+        setUploadError(`File upload failed: ${err.message}. Please try again.`);
+        setIsUploading(false);
+        return;
+      }
+    }
 
     addDeliverable(
       delProjectId,
       delName,
-      delUrl || '#',
+      finalUrl,
       currentUser?.name || 'Assigned Developer'
     );
 
+    setIsUploading(false);
     setDelSuccess(`Deliverable "${delName}" committed to repository workspace successfully.`);
     setDelProjectId('');
     setDelName('');
     setDelUrl('');
+    setDelFile(null);
     setTimeout(() => setDelSuccess(''), 5000);
   };
 
@@ -232,7 +274,7 @@ export const WorkerDashboard: React.FC = () => {
         <aside className="w-full md:w-64 shrink-0 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200/50 dark:border-slate-900">
           <button
             onClick={() => setActiveTab('tasks')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'tasks'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -244,7 +286,7 @@ export const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('attendance')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'attendance'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -256,7 +298,7 @@ export const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('deliverables')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'deliverables'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -268,7 +310,7 @@ export const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('chat')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'chat'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -280,7 +322,7 @@ export const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('deadlines')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'deadlines'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -544,6 +586,30 @@ export const WorkerDashboard: React.FC = () => {
                     onChange={(e) => setDelUrl(e.target.value)}
                     className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none"
                   />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">Deliverable File (Optional)</label>
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        setDelFile(e.target.files[0]);
+                        if (!delName) {
+                          setDelName(e.target.files[0].name);
+                        }
+                        setUploadError('');
+                      } else {
+                        setDelFile(null);
+                      }
+                    }}
+                    className="w-full text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-indigo-600/10 file:text-indigo-600 dark:file:text-indigo-400 hover:file:bg-indigo-600/20 bg-transparent text-slate-500 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-1.5"
+                  />
+                  <div className="mt-1 flex flex-col gap-0.5">
+                    {isUploading && <span className="text-[10px] text-indigo-500 font-semibold animate-pulse">Uploading file to storage...</span>}
+                    {uploadError && <span className="text-[10px] text-rose-500 font-semibold">{uploadError}</span>}
+                    {delFile && !isUploading && !uploadError && <span className="text-[10px] text-emerald-500 font-semibold">Selected file: {delFile.name} ({(delFile.size / 1024).toFixed(1)} KB)</span>}
+                  </div>
                 </div>
 
                 <button

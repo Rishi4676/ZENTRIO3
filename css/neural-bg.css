@@ -1,0 +1,21 @@
+/* Zentrio Neural Background Style Sheet - Localized to Hero Background */
+#zentrio-neural-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Layered behind hero text elements, but inside hero background */
+  pointer-events: none; /* Let all clicks pass through to interactive UI */
+  background-color: transparent !important; /* Transparent background to reveal base gradients */
+  display: block;
+  opacity: 0.8; /* Opacity blend for a subtle, cinematic look */
+  transition: opacity 0.5s ease;
+}
+
+/* Supports prefers-reduced-motion settings */
+@media (prefers-reduced-motion: reduce) {
+  #zentrio-neural-bg {
+    opacity: 0.4;
+  }
+}

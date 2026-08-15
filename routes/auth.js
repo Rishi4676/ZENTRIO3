@@ -529,7 +529,7 @@ router.post('/signup', signupLimiter, csrfCheck, async (req, res) => {
 // Login
 router.post('/login', loginLimiter, csrfCheck, async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
 
     if (!email || !password) {
       return res.status(400).json({ success: false, message: 'All fields are required' });
@@ -553,6 +553,14 @@ router.post('/login', loginLimiter, csrfCheck, async (req, res) => {
 
     if (!user) {
       return res.status(404).json({ success: false, message: 'Account not found' });
+    }
+
+    // Validate account role against requested portal role
+    if (role && user.role !== role) {
+      return res.status(403).json({ 
+        success: false, 
+        message: `Access restricted. This page is only for ${role}s, but your account is registered as a ${user.role}.` 
+      });
     }
 
     let isAuthenticated = false;

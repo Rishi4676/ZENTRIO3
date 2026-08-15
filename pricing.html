@@ -666,10 +666,12 @@
         <div>
           <h4 style="font-size:0.875rem; font-weight:600; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:1.2rem;">Stay Updated</h4>
           <p style="color:var(--text-secondary); font-size: 0.875rem; margin-bottom: 1rem; line-height: 1.4;">Subscribe for our quarterly engineering releases.</p>
-          <form style="display:flex; gap:8px;" onsubmit="event.preventDefault(); alert('Subscribed successfully!'); this.reset();">
-            <input type="email" placeholder="email@address.com" required style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:8px 12px; font-size:0.875rem; color:white; flex-grow:1; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent-indigo)'" onblur="this.style.borderColor='var(--border-color)'">
-            <button type="submit" class="btn btn-primary" style="padding:8px 16px; font-size:0.8125rem;">Join</button>
-          </form>
+          <div id="newsletter-container">
+            <form style="display:flex; gap:8px;" onsubmit="event.preventDefault(); document.getElementById('newsletter-container').innerHTML = '<p style=\'color:var(--accent-cyan); font-size:0.875rem; font-weight:600; margin:0; padding:4px 0; animation: fadeIn 0.3s;\'>🎉 Thank you! Subscribed to releases.</p>';">
+              <input type="email" placeholder="Enter your email address" required style="background:rgba(255,255,255,0.03); border:1px solid var(--border-color); border-radius:var(--border-radius-sm); padding:8px 12px; font-size:0.875rem; color:white; flex-grow:1; outline:none; transition:border-color 0.2s;" onfocus="this.style.borderColor='var(--accent-indigo)'" onblur="this.style.borderColor='var(--border-color)'">
+              <button type="submit" class="btn btn-primary" style="padding:8px 16px; font-size:0.8125rem;">Join</button>
+            </form>
+          </div>
         </div>
       </div>
       <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border-color); padding-top:2rem; font-size:0.75rem; color:var(--text-muted);" class="footer-bottom">

@@ -240,7 +240,7 @@ export const AdminDashboard: React.FC = () => {
         <aside className="w-full md:w-64 shrink-0 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200/50 dark:border-slate-900">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'overview'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -252,7 +252,7 @@ export const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('clients')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'clients'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -264,7 +264,7 @@ export const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('workers')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'workers'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -276,7 +276,7 @@ export const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('projects')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'projects'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -288,7 +288,7 @@ export const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('finance')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'finance'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -301,7 +301,7 @@ export const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('reports')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'reports'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -313,7 +313,7 @@ export const AdminDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('settings')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'settings'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'

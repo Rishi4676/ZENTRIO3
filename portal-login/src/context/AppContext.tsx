@@ -56,6 +56,7 @@ interface AppContextType {
     budget: number;
     deadline: string;
     additionalNotes?: string;
+    deliverables?: any[];
   }) => string;
   updateProjectStatus: (projectId: string, status: ProjectStatus, progress?: number) => void;
   assignProjectWorker: (projectId: string, workerId: string) => void;
@@ -666,6 +667,66 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [currentUser]);
 
+  // Security Policy: Auto logout on inactivity or tab hidden for more than 5 minutes
+  useEffect(() => {
+    if (!currentUser) return;
+
+    // 1. Detect switching away / Tab shifts
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        sessionStorage.setItem('tab_hidden_timestamp', Date.now().toString());
+      } else if (document.visibilityState === 'visible') {
+        const hiddenTimeStr = sessionStorage.getItem('tab_hidden_timestamp');
+        if (hiddenTimeStr) {
+          const hiddenTime = parseInt(hiddenTimeStr, 10);
+          const elapsed = Date.now() - hiddenTime;
+          const limit = 5 * 60 * 1000; // 5 minutes threshold
+          if (elapsed > limit) {
+            sessionStorage.removeItem('tab_hidden_timestamp');
+            logout();
+          }
+        }
+      }
+    };
+
+    // 2. Client-side inactivity idle logout (5 minutes idle)
+    let idleTimeout: any;
+    const resetIdleTimer = () => {
+      clearTimeout(idleTimeout);
+      idleTimeout = setTimeout(() => {
+        logout();
+      }, 5 * 60 * 1000); // 5 minutes idle
+    };
+
+    // 3. Listen to local storage to sync logout across other open tabs
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'portal_logged_out') {
+        logout();
+      }
+    };
+
+    // Event Listeners
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('storage', handleStorageChange);
+
+    const events = ['mousemove', 'mousedown', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(evt => {
+      document.addEventListener(evt, resetIdleTimer);
+    });
+
+    // Run active idle timer
+    resetIdleTimer();
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('storage', handleStorageChange);
+      events.forEach(evt => {
+        document.removeEventListener(evt, resetIdleTimer);
+      });
+      clearTimeout(idleTimeout);
+    };
+  }, [currentUser]);
+
   // Auth Operations
   const login = async (id: string, password: string, role: UserRole) => {
     try {
@@ -680,12 +741,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             'Content-Type': 'application/json',
             'X-CSRF-Token': getCsrfToken()
           },
-          body: JSON.stringify({ email: id, password })
+          body: JSON.stringify({ email: id, password, role })
         });
         const data = await res.json();
         if (res.ok && data.success && data.user) {
           userRole = (data.user.role as UserRole) || role;
-          if (userRole !== role && role !== 'admin') {
+          if (userRole !== role) {
+            await fetch('/api/auth/clear-session').catch(() => {});
             return { success: false, error: `Access restricted. Account role is ${userRole}, not ${role}.` };
           }
           clientUser = {
@@ -738,6 +800,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
       
       setCurrentUser(clientUser);
+      localStorage.removeItem('portal_logged_out');
       setUsers(prev => [...prev.filter(u => u.email !== clientUser!.email), clientUser!]);
       setCurrentPage(`${clientUser.role}-dashboard`);
       addNotification('Login successful', 'success');
@@ -952,6 +1015,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     setCurrentUser(null);
     localStorage.removeItem('current_user');
+    localStorage.setItem('portal_logged_out', Date.now().toString());
     setCurrentPage('client-login');
     addNotification('Session closed successfully.', 'info');
     window.location.href = '/portal/client-login';
@@ -981,6 +1045,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     budget: number;
     deadline: string;
     additionalNotes?: string;
+    deliverables?: any[];
   }) => {
     if (!currentUser || currentUser.role !== 'client') return '';
 
@@ -997,7 +1062,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         { id: 'm_init', title: 'Project Proposal Review', status: 'pending' },
         { id: 'm_spec', title: 'Detailed Requirement Specification', status: 'pending' }
       ],
-      deliverables: [],
+      deliverables: projectData.deliverables || [],
       createdAt: new Date().toISOString().split('T')[0]
     };
 

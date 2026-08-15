@@ -45,6 +45,9 @@ export const ClientDashboard: React.FC = () => {
   const [orderDeadline, setOrderDeadline] = useState('');
   const [orderNotes, setOrderNotes] = useState('');
   const [orderSuccess, setOrderSuccess] = useState('');
+  const [orderFile, setOrderFile] = useState<File | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
 
   // Support Ticket Form States
   const [ticketSubject, setTicketSubject] = useState('');
@@ -94,9 +97,52 @@ export const ClientDashboard: React.FC = () => {
   const clientTickets = tickets.filter(t => t.clientId === currentUser?.email);
   const clientPayments = payments.filter(p => p.clientId === currentUser?.email);
 
-  const handleOrderSubmit = (e: React.FormEvent) => {
+  const getCsrfToken = () => {
+    if (typeof document === 'undefined') return '';
+    return document.cookie.split('; ').find(row => row.startsWith('csrfToken='))?.split('=')[1] || '';
+  };
+
+  const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!orderTitle || !orderBudget || !orderDeadline) return;
+
+    let deliverables: any[] = [];
+    setIsUploading(true);
+    setUploadError('');
+
+    if (orderFile) {
+      try {
+        const formData = new FormData();
+        formData.append('file', orderFile);
+
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': getCsrfToken()
+          },
+          body: formData
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          deliverables.push({
+            id: `d-${Date.now()}`,
+            name: data.fileName || orderFile.name,
+            url: data.url,
+            uploadedAt: new Date().toISOString().split('T')[0],
+            uploadedBy: currentUser?.name || 'Client Owner'
+          });
+        } else {
+          throw new Error(data.message || 'File upload failed');
+        }
+      } catch (err: any) {
+        console.error('File upload error during submit:', err);
+        setUploadError(`File upload failed: ${err.message}. Please try again.`);
+        setIsUploading(false);
+        return;
+      }
+    }
 
     const projectId = addProject({
       title: orderTitle,
@@ -105,8 +151,11 @@ export const ClientDashboard: React.FC = () => {
       techRequired: orderTech.split(',').map(t => t.trim()).filter(Boolean),
       budget: parseFloat(orderBudget),
       deadline: orderDeadline,
-      additionalNotes: orderNotes
+      additionalNotes: orderNotes,
+      deliverables
     });
+
+    setIsUploading(false);
 
     if (projectId) {
       setOrderSuccess(`Project proposal "${orderTitle}" submitted successfully under ticket ID: ${projectId}.`);
@@ -116,6 +165,7 @@ export const ClientDashboard: React.FC = () => {
       setOrderBudget('');
       setOrderDeadline('');
       setOrderNotes('');
+      setOrderFile(null);
       setTimeout(() => setOrderSuccess(''), 5000);
     }
   };
@@ -267,7 +317,7 @@ export const ClientDashboard: React.FC = () => {
         <aside className="w-full md:w-64 shrink-0 flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-3 md:pb-0 border-b md:border-b-0 md:border-r border-slate-200/50 dark:border-slate-900">
           <button
             onClick={() => setActiveTab('projects')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'projects'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -279,7 +329,7 @@ export const ClientDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('order')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'order'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -292,7 +342,7 @@ export const ClientDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('payments')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'payments'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -304,7 +354,7 @@ export const ClientDashboard: React.FC = () => {
 
           <button
             onClick={() => setActiveTab('profile')}
-            className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 transition ${
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
               activeTab === 'profile'
                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-500/20'
                 : 'hover:bg-slate-200/50 dark:hover:bg-slate-900/50 text-slate-600 dark:text-slate-400'
@@ -437,7 +487,13 @@ export const ClientDashboard: React.FC = () => {
                               {project.deliverables.map(del => (
                                 <button
                                   key={del.id}
-                                  onClick={() => alert(`Mock Download: Triggering retrieval for "${del.name}"`)}
+                                  onClick={() => {
+                                    if (del.url && del.url !== '#') {
+                                      window.open(del.url, '_blank');
+                                    } else {
+                                      alert(`Mock Download: Triggering retrieval for "${del.name}"`);
+                                    }
+                                  }}
                                   className="px-3.5 py-2 text-[10px] font-bold bg-emerald-500/10 hover:bg-emerald-500 hover:text-white text-emerald-600 dark:text-emerald-400 rounded-xl transition flex items-center space-x-1.5 border border-emerald-500/20"
                                 >
                                   <Download className="w-3.5 h-3.5" />
@@ -568,14 +624,26 @@ export const ClientDashboard: React.FC = () => {
                     />
                   </div>
 
-                  {/* File Upload mock */}
+                  {/* File Upload enabled */}
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">Requirement Document (Optional)</label>
                     <input
                       type="file"
-                      disabled
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          setOrderFile(e.target.files[0]);
+                          setUploadError('');
+                        } else {
+                          setOrderFile(null);
+                        }
+                      }}
                       className="w-full text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-indigo-600/10 file:text-indigo-600 dark:file:text-indigo-400 hover:file:bg-indigo-600/20 bg-transparent text-slate-500 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-1.5"
                     />
+                    <div className="mt-1 flex flex-col gap-0.5">
+                      {isUploading && <span className="text-[10px] text-indigo-500 font-semibold animate-pulse">Uploading file to storage...</span>}
+                      {uploadError && <span className="text-[10px] text-rose-500 font-semibold">{uploadError}</span>}
+                      {orderFile && !isUploading && !uploadError && <span className="text-[10px] text-emerald-500 font-semibold">Selected file: {orderFile.name} ({(orderFile.size / 1024).toFixed(1)} KB)</span>}
+                    </div>
                   </div>
                 </div>
 

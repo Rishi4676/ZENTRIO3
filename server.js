@@ -78,6 +78,7 @@ app.use('/assets', express.static(path.join(__dirname, 'assets'), { ...cacheCont
 app.use('/admin', express.static(path.join(__dirname, 'admin0', 'dist'), cacheControlOptions));
 app.use('/portal', express.static(path.join(__dirname, 'portal-login', 'dist'), cacheControlOptions));
 app.use('/publicity', express.static(path.join(__dirname, 'publicity'), cacheControlOptions));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), cacheControlOptions));
 
 
 // Mount API Routers
@@ -95,6 +96,8 @@ app.use('/api/leaves', require('./routes/leaves'));
 app.use('/api/payroll', require('./routes/payroll'));
 app.use('/api/ai', require('./routes/ai'));
 app.use('/api/payment', require('./routes/payment_api'));
+app.use('/api/upload', require('./routes/upload'));
+app.use('/api/subscribe', require('./routes/subscribe'));
 app.use('/', require('./routes/admin_api'));
 
 // Static Logo/Asset Endpoints
@@ -141,6 +144,10 @@ app.get('/login', (req, res) => {
 
 app.get('/signup', (req, res) => {
   res.redirect('/portal/');
+});
+
+app.get('/preview-bg', (req, res) => {
+  res.sendFile(path.join(__dirname, 'preview-bg.html'));
 });
 
 // Admin SPA Fallback

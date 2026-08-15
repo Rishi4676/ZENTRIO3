@@ -132,15 +132,20 @@ function initGSAPHeroEntrance() {
       .to('.hero h1', { y: 0, opacity: 1, duration: 1.2 }, '-=0.7')
       .to('.hero-subtitle', { y: 0, opacity: 1, duration: 1 }, '-=0.9')
       .to('.hero-ctas', { y: 0, opacity: 1, duration: 0.8 }, '-=0.8')
+      .to('.hero-visual', { scale: 1, opacity: 1, duration: 1.5, ease: 'power3.out' }, '-=1.1')
       .to('.scroll-indicator', { opacity: 1, duration: 0.5 }, '-=0.4');
   } else {
     // If GSAP didn't load, use CSS transition class fallback
-    const elements = ['.hero-badge', '.hero h1', '.hero-subtitle', '.hero-ctas', '.scroll-indicator'];
+    const elements = ['.hero-badge', '.hero h1', '.hero-subtitle', '.hero-ctas', '.hero-visual', '.scroll-indicator'];
     elements.forEach((el, index) => {
       const domEl = document.querySelector(el);
       if (domEl) {
         setTimeout(() => {
-          domEl.style.transform = 'translateY(0)';
+          if (el === '.hero-visual') {
+            domEl.style.transform = 'scale(1)';
+          } else {
+            domEl.style.transform = 'translateY(0)';
+          }
           domEl.style.opacity = '1';
           domEl.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
         }, index * 150);

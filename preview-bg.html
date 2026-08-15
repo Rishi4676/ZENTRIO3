@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zentrio AI - Premium Background Animation Preview Console</title>
+  
+  <!-- Direct CDN loading of Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Zentrio Global & Navbar Styles -->
+  <link rel="stylesheet" href="/css/global.css">
+  <link rel="stylesheet" href="/css/navbar.css">
+  
+  <!-- Newly Created Background Styles -->
+  <link rel="stylesheet" href="/css/neural-bg.css?v=3">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #020205;
+      color: #ffffff;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Cinematic Layout */
+    .preview-container {
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 30px;
+      max-width: 1400px;
+      width: 100%;
+      margin: auto;
+      padding: 40px 20px;
+      z-index: 10;
+      flex-grow: 1;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 991px) {
+      .preview-container {
+        grid-template-columns: 1fr;
+        padding-top: 100px;
+      }
+    }
+
+    /* Glassmorphic Panel UI */
+    .glass-panel {
+      background: rgba(10, 10, 18, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .brand-hero {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+    }
+
+    .brand-hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, #00dfd8 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-hero p {
+      color: #94a3b8;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    /* Form Controls */
+    .control-group {
+      margin-bottom: 24px;
+    }
+
+    .control-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      color: #cbd5e1;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .control-label span.val {
+      color: #00dfd8;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.1);
+      outline: none;
+      -webkit-appearance: none;
+      transition: background 0.2s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #00dfd8;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 223, 216, 0.8);
+      transition: transform 0.1s;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+    }
+
+    /* Buttons */
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #00dfd8 0%, #6366f1 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0, 223, 216, 0.3);
+      transition: all 0.3s ease;
+      margin-top: 15px;
+    }
+
+    .btn-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 223, 216, 0.5);
+    }
+
+    .btn-action:active {
+      transform: translateY(0);
+    }
+
+    /* Integration Guide box */
+    .guide-box {
+      margin-top: 25px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      padding: 15px;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      color: #94a3b8;
+    }
+
+    .guide-box code {
+      color: #e2e8f0;
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .recording-overlay {
+      display: none;
+      position: fixed;
+      top: 30px;
+      left: 30px;
+      background: rgba(239, 68, 68, 0.9);
+      border: 1px solid #ef4444;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: white;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+      z-index: 1000;
+      animation: pulseAlert 1.5s infinite alternate;
+    }
+
+    @keyframes pulseAlert {
+      0% { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .recording-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: white;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Static header just to align with existing designs -->
+  <header style="position: absolute; top:0; left:0; width:100%; z-index:100; padding: 20px;">
+    <div style="max-width:1400px; margin:auto; display:flex; justify-content:space-between; align-items:center;">
+      <a href="/" style="display:flex; align-items:center; gap:10px; text-decoration:none; color:white;">
+        <img src="/LOGOO.png" alt="Zentrio Logo" style="height:32px; object-fit:contain;">
+        <span style="font-weight:800; font-size:1.25rem; letter-spacing:-0.02em;">ZENTRIO</span>
+      </a>
+      <a href="/" style="color:#94a3b8; font-size:0.875rem; text-decoration:none; border:1px solid rgba(255,255,255,0.1); padding:8px 16px; border-radius:30px; background:rgba(0,0,0,0.2);">Return to Site</a>
+    </div>
+  </header>
+
+  <!-- Background animation Canvas container -->
+  <canvas id="zentrio-neural-bg"></canvas>
+
+  <div class="preview-container">
+    <!-- Left Hero/Visual Area -->
+    <div class="brand-hero">
+      <h1>AI Neural Network<br>& Digital Energy Flow</h1>
+      <p>Premium cinematic animation asset developed for Zentrio AI. Engineered directly on HTML5 Canvas using lightweight, GPU-optimized vertex connection paths. Zero lag. Infinite periodic drift loops.</p>
+      
+      <div class="glass-panel" style="max-width: 600px; padding: 25px;">
+        <h3 style="margin-top:0; font-size:1.1rem; color:#e2e8f0; margin-bottom:12px;">Visual Concept Highlights</h3>
+        <ul style="margin: 0; padding-left: 20px; color:#94a3b8; font-size:0.9rem; line-height: 1.6;">
+          <li>Warm glowing central AI Core utilizing composite radial light shaders.</li>
+          <li>Depth of field simulated via layered node sizing and selective interconnectivity.</li>
+          <li>Liquid parallax response that interpolates coordinate changes smoothly.</li>
+          <li>Strict compliance with hardware-acceleration rules for maximum rendering speed.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Right Settings Overlay Panel -->
+    <div class="glass-panel" style="display:flex; flex-direction:column; justify-content:center;">
+      <h2 style="margin-top:0; font-size:1.35rem; font-weight:700; margin-bottom:20px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:12px; color:#e2e8f0;">Animation Control Panel</h2>
+      
+      <!-- Opacity Slider -->
+      <div class="control-group">
+        <label class="control-label">Background Opacity <span class="val" id="val-opacity">0.7</span></label>
+        <input type="range" id="slider-opacity" min="0.1" max="1" step="0.05" value="0.7">
+      </div>
+
+      <!-- Speed Slider -->
+      <div class="control-group">
+        <label class="control-label">Drifting Velocity <span class="val" id="val-speed">0.5</span></label>
+        <input type="range" id="slider-speed" min="0.05" max="2" step="0.05" value="0.5">
+      </div>
+
+      <!-- Glow Slider -->
+      <div class="control-group">
+        <label class="control-label">Synapse Glow Depth <span class="val" id="val-glow">15</span></label>
+        <input type="range" id="slider-glow" min="0" max="40" step="5" value="15">
+      </div>
+
+      <!-- Node count Slider -->
+      <div class="control-group">
+        <label class="control-label">Particle Nodes Density <span class="val" id="val-density">60</span></label>
+        <input type="range" id="slider-density" min="15" max="150" step="5" value="60">
+      </div>
+
+      <!-- Video loop capture trigger -->
+      <button class="btn-action" id="btn-export">
+        <svg style="width:18px; height:18px; margin-right:8px;" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5h10.5a2.25 2.25 0 002.25-2.25v-10.5A2.25 2.25 0 0016.5 4.5H6.75A2.25 2.25 0 004.5 6.75v10.5A2.25 2.25 0 006.75 19.5z" />
+        </svg>
+        Export WebM Loop (20s)
+      </button>
+
+      <div class="guide-box">
+        💡 <strong>Quick Info:</strong> Click the button above to record a 20-second seamless loop. The browser will render and download a high-definition <code>.webm</code> file instantly.
+      </div>
+    </div>
+  </div>
+
+  <!-- Capture status overlay -->
+  <div class="recording-overlay" id="rec-status">
+    <div class="recording-dot"></div>
+    <span>RECORDING CANVAS LOOP (20s)...</span>
+  </div>
+
+  <!-- Background JavaScript Engine -->
+  <script src="/js/neural-bg.js?v=3"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Initialize background instance
+      const bg = new ZentrioNeuralBackground('zentrio-neural-bg', {
+        opacity: 0.7,
+        speed: 0.5,
+        glow: 15,
+        particleCount: 60
+      });
+
+      // 2. Setup interactive controls
+      const sOpacity = document.getElementById('slider-opacity');
+      const sSpeed = document.getElementById('slider-speed');
+      const sGlow = document.getElementById('slider-glow');
+      const sDensity = document.getElementById('slider-density');
+
+      const vOpacity = document.getElementById('val-opacity');
+      const vSpeed = document.getElementById('val-speed');
+      const vGlow = document.getElementById('val-glow');
+      const vDensity = document.getElementById('val-density');
+
+      sOpacity.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        vOpacity.textContent = val.toFixed(2);
+        bg.updateOptions({ opacity: val });
+      });
+
+      sSpeed.addEventListener('input', (e) => {
+        const val = parseFloat(e.target.value);
+        vSpeed.textContent = val.toFixed(2);
+        bg.updateOptions({ speed: val });
+      });
+
+      sGlow.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        vGlow.textContent = val;
+        bg.updateOptions({ glow: val });
+      });
+
+      sDensity.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value, 10);
+        vDensity.textContent = val;
+        bg.updateOptions({ particleCount: val });
+      });
+
+      // 3. Handle WebM Loop Capture
+      const btnExport = document.getElementById('btn-export');
+      const recStatus = document.getElementById('rec-status');
+
+      btnExport.addEventListener('click', () => {
+        btnExport.disabled = true;
+        btnExport.style.opacity = '0.5';
+        recStatus.style.display = 'flex';
+
+        // High quality capture
+        bg.exportLoop(20, (downloadUrl) => {
+          btnExport.disabled = false;
+          btnExport.style.opacity = '1';
+          recStatus.style.display = 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
