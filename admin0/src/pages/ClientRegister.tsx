@@ -18,7 +18,22 @@ export const ClientRegister: React.FC = () => {
     agreeTerms: false
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [captchaAnswer, setCaptchaAnswer] = useState('');
+  const [captchaNum1, setCaptchaNum1] = useState(3);
+  const [captchaNum2, setCaptchaNum2] = useState(4);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+
+  useEffect(() => {
+    setCaptchaNum1(Math.floor(Math.random() * 8) + 2);
+    setCaptchaNum2(Math.floor(Math.random() * 8) + 1);
+  }, []);
+
+  const refreshCaptcha = () => {
+    setCaptchaNum1(Math.floor(Math.random() * 8) + 2);
+    setCaptchaNum2(Math.floor(Math.random() * 8) + 1);
+    setCaptchaAnswer('');
+  };
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -87,10 +102,19 @@ export const ClientRegister: React.FC = () => {
   };
 
   const handleSendEmailOtp = async () => {
-    if (!formData.email || !formData.name) {
-      alert('Please fill out your Name and Email address first.');
+    if (!formData.name || !formData.email) {
+      setErrorMessage('Please enter your Name and Email address first.');
       return;
     }
+    if (!formData.agreeTerms) {
+      setErrorMessage('Please accept the Terms of Service & Privacy Policy agreement before requesting OTP.');
+      return;
+    }
+    if (parseInt(captchaAnswer, 10) !== captchaNum1 + captchaNum2) {
+      setErrorMessage('reCAPTCHA security check failed. Please answer the bot verification math problem correctly.');
+      return;
+    }
+    setErrorMessage('');
     try {
       const response = await fetch('/api/auth/register-otp', {
         method: 'POST',
@@ -107,32 +131,36 @@ export const ClientRegister: React.FC = () => {
       if (response.ok && data.success) {
         setEmailOtpSent(true);
         if (data.otp) {
-          // Dev mode: backend returned the OTP code — auto-fill and show it
           setEmailBypassCode(data.otp);
           setEmailOtp(data.otp);
           setEmailOtpStatus({
             type: 'info',
-            msg: `🔑 Dev mode: OTP auto-filled → ${data.otp}. Resend free tier sent email to admin inbox instead of ${formData.email}.`
+            msg: `🔑 Dev mode: OTP auto-filled → ${data.otp}.`
           });
         } else {
           setEmailOtpStatus({
             type: 'info',
-            msg: `✉️ Verification code sent to ${formData.email}. Check your inbox (or try code '123456' as bypass).`
+            msg: `✉️ Verification code dispatched to ${formData.email}.`
           });
         }
       } else {
         setEmailOtpStatus({ type: 'error', msg: data.message || 'Failed to send verification code.' });
       }
     } catch (err) {
-      alert('Connection error. Server may be offline.');
+      setErrorMessage('Connection error sending OTP code.');
     }
   };
 
   const handleVerifyEmailOtp = async () => {
-    if (!emailOtp) {
-      alert('Please enter the 6-digit verification code.');
+    if (!formData.agreeTerms) {
+      setErrorMessage('Please accept the Terms of Service & Privacy Policy agreement before verifying OTP.');
       return;
     }
+    if (!emailOtp) {
+      setErrorMessage('Please enter the 6-digit verification code.');
+      return;
+    }
+    setErrorMessage('');
     try {
       const response = await fetch('/api/auth/verify-otp', {
         method: 'POST',
@@ -168,12 +196,18 @@ export const ClientRegister: React.FC = () => {
     }
 
     if (!formData.agreeTerms) {
-      setErrorMessage('You must accept the terms & conditions.');
+      setErrorMessage('You must accept the Terms of Service & Privacy Policy agreement before registering.');
       return;
     }
 
     if (!emailVerified) {
       setErrorMessage('Please verify your email address via OTP first.');
+      return;
+    }
+
+    if (parseInt(captchaAnswer, 10) !== captchaNum1 + captchaNum2) {
+      setErrorMessage('reCAPTCHA security check failed. Please answer the bot verification math problem correctly.');
+      refreshCaptcha();
       return;
     }
 
@@ -425,17 +459,53 @@ export const ClientRegister: React.FC = () => {
                     <Lock className="w-4 h-4" />
                   </span>
                   <input
-                    type={showPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? 'text' : 'password'}
                     required
                     placeholder="••••••••••••"
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
-                    className="w-full text-xs pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+                    className="w-full text-xs pl-9 pr-9 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-650 cursor-pointer"
+                  >
+                    {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
           )}
+
+          {/* Bot Protection / Math reCAPTCHA */}
+          <div className="p-3.5 rounded-2xl bg-indigo-500/5 dark:bg-indigo-500/10 border border-indigo-500/20">
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider flex items-center gap-1">
+                <span>🤖 Anti-Bot reCAPTCHA Verification</span>
+              </label>
+              <button
+                type="button"
+                onClick={refreshCaptcha}
+                className="text-[10px] font-bold text-indigo-500 hover:underline cursor-pointer"
+              >
+                Refresh Math
+              </button>
+            </div>
+            <div className="flex items-center space-x-3">
+              <div className="px-3 py-1.5 rounded-xl bg-indigo-600 text-white font-mono font-bold text-sm tracking-wider shadow-sm select-none">
+                {captchaNum1} + {captchaNum2} = ?
+              </div>
+              <input
+                type="number"
+                required
+                placeholder="Result"
+                value={captchaAnswer}
+                onChange={(e) => setCaptchaAnswer(e.target.value)}
+                className="flex-grow text-xs px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+            </div>
+          </div>
 
           {/* Terms & Conditions Checkbox */}
           <div className="flex items-start py-2">
@@ -449,10 +519,14 @@ export const ClientRegister: React.FC = () => {
             />
             <label htmlFor="agree_terms" className="ml-2 text-xs font-semibold text-slate-500 dark:text-slate-400 leading-normal">
               I agree to the{' '}
-              <a href="#" className="text-indigo-500 hover:underline">
-                Terms of Service
-              </a>{' '}
-              and confirm my client parameters are valid.
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(true)}
+                className="text-indigo-500 hover:underline font-bold cursor-pointer"
+              >
+                Terms of Service & Privacy Policy Agreement
+              </button>{' '}
+              and confirm my client registration parameters are valid.
             </label>
           </div>
 
@@ -489,6 +563,40 @@ export const ClientRegister: React.FC = () => {
         </div>
 
       </div>
+
+      {/* TERMS AND CONDITIONS MODAL */}
+      {showTermsModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-lg rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative text-left bg-white dark:bg-slate-950 max-h-[80vh] flex flex-col">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
+              <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Terms of Service & Privacy Agreement</h3>
+              <button
+                onClick={() => setShowTermsModal(false)}
+                className="text-xs text-slate-400 hover:text-slate-600 font-bold px-2 py-1"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <div className="py-4 overflow-y-auto space-y-3 text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              <p><strong>1. Account Security & Verification:</strong> All enterprise accounts require email OTP verification and anti-bot reCAPTCHA validation.</p>
+              <p><strong>2. Data Privacy:</strong> Zentrio AI protects client data, project briefs, and communication logs under SSL/TLS encryption.</p>
+              <p><strong>3. Service Scope:</strong> Clients gain access to project blueprints, engineering estimates, payment tracking, and deliverables handover.</p>
+              <p><strong>4. Fair Use:</strong> Automated scraping, unauthorized bot creation, or abuse of the verification endpoint is strictly prohibited.</p>
+            </div>
+            <div className="pt-3 border-t border-slate-200 dark:border-slate-800 text-right">
+              <button
+                onClick={() => {
+                  setFormData(prev => ({ ...prev, agreeTerms: true }));
+                  setShowTermsModal(false);
+                }}
+                className="px-5 py-2 bg-indigo-600 text-white font-bold rounded-xl text-xs"
+              >
+                Accept & Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

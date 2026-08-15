@@ -489,12 +489,12 @@ router.post('/signup', signupLimiter, csrfCheck, async (req, res) => {
     });
 
     try {
-      await emailService.sendWelcomeEmail(email, name);
+      await emailService.sendWelcomeEmail(email, name, { mobile, clientId: clientId || email });
     } catch (e) {
       console.warn('Welcome email failed to send:', e.message);
     }
 
-    const regTime = new Date().toLocaleString();
+    const regTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata', dateStyle: 'full', timeStyle: 'medium' });
     const adminNotifHtml = `
       <h1 class="body-title" style="color: #6366f1;">New Client Registration Alert</h1>
       <p class="body-text">An enterprise client workspace has been registered and verified successfully:</p>
@@ -503,7 +503,7 @@ router.post('/signup', signupLimiter, csrfCheck, async (req, res) => {
         <div style="margin-bottom:8px;"><span class="badge-label">Work Email:</span> <a href="mailto:${email}" style="color:#6366F1;">${email}</a></div>
         <div style="margin-bottom:8px;"><span class="badge-label">Phone:</span> <span style="color:#FFF;">${mobile || 'N/A'}</span></div>
         <div style="margin-bottom:8px;"><span class="badge-label">Client ID:</span> <span style="color:#FFF;">${clientId || 'N/A'}</span></div>
-        <div><span class="badge-label">Registration Time:</span> <span style="color:#FFF;">${regTime}</span></div>
+        <div><span class="badge-label">Registration Time:</span> <span style="color:#FFF;">${regTime} (IST)</span></div>
       </div>
     `;
     try {

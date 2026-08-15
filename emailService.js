@@ -2,6 +2,7 @@ const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const APP_URL = process.env.APP_URL || 'http://localhost:3000';
+const PUBLIC_DOMAIN = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : (process.env.PUBLIC_URL || APP_URL);
 
 let transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
@@ -214,29 +215,32 @@ const wrapTemplate = (contentTitle, innerHtml) => {
       </head>
       <body>
         <div class="email-container">
-          <div class="header-gradient">
-            <a href="${APP_URL}" class="header-logo">
-              ZENTRIO<span>.AI</span>
-            </a>
+          <div class="header-gradient" style="text-align: center; padding: 30px; background: linear-gradient(135deg, #0F172A 0%, #1E1B4B 50%, #311042 100%); border-bottom: 2px solid #6366F1;">
+            <div style="display: inline-flex; align-items: center; justify-content: center; gap: 12px;">
+              <img src="${PUBLIC_DOMAIN}/LOGOO.png" alt="Zentrio Logo" style="width: 44 h-auto; max-height: 44px; vertical-align: middle;" />
+              <a href="${PUBLIC_DOMAIN}" class="header-logo" style="font-size: 26px; font-weight: 900; color: #FFFFFF; font-family: 'Inter', sans-serif; letter-spacing: -0.03em; text-decoration: none; text-transform: uppercase;">
+                ZENTRIO<span style="color: #6366F1; text-shadow: 0 0 12px rgba(99, 102, 241, 0.6);">.AI</span>
+              </a>
+            </div>
           </div>
           <div class="body-content">
             ${innerHtml}
           </div>
           <div class="footer-section">
             <div class="footer-links">
-              <a href="${APP_URL}/solutions">blueprints</a>
-              <a href="${APP_URL}/pricing">pricing</a>
-              <a href="${APP_URL}/contact">team directory</a>
+              <a href="${PUBLIC_DOMAIN}/#solutions">blueprints</a>
+              <a href="${PUBLIC_DOMAIN}/#pricing">pricing</a>
+              <a href="${PUBLIC_DOMAIN}/#contact">team directory</a>
             </div>
             <div class="footer-text">
               &copy; 2026 Zentrio AI Technology. All rights reserved.<br>
-              100 Pine Street, Suite 2400, San Francisco, CA 94111<br>
-              Have questions? Reach our developer operations desk at <a href="mailto:support@zentrio.ai" style="color:#64748B;">support@zentrio.ai</a>.
+              Zentrio Tech Park, Cyber City, Phase III, Chennai, Tamil Nadu 600001<br>
+              Have questions? Reach our developer operations desk at <a href="mailto:zentriotechnology3@gmail.com" style="color:#6366F1; font-weight: 600;">zentriotechnology3@gmail.com</a>.
             </div>
             <div class="footer-socials">
-              <a href="#" class="social-link">github</a>
-              <a href="#" class="social-link">linkedin</a>
-              <a href="#" class="social-link">x-twitter</a>
+              <a href="https://github.com/Rishi4676/ZENTRIO3" class="social-link" target="_blank">github</a>
+              <a href="${PUBLIC_DOMAIN}" class="social-link" target="_blank">linkedin</a>
+              <a href="${PUBLIC_DOMAIN}" class="social-link" target="_blank">x-twitter</a>
             </div>
           </div>
         </div>
@@ -246,9 +250,9 @@ const wrapTemplate = (contentTitle, innerHtml) => {
 };
 
 // 1. sendWelcomeEmail()
-const sendWelcomeEmail = async (to, name) => {
+const sendWelcomeEmail = async (to, name, clientData = {}) => {
   const subject = 'Registration Successful - Welcome to Zentrio Technology';
-  const text = `Hello ${name},\n\nRegistration Successful! Welcome to Zentrio AI! Your client developer workspace has been created successfully.\n\nLog in at: ${APP_URL}/portal/client-login`;
+  const text = `Hello ${name},\n\nRegistration Successful! Welcome to Zentrio AI! Your client developer workspace has been created successfully.\nMobile: ${clientData.mobile || 'N/A'}\nLog in at: ${PUBLIC_DOMAIN}/portal/client-login`;
   
   const innerHtml = `
     <h1 class="body-title">Registration Successful</h1>
@@ -258,12 +262,16 @@ const sendWelcomeEmail = async (to, name) => {
     <div class="badge-box">
       <div class="badge-label">Account Privilege</div>
       <div class="badge-value">Verified Client Hub Access</div>
+      <div style="margin-top:10px; font-size:13px; color:#CBD5E1;">
+        <strong>Registered Mobile:</strong> ${clientData.mobile || 'N/A'}<br>
+        <strong>Client ID:</strong> ${clientData.clientId || clientData.companyName || to}
+      </div>
     </div>
 
     <p class="body-text">You can now submit project blueprints, approve engineering estimates, download deliverables, and interact directly with your assigned engineering team.</p>
     
     <div style="text-align: center; margin: 30px 0;">
-      <a href="${APP_URL}/portal/client-login" class="action-btn">Enter Client Hub</a>
+      <a href="${PUBLIC_DOMAIN}/portal/client-login" class="action-btn">Enter Client Hub</a>
     </div>
   `;
   
