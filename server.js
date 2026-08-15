@@ -27,17 +27,7 @@ app.use((req, res, next) => {
 
 // Secure HTTP Headers (Helmet)
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://checkout.razorpay.com"],
-      frameSrc: ["'self'", "https://api.razorpay.com", "https://checkout.razorpay.com"],
-      connectSrc: ["'self'", "https://api.razorpay.com"],
-      imgSrc: ["'self'", "data:", "https://checkout.razorpay.com", "https://images.unsplash.com"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"]
-    }
-  },
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 
