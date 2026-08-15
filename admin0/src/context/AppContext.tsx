@@ -80,6 +80,7 @@ interface AppContextType {
 
   // Chat
   sendChatMessage: (recipientId: string, content: string) => void;
+  clearChannelMessages: (channelId: string) => void;
 
   // Workers
   markAttendance: (workerId: string, status: 'present' | 'absent') => void;
@@ -868,12 +869,21 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       console.warn('Firebase logout failed', e);
     }
 
+    const loggedOutRole = currentUser?.role;
     setCurrentUser(null);
     localStorage.removeItem('current_user');
     localStorage.setItem('portal_logged_out', Date.now().toString());
-    setCurrentPage('client-login');
     addNotification('Session closed successfully.', 'info');
-    window.location.href = '/portal/client-login';
+    if (loggedOutRole === 'worker') {
+      setCurrentPage('worker-login');
+      window.location.href = '/portal/worker-login';
+    } else if (loggedOutRole === 'admin') {
+      setCurrentPage('admin-login');
+      window.location.href = '/portal/admin-login';
+    } else {
+      setCurrentPage('client-login');
+      window.location.href = '/portal/client-login';
+    }
   };
 
   const addNotification = (text: string, type: 'info' | 'success' | 'warning') => {
@@ -1429,6 +1439,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }).catch(err => console.error('Failed to save message to Firebase Firestore:', err));
   };
 
+  const clearChannelMessages = (channelId: string) => {
+    setMessages(prev => prev.filter(m => m.recipientId !== channelId));
+  };
+
+
   // Workers Operations
   const markAttendance = (workerId: string, status: 'present' | 'absent') => {
     const today = new Date().toISOString().split('T')[0];
@@ -1716,6 +1731,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       addPayment,
       createPaymentOrder,
       sendChatMessage,
+      clearChannelMessages,
 
       markAttendance,
       addWorkerTask,

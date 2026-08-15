@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Hash, Users, MessageSquare } from 'lucide-react';
+import { Send, Hash, Users, MessageSquare, Trash2 } from 'lucide-react';
 import type { User, Project, ChatMessage } from '../types';
 
 interface ChatWorkspaceProps {
@@ -7,13 +7,15 @@ interface ChatWorkspaceProps {
   messages: ChatMessage[];
   projects: Project[];
   sendChatMessage: (recipientId: string, content: string) => void;
+  clearChannelMessages?: (channelId: string) => void;
 }
 
 export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
   currentUser,
   messages,
   projects,
-  sendChatMessage
+  sendChatMessage,
+  clearChannelMessages
 }) => {
   const [selectedChannel, setSelectedChannel] = useState<string>('internal-team');
   const [chatMessage, setChatMessage] = useState<string>('');
@@ -111,13 +113,29 @@ export const ChatWorkspace: React.FC<ChatWorkspaceProps> = ({
       <div className="flex-grow flex flex-col h-full bg-white/10 dark:bg-slate-950/5">
         {/* Channel Header */}
         <div className="p-4 border-b border-slate-200/50 dark:border-slate-855 bg-slate-50/30 dark:bg-slate-950/20">
-          <div className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-            {selectedChannel === 'internal-team' ? (
-              <Users className="w-4 h-4 text-indigo-500" />
-            ) : (
-              <Hash className="w-4 h-4 text-indigo-500" />
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+              {selectedChannel === 'internal-team' ? (
+                <Users className="w-4 h-4 text-indigo-500" />
+              ) : (
+                <Hash className="w-4 h-4 text-indigo-500" />
+              )}
+              #{currentChannel?.name || selectedChannel}
+            </div>
+            {clearChannelMessages && !isClient && (
+              <button
+                onClick={() => {
+                  if (window.confirm(`Clear all messages in #${currentChannel?.name || selectedChannel}?`)) {
+                    clearChannelMessages(selectedChannel);
+                  }
+                }}
+                className="flex items-center space-x-1 text-[10px] font-bold text-rose-400 hover:text-rose-600 hover:bg-rose-500/10 px-2 py-1 rounded-lg transition cursor-pointer"
+                title="Clear chat history"
+              >
+                <Trash2 className="w-3 h-3" />
+                <span>Clear</span>
+              </button>
             )}
-            #{currentChannel?.name || selectedChannel}
           </div>
           <div className="text-[10px] text-slate-400 font-medium mt-0.5">
             {currentChannel?.description}

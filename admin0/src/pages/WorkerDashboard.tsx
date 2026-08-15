@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import {
   CheckSquare,
@@ -20,7 +20,13 @@ import {
   DollarSign,
   FileText,
   Printer,
-  Briefcase
+  Briefcase,
+  Trash2,
+  Video,
+  Phone,
+  Mail,
+  X,
+  Users
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ChatWorkspace } from '../components/ChatWorkspace';
@@ -38,6 +44,7 @@ export const WorkerDashboard: React.FC = () => {
     addDeliverable,
     messages,
     sendChatMessage,
+    clearChannelMessages,
     notifications,
     clearNotifications,
     leaves,
@@ -45,8 +52,9 @@ export const WorkerDashboard: React.FC = () => {
     addLeaveRequest
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'tasks' | 'attendance' | 'deliverables' | 'chat' | 'deadlines' | 'ai'>('tasks');
+  const [activeTab, setActiveTab] = useState<'tasks' | 'attendance' | 'deliverables' | 'chat' | 'deadlines' | 'ai' | 'meet'>('tasks');
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
+  const [meetModalOpen, setMeetModalOpen] = useState(false);
 
   // Time Tracker stopwatch states
   const [timerActive, setTimerActive] = useState(false);
@@ -76,23 +84,36 @@ export const WorkerDashboard: React.FC = () => {
   const [payslipModalOpen, setPayslipModalOpen] = useState(false);
 
   // AI Assistant States
+  const aiChatKey = `ai_copilot_history_${currentUser?.id || 'worker'}`;
   const [aiPrompt, setAiPrompt] = useState('');
   const [aiLoading, setAiLoading] = useState(false);
-  const [aiChatHistory, setAiChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>([
-    { role: 'ai', text: 'Hello! I am your AI Copilot. Ask me questions about task scripts, HTML layouts, database scaling, or coding templates.' }
-  ]);
+  const aiChatEndRef = useRef<HTMLDivElement | null>(null);
+  const [aiChatHistory, setAiChatHistory] = useState<{ role: 'user' | 'ai'; text: string }[]>(() => {
+    try {
+      const saved = localStorage.getItem(aiChatKey);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return [{ role: 'ai', text: 'Hello! I am your AI Copilot. Ask me questions about task scripts, HTML layouts, database scaling, or coding templates.' }];
+  });
 
-  // Filter lists for this specific worker (matching ID, case-insensitive ID, or Email)
+
+
+  // Filter lists for this specific worker (matching ID, case-insensitive ID, or Email or Name)
   const workerTasks = tasks.filter(t => 
     t.workerId === currentUser?.id || 
     (t.workerId && currentUser?.id && t.workerId.toLowerCase() === currentUser.id.toLowerCase()) ||
-    (t.workerId && currentUser?.email && t.workerId.toLowerCase() === currentUser.email.toLowerCase())
+    (t.workerId && currentUser?.email && t.workerId.toLowerCase() === currentUser.email.toLowerCase()) ||
+    (t.workerId && currentUser?.name && t.workerId.toLowerCase() === currentUser.name.toLowerCase())
   );
   const workerProjects = projects.filter(p => 
     p.assignedWorkerId === currentUser?.id || 
     (p.assignedWorkerId && currentUser?.id && p.assignedWorkerId.toLowerCase() === currentUser.id.toLowerCase()) ||
+    (p.assignedWorkerId && currentUser?.email && p.assignedWorkerId.toLowerCase() === currentUser.email.toLowerCase()) ||
     (p.assignedWorkerName && currentUser?.name && p.assignedWorkerName.toLowerCase() === currentUser.name.toLowerCase())
   );
+  // Fix #7: Only show non-completed projects in deliverable dropdown
+  const activeWorkerProjects = workerProjects.filter(p => p.status !== 'completed' && p.status !== 'delivered');
+
   const workerAttendance = attendance.filter(a => 
     a.workerId === currentUser?.id || 
     (a.workerId && currentUser?.id && a.workerId.toLowerCase() === currentUser.id.toLowerCase()) ||
@@ -120,6 +141,19 @@ export const WorkerDashboard: React.FC = () => {
     }
     return () => clearInterval(interval);
   }, [timerActive]);
+
+  // Fix #4: Persist AI chat history to localStorage on every change
+  useEffect(() => {
+    try {
+      localStorage.setItem(aiChatKey, JSON.stringify(aiChatHistory));
+    } catch {}
+  }, [aiChatHistory]);
+
+  // Auto-scroll AI chat to bottom
+  useEffect(() => {
+    aiChatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [aiChatHistory, aiLoading]);
+
 
   const formatTimer = (seconds: number) => {
     const hrs = Math.floor(seconds / 3600);
@@ -470,6 +504,14 @@ export const WorkerDashboard: React.FC = () => {
           >
             <Bot className="w-4 h-4 shrink-0" />
             <span>AI Copilot</span>
+          </button>
+
+          <button
+            onClick={() => setMeetModalOpen(true)}
+            className="w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+          >
+            <Video className="w-4 h-4 shrink-0" />
+            <span>Team Meet</span>
           </button>
         </aside>
 
@@ -845,79 +887,138 @@ export const WorkerDashboard: React.FC = () => {
                 </div>
               )}
 
-              <form onSubmit={handleUploadDeliverable} className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm max-w-xl space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Select Active Project</label>
-                  <select
-                    required
-                    value={delProjectId}
-                    onChange={(e) => setDelProjectId(e.target.value)}
-                    className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  >
-                    <option value="">Select Project Assignment</option>
-                    {workerProjects.map(p => (
-                      <option key={p.id} value={p.id}>{p.id} - {p.title}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Deliverable Name / Label</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. invite-RSVP-module-dist.zip, documentation.pdf"
-                    value={delName}
-                    onChange={(e) => setDelName(e.target.value)}
-                    className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Resource File Link (HTTP/Cloud url) (Optional)</label>
-                  <input
-                    type="text"
-                    placeholder="https://drive.google.com/file/d/..."
-                    value={delUrl}
-                    onChange={(e) => setDelUrl(e.target.value)}
-                    className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Deliverable File (Optional)</label>
-                  <input
-                    type="file"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 0) {
-                        setDelFile(e.target.files[0]);
-                        if (!delName) {
-                          setDelName(e.target.files[0].name);
-                        }
-                        setUploadError('');
-                      } else {
-                        setDelFile(null);
-                      }
-                    }}
-                    className="w-full text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-indigo-600/10 file:text-indigo-600 dark:file:text-indigo-400 hover:file:bg-indigo-600/20 bg-transparent text-slate-500 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-1.5"
-                  />
-                  <div className="mt-1 flex flex-col gap-0.5">
-                    {isUploading && <span className="text-[10px] text-indigo-500 font-semibold animate-pulse">Uploading file to storage...</span>}
-                    {uploadError && <span className="text-[10px] text-rose-500 font-semibold">{uploadError}</span>}
-                    {delFile && !isUploading && !uploadError && <span className="text-[10px] text-emerald-500 font-semibold">Selected file: {delFile.name} ({(delFile.size / 1024).toFixed(1)} KB)</span>}
+              <div className="grid lg:grid-cols-2 gap-6 items-start">
+                <form onSubmit={handleUploadDeliverable} className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Select Active Project</label>
+                    <select
+                      required
+                      value={delProjectId}
+                      onChange={(e) => setDelProjectId(e.target.value)}
+                      className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                      <option value="">Select Project Assignment</option>
+                      {activeWorkerProjects.length === 0 ? (
+                        <option disabled>No active projects assigned</option>
+                      ) : (
+                        activeWorkerProjects.map(p => (
+                          <option key={p.id} value={p.id}>{p.id} – {p.title} ({p.status})</option>
+                        ))
+                      )}
+                    </select>
+                    {activeWorkerProjects.length === 0 && (
+                      <p className="text-[10px] text-amber-500 font-semibold mt-1.5">⚠ All assigned projects are completed. No active projects to submit deliverables for.</p>
+                    )}
                   </div>
-                </div>
 
-                <button
-                  type="submit"
-                  className="w-full py-3.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition duration-200 shadow-md flex items-center justify-center space-x-2 cursor-pointer animate-none"
-                >
-                  <UploadCloud className="w-4 h-4" />
-                  <span>Publish Handover Deliverable</span>
-                </button>
-              </form>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Deliverable Name / Label</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. invite-RSVP-module-dist.zip, documentation.pdf"
+                      value={delName}
+                      onChange={(e) => setDelName(e.target.value)}
+                      className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Resource File Link (HTTP/Cloud url) (Optional)</label>
+                    <input
+                      type="text"
+                      placeholder="https://drive.google.com/file/d/..."
+                      value={delUrl}
+                      onChange={(e) => setDelUrl(e.target.value)}
+                      className="w-full text-xs p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Deliverable File (Optional)</label>
+                    <input
+                      type="file"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files.length > 0) {
+                          setDelFile(e.target.files[0]);
+                          if (!delName) {
+                            setDelName(e.target.files[0].name);
+                          }
+                          setUploadError('');
+                        } else {
+                          setDelFile(null);
+                        }
+                      }}
+                      className="w-full text-xs file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-indigo-600/10 file:text-indigo-600 dark:file:text-indigo-400 hover:file:bg-indigo-600/20 bg-transparent text-slate-500 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-1.5"
+                    />
+                    <div className="mt-1 flex flex-col gap-0.5">
+                      {isUploading && <span className="text-[10px] text-indigo-500 font-semibold animate-pulse">Uploading file to storage...</span>}
+                      {uploadError && <span className="text-[10px] text-rose-500 font-semibold">{uploadError}</span>}
+                      {delFile && !isUploading && !uploadError && <span className="text-[10px] text-emerald-500 font-semibold">Selected file: {delFile.name} ({(delFile.size / 1024).toFixed(1)} KB)</span>}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full py-3.5 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition duration-200 shadow-md flex items-center justify-center space-x-2 cursor-pointer animate-none"
+                  >
+                    <UploadCloud className="w-4 h-4" />
+                    <span>Publish Handover Deliverable</span>
+                  </button>
+                </form>
+
+                {/* Fix #5 & #8: Project detail and client contact panel */}
+                <div className="space-y-4">
+                  {workerProjects.length === 0 ? (
+                    <div className="glass-card text-center p-8 rounded-2xl border border-slate-200/50 dark:border-slate-850">
+                      <Briefcase className="w-10 h-10 text-slate-400 mx-auto" />
+                      <h3 className="mt-3 text-sm font-bold text-slate-900 dark:text-white">No Projects Assigned</h3>
+                      <p className="text-xs text-slate-500 mt-1">Contact your admin to get a project assigned.</p>
+                    </div>
+                  ) : (
+                    workerProjects.map(proj => (
+                      <div key={proj.id} className="glass-card p-5 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm space-y-3">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center shrink-0">
+                            <Briefcase className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <h3 className="text-xs font-extrabold text-slate-900 dark:text-white">{proj.title}</h3>
+                            <span className="text-[9px] text-slate-400 font-bold uppercase">{proj.id} · {proj.status} · {proj.progress}% done</span>
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed">{proj.description}</p>
+                        <div className="flex flex-wrap gap-1.5">
+                          {proj.techRequired?.map(t => (
+                            <span key={t} className="text-[9px] px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-bold border border-indigo-500/20">{t}</span>
+                          ))}
+                        </div>
+                        <div className="pt-2 border-t border-slate-100 dark:border-slate-850">
+                          <div className="text-[9px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center space-x-1.5">
+                            <Users className="w-3 h-3" />
+                            <span>Client Contact for Project Queries</span>
+                          </div>
+                          <div className="space-y-1.5">
+                            <div className="flex items-center space-x-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                              <span className="font-bold">{proj.clientName}</span>
+                              {proj.clientCompany && <span className="text-slate-400">· {proj.clientCompany}</span>}
+                            </div>
+                            {proj.clientId && (
+                              <a href={`mailto:${proj.clientId}`} className="flex items-center space-x-1.5 text-[10px] text-indigo-500 hover:underline font-semibold">
+                                <Mail className="w-3 h-3" />
+                                <span>{proj.clientId}</span>
+                              </a>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           )}
+
 
           {/* TAB 4: INTERNAL TEAM CHAT */}
           {activeTab === 'chat' && (
@@ -933,6 +1034,7 @@ export const WorkerDashboard: React.FC = () => {
                   messages={messages}
                   projects={projects}
                   sendChatMessage={sendChatMessage}
+                  clearChannelMessages={clearChannelMessages}
                 />
               </div>
             </div>
@@ -1007,9 +1109,23 @@ export const WorkerDashboard: React.FC = () => {
           {/* TAB 6: AI COPILOT */}
           {activeTab === 'ai' && (
             <div className="space-y-6 text-left flex flex-col h-[520px]">
-              <div>
-                <h2 className="text-xl font-extrabold tracking-tight">AI Developer Copilot</h2>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Generate code templates, analyze backlog errors, and consult LLM instructions.</p>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-xl font-extrabold tracking-tight">AI Developer Copilot</h2>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">Generate code templates, analyze backlog errors, and consult LLM instructions.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    const reset = [{ role: 'ai' as const, text: 'Hello! I am your AI Copilot. Chat cleared. Ask me anything!' }];
+                    setAiChatHistory(reset);
+                    try { localStorage.setItem(aiChatKey, JSON.stringify(reset)); } catch {}
+                  }}
+                  className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold text-rose-500 hover:bg-rose-500/10 border border-rose-500/20 transition cursor-pointer"
+                  title="Clear Copilot Chat History"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  <span>Clear Chat</span>
+                </button>
               </div>
 
               <div className="glass-card rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm overflow-hidden flex-grow flex flex-col justify-between">
@@ -1050,6 +1166,7 @@ export const WorkerDashboard: React.FC = () => {
                       </div>
                     </div>
                   )}
+                  <div ref={aiChatEndRef} />
                 </div>
 
                 {/* Chat Suggestion prompts */}
@@ -1158,6 +1275,77 @@ export const WorkerDashboard: React.FC = () => {
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* TEAM MEET MODAL (Fix #6) */}
+      {meetModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-md rounded-3xl p-7 border border-slate-200 dark:border-slate-800 shadow-2xl relative text-left bg-white dark:bg-slate-950">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                  <Video className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Team Meet</h3>
+                  <p className="text-[10px] text-slate-400 font-semibold">Start or join a video call with your team</p>
+                </div>
+              </div>
+              <button onClick={() => setMeetModalOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-400 cursor-pointer transition">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <a
+                href="https://meet.google.com/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3.5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition cursor-pointer group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                  <Video className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">Start Google Meet</div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Create instant video call link</div>
+                </div>
+              </a>
+
+              <a
+                href="https://zoom.us/start/videomeeting"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3.5 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition cursor-pointer group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                  <Users className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">Start Zoom Meeting</div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Open Zoom video conference</div>
+                </div>
+              </a>
+
+              <a
+                href="https://teams.microsoft.com/l/meeting/new"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-3.5 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-800/50 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 transition cursor-pointer group"
+              >
+                <div className="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-slate-900 dark:text-white">Microsoft Teams Meet</div>
+                  <div className="text-[10px] text-slate-500 mt-0.5">Launch Teams video call</div>
+                </div>
+              </a>
+            </div>
+
+            <p className="text-[10px] text-slate-400 text-center mt-5">These links open in a new tab. Share with your team to collaborate.</p>
           </div>
         </div>
       )}
