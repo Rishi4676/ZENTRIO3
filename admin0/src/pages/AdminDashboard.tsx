@@ -23,7 +23,9 @@ import {
   Printer,
   FileText,
   Clock,
-  CheckSquare
+  CheckSquare,
+  Video,
+  X
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ChatWorkspace } from '../components/ChatWorkspace';
@@ -65,7 +67,56 @@ export const AdminDashboard: React.FC = () => {
     updateLeaveStatus
   } = useApp();
 
-  const [activeTab, setActiveTab] = useState<'overview' | 'clients' | 'workers' | 'projects' | 'finance' | 'support' | 'reports' | 'settings' | 'enquiries' | 'chat' | 'audit' | 'ai'>('overview');
+  // Meeting Modal State
+  const [meetModalOpen, setMeetModalOpen] = useState(false);
+  const [activeMeeting, setActiveMeeting] = useState<{ platform: string; url: string; startedAt: string; startedBy: string } | null>(null);
+
+  const checkActiveMeeting = async () => {
+    try {
+      const res = await fetch('/api/messages/meeting');
+      const data = await res.json();
+      if (data.success) {
+        setActiveMeeting(data.meeting || null);
+      }
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    checkActiveMeeting();
+    const interval = setInterval(checkActiveMeeting, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleStartMeeting = async (platform: 'google' | 'zoom' | 'teams') => {
+    let url = 'https://meet.google.com/new';
+    if (platform === 'zoom') url = 'https://zoom.us/start/videomeeting';
+    if (platform === 'teams') url = 'https://teams.microsoft.com/l/meeting/new';
+
+    try {
+      const res = await fetch('/api/messages/meeting/start', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ platform, url, startedBy: currentUser?.name || 'Admin Owner' })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setActiveMeeting(data.meeting);
+        sendChatMessage('internal-team', `🚨 TEAM MEET STARTED by ${currentUser?.name || 'Admin'}! Click "Join Team Meet" button or link: ${url}`);
+        window.open(url, '_blank');
+      }
+    } catch (e) {
+      window.open(url, '_blank');
+    }
+  };
+
+  const handleEndMeeting = async () => {
+    try {
+      await fetch('/api/messages/meeting/end', { method: 'POST' });
+      setActiveMeeting(null);
+      sendChatMessage('internal-team', `🏁 Team meeting has ended by ${currentUser?.name || 'Admin'}.`);
+    } catch (e) {}
+  };
+
 
   // Payroll / Payslip States
   const [payrollWorkerId, setPayrollWorkerId] = useState('');
@@ -500,6 +551,14 @@ export const AdminDashboard: React.FC = () => {
           >
             <Bot className="w-4 h-4 shrink-0" />
             <span>AI Analyst Helper</span>
+          </button>
+
+          <button
+            onClick={() => setMeetModalOpen(true)}
+            className="w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+          >
+            <Video className="w-4 h-4 shrink-0" />
+            <span>Team Meet Control</span>
           </button>
         </aside>
 
@@ -2233,6 +2292,97 @@ export const AdminDashboard: React.FC = () => {
         </div>
       )}
 
+      {/* ADMIN TEAM MEET CONTROL MODAL */}
+      {meetModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-md rounded-3xl p-7 border border-slate-200 dark:border-slate-800 shadow-2xl relative text-left bg-white dark:bg-slate-950">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                  <Video className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Admin Meeting Host Control</h3>
+                  <p className="text-[10px] text-slate-400 font-semibold">Start meeting for all workers to automatically join</p>
+                </div>
+              </div>
+              <button onClick={() => setMeetModalOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-400 cursor-pointer transition">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {activeMeeting ? (
+              <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3">
+                <div className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider">🔴 Live Meeting Active</div>
+                <p className="text-xs text-slate-600 dark:text-slate-300">Started by <strong>{activeMeeting.startedBy}</strong></p>
+                <div className="flex justify-center space-x-2">
+                  <a
+                    href={activeMeeting.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition"
+                  >
+                    Open Live Call
+                  </a>
+                  <button
+                    onClick={handleEndMeeting}
+                    className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition"
+                  >
+                    End Meeting
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                <p className="text-xs text-slate-500 mb-2">Select a platform below to start meeting. Workers will be automatically notified with a direct join link:</p>
+                
+                <button
+                  onClick={() => handleStartMeeting('google')}
+                  className="w-full flex items-center space-x-3.5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition cursor-pointer group text-left"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
+                    <Video className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">Start Google Meet</div>
+                    <div className="text-[10px] text-slate-500 mt-0.5">Creates instant Google Meet & notifies workers</div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleStartMeeting('zoom')}
+                  className="w-full flex items-center space-x-3.5 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition cursor-pointer group text-left"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                    <Users className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">Start Zoom Meeting</div>
+                    <div className="text-[10px] text-slate-500 mt-0.5">Launches Zoom room & notifies workers</div>
+                  </div>
+                </button>
+
+                <button
+                  onClick={() => handleStartMeeting('teams')}
+                  className="w-full flex items-center space-x-3.5 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-800/50 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 transition cursor-pointer group text-left"
+                >
+                  <div className="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0">
+                    <MessageSquare className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-extrabold text-slate-900 dark:text-white">Microsoft Teams Meet</div>
+                    <div className="text-[10px] text-slate-500 mt-0.5">Launches MS Teams call & notifies workers</div>
+                  </div>
+                </button>
+              </div>
+            )}
+
+            <p className="text-[10px] text-slate-400 text-center mt-5">Only administrators can start or end live team meetings.</p>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
+

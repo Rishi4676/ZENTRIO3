@@ -27,4 +27,33 @@ router.post('/', async (req, res) => {
   }
 });
 
+let activeMeeting = null; // In-memory active meeting status: { platform: 'google'|'zoom'|'teams', url: string, startedAt: string, startedBy: string }
+
+// GET current active team meeting
+router.get('/meeting', (req, res) => {
+  return res.json({ success: true, meeting: activeMeeting });
+});
+
+// POST start meeting (Admin only)
+router.post('/meeting/start', (req, res) => {
+  const { platform, url, startedBy } = req.body;
+  if (!url) {
+    return res.status(400).json({ success: false, message: 'Meeting URL required' });
+  }
+  activeMeeting = {
+    platform: platform || 'google',
+    url,
+    startedAt: new Date().toISOString(),
+    startedBy: startedBy || 'Admin Owner'
+  };
+  return res.json({ success: true, meeting: activeMeeting });
+});
+
+// POST end meeting
+router.post('/meeting/end', (req, res) => {
+  activeMeeting = null;
+  return res.json({ success: true, message: 'Meeting ended' });
+});
+
 module.exports = router;
+

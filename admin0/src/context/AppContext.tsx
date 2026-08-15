@@ -397,7 +397,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCurrentUser(clientUser);
         localStorage.setItem('current_user', JSON.stringify(clientUser));
       } else {
-        const saved = localStorage.getItem('current_user');
+        const saved = sessionStorage.getItem('current_user');
         if (saved) {
           const u = JSON.parse(saved);
           if (u.role === 'worker' || u.role === 'admin') {
@@ -420,7 +420,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Custom single page router
   const [currentPage, setCurrentPage] = useState<string>(() => {
-    const savedUser = localStorage.getItem('current_user');
+    const savedUser = sessionStorage.getItem('current_user');
     if (savedUser) {
       const u = JSON.parse(savedUser) as User;
       return `${u.role}-dashboard`;
@@ -682,8 +682,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('current_user', JSON.stringify(currentUser));
+      sessionStorage.setItem('current_user', JSON.stringify(currentUser));
+      localStorage.removeItem('current_user'); // ensure stale localStorage is cleared
     } else {
+      sessionStorage.removeItem('current_user');
       localStorage.removeItem('current_user');
     }
   }, [currentUser]);
@@ -871,6 +873,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     const loggedOutRole = currentUser?.role;
     setCurrentUser(null);
+    sessionStorage.removeItem('current_user');
     localStorage.removeItem('current_user');
     localStorage.setItem('portal_logged_out', Date.now().toString());
     addNotification('Session closed successfully.', 'info');

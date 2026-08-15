@@ -92,7 +92,7 @@ export const AdminLogin: React.FC = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. ADMIN001"
+                placeholder="ADMIN_ID"
                 value={adminId}
                 onChange={(e) => setAdminId(e.target.value)}
                 className="w-full text-sm pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"

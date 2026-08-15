@@ -124,7 +124,7 @@ export const WorkerLogin: React.FC = () => {
               <input
                 type="text"
                 required
-                placeholder="e.g. syedrashid_W1"
+                placeholder="worker_ID"
                 value={workerId}
                 onChange={(e) => setWorkerId(e.target.value)}
                 className="w-full text-sm pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"

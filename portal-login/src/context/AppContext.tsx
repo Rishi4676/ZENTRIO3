@@ -385,7 +385,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCurrentUser(clientUser);
         localStorage.setItem('current_user', JSON.stringify(clientUser));
       } else {
-        const saved = localStorage.getItem('current_user');
+        const saved = sessionStorage.getItem('current_user');
         if (saved) {
           const u = JSON.parse(saved);
           if (u.role === 'worker' || u.role === 'admin') {
@@ -418,8 +418,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (path.endsWith('/client-register')) return 'client-register';
     if (path.endsWith('/portal-selector')) return 'portal-selector';
 
-    // 2. Otherwise, check if user session is saved in localStorage and restore it
-    const savedUser = localStorage.getItem('current_user');
+    // 2. Otherwise, check if user session is saved in sessionStorage and restore it
+    const savedUser = sessionStorage.getItem('current_user');
     if (savedUser) {
       const u = JSON.parse(savedUser) as User;
       return `${u.role}-dashboard`;
@@ -661,8 +661,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('current_user', JSON.stringify(currentUser));
+      sessionStorage.setItem('current_user', JSON.stringify(currentUser));
+      localStorage.removeItem('current_user');
     } else {
+      sessionStorage.removeItem('current_user');
       localStorage.removeItem('current_user');
     }
   }, [currentUser]);
@@ -1013,12 +1015,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       console.warn('Firebase logout failed', e);
     }
 
+    const loggedOutRole = currentUser?.role;
     setCurrentUser(null);
+    sessionStorage.removeItem('current_user');
     localStorage.removeItem('current_user');
     localStorage.setItem('portal_logged_out', Date.now().toString());
-    setCurrentPage('client-login');
     addNotification('Session closed successfully.', 'info');
-    window.location.href = '/portal/client-login';
+    if (loggedOutRole === 'worker') {
+      setCurrentPage('worker-login');
+      window.location.href = '/portal/worker-login';
+    } else if (loggedOutRole === 'admin') {
+      setCurrentPage('admin-login');
+      window.location.href = '/portal/admin-login';
+    } else {
+      setCurrentPage('client-login');
+      window.location.href = '/portal/client-login';
+    }
   };
 
   const addNotification = (text: string, type: 'info' | 'success' | 'warning') => {

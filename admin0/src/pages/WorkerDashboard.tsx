@@ -55,6 +55,23 @@ export const WorkerDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'tasks' | 'attendance' | 'deliverables' | 'chat' | 'deadlines' | 'ai' | 'meet'>('tasks');
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
   const [meetModalOpen, setMeetModalOpen] = useState(false);
+  const [activeMeeting, setActiveMeeting] = useState<{ platform: string; url: string; startedAt: string; startedBy: string } | null>(null);
+
+  const checkActiveMeeting = async () => {
+    try {
+      const res = await fetch('/api/messages/meeting');
+      const data = await res.json();
+      if (data.success) {
+        setActiveMeeting(data.meeting || null);
+      }
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    checkActiveMeeting();
+    const interval = setInterval(checkActiveMeeting, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Time Tracker stopwatch states
   const [timerActive, setTimerActive] = useState(false);
@@ -508,10 +525,14 @@ export const WorkerDashboard: React.FC = () => {
 
           <button
             onClick={() => setMeetModalOpen(true)}
-            className="w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
+              activeMeeting
+                ? 'bg-rose-600 text-white shadow-lg shadow-rose-500/30 animate-pulse'
+                : 'hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+            }`}
           >
             <Video className="w-4 h-4 shrink-0" />
-            <span>Team Meet</span>
+            <span>{activeMeeting ? '🔴 Join Live Meet' : 'Team Meet'}</span>
           </button>
         </aside>
 
@@ -1296,56 +1317,27 @@ export const WorkerDashboard: React.FC = () => {
               <button onClick={() => setMeetModalOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-400 cursor-pointer transition">
                 <X className="w-4 h-4" />
               </button>
-            </div>
+            {activeMeeting ? (
+              <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3">
+                <div className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider">🔴 Live Admin Meeting Active</div>
+                <p className="text-xs text-slate-600 dark:text-slate-300">Meeting started by <strong>{activeMeeting.startedBy}</strong> ({activeMeeting.platform.toUpperCase()})</p>
+                <a
+                  href={activeMeeting.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition"
+                >
+                  🚀 Join Admin Meeting Now
+                </a>
+              </div>
+            ) : (
+              <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-800 text-center space-y-2">
+                <div className="text-xs font-bold text-slate-700 dark:text-slate-300">No Active Meeting Started</div>
+                <p className="text-[10px] text-slate-400">Administrators start live meetings for the engineering team. Once started, a direct join button will automatically appear here and in team chat.</p>
+              </div>
+            )}
 
-            <div className="space-y-3">
-              <a
-                href="https://meet.google.com/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-3.5 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 hover:bg-emerald-500/20 transition cursor-pointer group"
-              >
-                <div className="w-9 h-9 rounded-lg bg-emerald-500 text-white flex items-center justify-center shrink-0">
-                  <Video className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition">Start Google Meet</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">Create instant video call link</div>
-                </div>
-              </a>
-
-              <a
-                href="https://zoom.us/start/videomeeting"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-3.5 p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 hover:bg-indigo-500/20 transition cursor-pointer group"
-              >
-                <div className="w-9 h-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center shrink-0">
-                  <Users className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-extrabold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition">Start Zoom Meeting</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">Open Zoom video conference</div>
-                </div>
-              </a>
-
-              <a
-                href="https://teams.microsoft.com/l/meeting/new"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center space-x-3.5 p-4 rounded-xl bg-slate-100/60 dark:bg-slate-900/30 border border-slate-200/40 dark:border-slate-800/50 hover:bg-slate-200/50 dark:hover:bg-slate-900/60 transition cursor-pointer group"
-              >
-                <div className="w-9 h-9 rounded-lg bg-slate-700 text-white flex items-center justify-center shrink-0">
-                  <MessageSquare className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="text-xs font-extrabold text-slate-900 dark:text-white">Microsoft Teams Meet</div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">Launch Teams video call</div>
-                </div>
-              </a>
-            </div>
-
-            <p className="text-[10px] text-slate-400 text-center mt-5">These links open in a new tab. Share with your team to collaborate.</p>
+            <p className="text-[10px] text-slate-400 text-center mt-5">Meetings are created & hosted by Administrator.</p>
           </div>
         </div>
       )}
