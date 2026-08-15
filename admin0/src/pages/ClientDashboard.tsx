@@ -13,7 +13,9 @@ import {
   CreditCard,
   Check,
   FileText,
-  MessageSquare
+  MessageSquare,
+  Video,
+  X
 } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { ZipWriter } from '../services/zipWriter';
@@ -42,7 +44,10 @@ export const ClientDashboard: React.FC = () => {
 
   const [activeTab, setActiveTab] = useState<'projects' | 'order' | 'support' | 'payments' | 'profile' | 'chat'>('projects');
   
-  // Project Order Form States
+  // Currency & Project Order Form States
+  const [currency, setCurrency] = useState<'USD' | 'INR'>(() => {
+    return currentUser?.country?.toLowerCase() === 'india' || currentUser?.state?.toLowerCase().includes('india') ? 'INR' : 'USD';
+  });
   const [orderTitle, setOrderTitle] = useState('');
   const [orderCategory, setOrderCategory] = useState('Web Development');
   const [orderDesc, setOrderDesc] = useState('');
@@ -54,6 +59,26 @@ export const ClientDashboard: React.FC = () => {
   const [orderFile, setOrderFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
+
+  // Team Meet State
+  const [meetModalOpen, setMeetModalOpen] = useState(false);
+  const [activeMeeting, setActiveMeeting] = useState<{ platform: string; url: string; startedAt: string; startedBy: string } | null>(null);
+
+  const checkActiveMeeting = async () => {
+    try {
+      const res = await fetch('/api/messages/meeting');
+      const data = await res.json();
+      if (data.success) {
+        setActiveMeeting(data.meeting || null);
+      }
+    } catch (e) {}
+  };
+
+  React.useEffect(() => {
+    checkActiveMeeting();
+    const interval = setInterval(checkActiveMeeting, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Support Ticket Form States
   const [ticketSubject, setTicketSubject] = useState('');
@@ -467,7 +492,7 @@ export const ClientDashboard: React.FC = () => {
             }`}
           >
             <Briefcase className="w-4 h-4 shrink-0" />
-            <span>My Projects</span>
+            <span>My project orders</span>
           </button>
 
           <button
@@ -517,6 +542,18 @@ export const ClientDashboard: React.FC = () => {
           >
             <UserIcon className="w-4 h-4 shrink-0" />
             <span>Profile Management</span>
+          </button>
+
+          <button
+            onClick={() => setMeetModalOpen(true)}
+            className={`w-auto md:w-full text-left px-4 py-3 rounded-xl text-xs font-bold flex items-center space-x-3.5 whitespace-nowrap shrink-0 transition ${
+              activeMeeting
+                ? 'bg-rose-600 text-white shadow-lg shadow-rose-500/30 animate-pulse'
+                : 'hover:bg-emerald-500/10 dark:hover:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
+            }`}
+          >
+            <Video className="w-4 h-4 shrink-0" />
+            <span>{activeMeeting ? '🔴 Join Live Meet' : 'Team Meet'}</span>
           </button>
         </aside>
 
@@ -772,17 +809,32 @@ export const ClientDashboard: React.FC = () => {
                     />
                   </div>
 
-                  {/* Budget */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">Budget ($ USD)</label>
-                    <input
-                      type="number"
-                      required
-                      placeholder="e.g. 15000"
-                      value={orderBudget}
-                      onChange={(e) => setOrderBudget(e.target.value)}
-                      className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none"
-                    />
+                  {/* Budget & Currency */}
+                  <div className="grid grid-cols-3 gap-2">
+                    <div className="col-span-2">
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">
+                        Budget ({currency === 'INR' ? '₹ INR' : '$ USD'})
+                      </label>
+                      <input
+                        type="number"
+                        required
+                        placeholder={currency === 'INR' ? "e.g. 100000" : "e.g. 15000"}
+                        value={orderBudget}
+                        onChange={(e) => setOrderBudget(e.target.value)}
+                        className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-slate-500 uppercase mb-1.5">Currency</label>
+                      <select
+                        value={currency}
+                        onChange={(e) => setCurrency(e.target.value as 'USD' | 'INR')}
+                        className="w-full text-xs px-2.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none font-bold text-indigo-500"
+                      >
+                        <option value="INR">₹ INR (India)</option>
+                        <option value="USD">$ USD (Global)</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -1085,6 +1137,50 @@ export const ClientDashboard: React.FC = () => {
               </>
             )}
 
+          </div>
+        </div>
+      )}
+
+      {/* CLIENT TEAM MEET MODAL */}
+      {meetModalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-md rounded-3xl p-7 border border-slate-200 dark:border-slate-800 shadow-2xl relative text-left bg-white dark:bg-slate-950">
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+                  <Video className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Client & Team Meet</h3>
+                  <p className="text-[10px] text-slate-400 font-semibold">Join live video call hosted by Zentrio engineering leads</p>
+                </div>
+              </div>
+              <button onClick={() => setMeetModalOpen(false)} className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-900 text-slate-400 cursor-pointer transition">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {activeMeeting ? (
+              <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3">
+                <div className="text-xs font-extrabold text-emerald-500 uppercase tracking-wider">🔴 Live Engineering Call Active</div>
+                <p className="text-xs text-slate-600 dark:text-slate-300">Call hosted by <strong>{activeMeeting.startedBy}</strong> ({activeMeeting.platform.toUpperCase()})</p>
+                <a
+                  href={activeMeeting.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow cursor-pointer transition"
+                >
+                  🚀 Join Project Video Call
+                </a>
+              </div>
+            ) : (
+              <div className="p-4 rounded-2xl bg-slate-100/50 dark:bg-slate-900/40 border border-slate-200/40 dark:border-slate-800 text-center space-y-2">
+                <div className="text-xs font-bold text-slate-700 dark:text-slate-300">No Active Meeting Started</div>
+                <p className="text-[10px] text-slate-400">Engineering leads host video consultations for client project reviews. When a meeting starts, the direct join button will automatically activate here.</p>
+              </div>
+            )}
+
+            <p className="text-[10px] text-slate-400 text-center mt-5">Meetings are scheduled and hosted by Zentrio AI Project Team.</p>
           </div>
         </div>
       )}

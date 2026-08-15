@@ -121,7 +121,11 @@ const csrfCheck = (req, res, next) => {
 // Write Audit Logs to Firestore with JSON File fallback
 const writeAuditLog = async (userId, userEmail, action, details, req) => {
   const timestamp = new Date();
-  const ip = req ? (req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress) : 'SYSTEM';
+  let rawIp = req ? (req.headers['x-forwarded-for'] || req.ip || req.socket?.remoteAddress || '127.0.0.1') : 'SYSTEM';
+  if (typeof rawIp === 'string' && rawIp.includes(',')) {
+    rawIp = rawIp.split(',')[0].trim();
+  }
+  const ip = (rawIp === '::1' || rawIp === '::ffff:127.0.0.1') ? '127.0.0.1 (Localhost)' : rawIp;
   const entry = { timestamp, userId, userEmail, action, details, ip };
   
   console.log(`[AUDIT LOG] ${timestamp.toISOString()} | Action: ${action} | Email: ${userEmail || 'GUEST'} | IP: ${ip}`);

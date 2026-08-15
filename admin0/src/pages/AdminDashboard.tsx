@@ -61,6 +61,7 @@ export const AdminDashboard: React.FC = () => {
     addNotification,
     messages,
     sendChatMessage,
+    clearChannelMessages,
     leaves,
     payslips,
     addPayslip,
@@ -138,8 +139,43 @@ export const AdminDashboard: React.FC = () => {
   const [selectedPayslip, setSelectedPayslip] = useState<Payslip | null>(null);
   const [payslipModalOpen, setPayslipModalOpen] = useState(false);
   
-  // Kanban Task Filter (for Admin Task Board View)
-  const [kanbanFilterWorkerId, setKanbanFilterWorkerId] = useState('all');
+  // Enquiry Reply Modal State
+  const [replyModalOpen, setReplyModalOpen] = useState(false);
+  const [selectedEnquiry, setSelectedEnquiry] = useState<any>(null);
+  const [replyProjectName, setReplyProjectName] = useState('');
+  const [replyText, setReplyText] = useState('');
+  const [replySending, setReplySending] = useState(false);
+
+  const handleSendEnquiryReply = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedEnquiry || !replyText) return;
+    setReplySending(true);
+    try {
+      const res = await fetch('/api/contact/reply', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: selectedEnquiry.email,
+          recipientName: selectedEnquiry.name,
+          projectName: replyProjectName,
+          replyMessage: replyText
+        })
+      });
+      const data = await res.json();
+      setReplySending(false);
+      if (data.success) {
+        addNotification(`Reply dispatched to ${selectedEnquiry.email}`, 'success');
+        setReplyModalOpen(false);
+        setReplyText('');
+        setReplyProjectName('');
+      } else {
+        alert(data.message || 'Failed to send reply');
+      }
+    } catch (err) {
+      setReplySending(false);
+      alert('Error sending reply email.');
+    }
+  };
 
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [loadingAudit, setLoadingAudit] = useState(false);
@@ -657,6 +693,7 @@ export const AdminDashboard: React.FC = () => {
                         <th className="pb-3.5 font-bold">Company Name</th>
                         <th className="pb-3.5 font-bold">Mobile</th>
                         <th className="pb-3.5 font-bold">Region Location</th>
+                        <th className="pb-3.5 font-bold">Date Joined</th>
                         <th className="pb-3.5 font-bold text-right">Actions</th>
                       </tr>
                     </thead>
@@ -672,9 +709,10 @@ export const AdminDashboard: React.FC = () => {
                               </div>
                             </div>
                           </td>
-                          <td className="py-4 font-bold text-slate-500">{client.companyName}</td>
-                          <td className="py-4 font-medium text-slate-500">{client.mobile}</td>
-                          <td className="py-4 font-medium text-slate-400">{client.city}, {client.country}</td>
+                          <td className="py-4 font-bold text-slate-500">{client.companyName || 'N/A'}</td>
+                          <td className="py-4 font-medium text-slate-500">{client.mobile || 'N/A'}</td>
+                          <td className="py-4 font-medium text-slate-400">{(client.city || client.state) ? `${client.city ? client.city + ', ' : ''}${client.state || ''}` : (client.country || 'N/A')}</td>
+                          <td className="py-4 font-medium text-slate-400">{client.joinedDate || '2026-08-15'}</td>
                           <td className="py-4 text-right space-x-1">
                             <button
                               onClick={() => handleEditClientClick(client)}
@@ -1569,20 +1607,68 @@ export const AdminDashboard: React.FC = () => {
                       <text x="15" y="125" fill="#64748b" className="text-[9px] font-bold">50%</text>
                       <text x="15" y="175" fill="#64748b" className="text-[9px] font-bold">0%</text>
 
-                      {/* X-axis labels */}
-                      <text x="96" y="190" fill="#64748b" className="text-[10px] font-bold">Feb (90%)</text>
-                      <text x="206" y="190" fill="#64748b" className="text-[10px] font-bold">Mar (95%)</text>
-                      <text x="316" y="190" fill="#64748b" className="text-[10px] font-bold">Apr (80%)</text>
-                      <text x="426" y="190" fill="#64748b" className="text-[10px] font-bold">May (92%)</text>
                       <text x="536" y="190" fill="#64748b" className="text-[10px] font-bold">Jun (80%)</text>
                       <text x="646" y="190" fill="#64748b" className="text-[10px] font-bold">Jul (Active)</text>
                     </svg>
                   </div>
                 </div>
+              </div>
 
+            {/* EXPENDITURE ANALYSIS & FINANCIAL REPORT GENERATOR */}
+            <div className="glass-card p-6 rounded-2xl border border-slate-200/50 dark:border-slate-850 shadow-sm text-left">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-6 border-b border-slate-200 dark:border-slate-850 pb-4">
+                <div>
+                  <h3 className="text-sm font-extrabold text-slate-900 dark:text-white uppercase tracking-wider">Expenditure & Financial Summary Analysis</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Calculated net margins across client credits and engineer payroll disbursements.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    const totalPayroll = payslips.reduce((s, p) => s + (p.netSalary || 0), 0);
+                    const csvContent = "data:text/csv;charset=utf-8," 
+                      + "Financial Analysis Report - Zentrio AI Technology\n"
+                      + `Gross Revenue (Income Tab),₹${totalRevenue}\n`
+                      + `Worker Salary Expenses,₹${totalPayroll}\n`
+                      + `Net Profit Margin,₹${totalRevenue - totalPayroll}\n`
+                      + `Report Timestamp,${new Date().toLocaleString()}\n`;
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", `financial_expenditure_report_${Date.now()}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  }}
+                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl shadow transition cursor-pointer flex items-center space-x-1.5 shrink-0"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>Download CSV Financial Report</span>
+                </button>
+              </div>
+
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600 dark:text-emerald-400 block mb-1">Gross Project Credits</span>
+                  <span className="text-xl font-extrabold text-slate-900 dark:text-white">₹{totalRevenue.toLocaleString()}</span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/20">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-rose-600 dark:text-rose-400 block mb-1">Total Payroll Expenditure</span>
+                  <span className="text-xl font-extrabold text-slate-900 dark:text-white">
+                    ₹{payslips.reduce((s, p) => s + (p.netSalary || 0), 0).toLocaleString()}
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 block mb-1">Net Operating Profit</span>
+                  <span className="text-xl font-extrabold text-slate-900 dark:text-white">
+                    ₹{(totalRevenue - payslips.reduce((s, p) => s + (p.netSalary || 0), 0)).toLocaleString()}
+                  </span>
+                </div>
               </div>
             </div>
-          )}
+
+          </div>
+        )}
 
           {/* TAB 8: SETTINGS */}
           {activeTab === 'settings' && (
@@ -1732,7 +1818,17 @@ export const AdminDashboard: React.FC = () => {
 
                       <div className="flex justify-between items-center text-[9px] text-slate-400 font-semibold pt-1 border-t border-slate-100 dark:border-slate-850/50">
                         <span>Submitted from IP: {enq.ip}</span>
-                        <a href={`mailto:${enq.email}?subject=RE: ${encodeURIComponent(enq.subject)}`} className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold uppercase tracking-wider">Reply via Email</a>
+                        <button
+                          onClick={() => {
+                            setSelectedEnquiry(enq);
+                            setReplyProjectName(enq.subject && enq.subject !== 'N/A' ? enq.subject : '');
+                            setReplyModalOpen(true);
+                          }}
+                          className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-[10px] cursor-pointer transition flex items-center space-x-1"
+                        >
+                          <Send className="w-3 h-3" />
+                          <span>Reply (with Project Name)</span>
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -1754,6 +1850,7 @@ export const AdminDashboard: React.FC = () => {
                 messages={messages}
                 projects={projects}
                 sendChatMessage={sendChatMessage}
+                clearChannelMessages={clearChannelMessages}
               />
             </div>
           )}
@@ -2378,6 +2475,66 @@ export const AdminDashboard: React.FC = () => {
             )}
 
             <p className="text-[10px] text-slate-400 text-center mt-5">Only administrators can start or end live team meetings.</p>
+          </div>
+        </div>
+      )}
+
+      {/* ENQUIRY REPLY WITH PROJECT NAME MODAL */}
+      {replyModalOpen && selectedEnquiry && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="glass-card w-full max-w-lg rounded-3xl p-6 border border-slate-200 dark:border-slate-800 shadow-2xl relative text-left bg-white dark:bg-slate-950">
+            <div className="flex justify-between items-center pb-4 border-b border-slate-200 dark:border-slate-800">
+              <div>
+                <h3 className="text-base font-extrabold text-slate-900 dark:text-white">Reply to Contact Enquiry</h3>
+                <p className="text-[10px] text-slate-400">Recipient: <strong>{selectedEnquiry.name}</strong> ({selectedEnquiry.email})</p>
+              </div>
+              <button onClick={() => setReplyModalOpen(false)} className="p-1 rounded-lg text-slate-400 hover:text-slate-600">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSendEnquiryReply} className="mt-4 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Project Name / Reference</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Zentrio E-Commerce Suite"
+                  value={replyProjectName}
+                  onChange={(e) => setReplyProjectName(e.target.value)}
+                  className="w-full text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none font-semibold text-indigo-500"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-500 uppercase mb-1">Response Message</label>
+                <textarea
+                  required
+                  rows={5}
+                  placeholder="Type your official reply details here..."
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  className="w-full text-xs p-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none"
+                ></textarea>
+              </div>
+
+              <div className="flex justify-end space-x-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setReplyModalOpen(false)}
+                  className="px-4 py-2 text-xs font-bold text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-900 rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={replySending}
+                  className="px-5 py-2 text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl shadow transition cursor-pointer flex items-center space-x-1.5"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>{replySending ? 'Sending...' : 'Dispatch Reply Email'}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
