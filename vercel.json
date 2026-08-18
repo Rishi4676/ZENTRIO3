@@ -9,6 +9,10 @@
   },
   "rewrites": [
     {
+      "source": "/videos/(.*)",
+      "destination": "/public/videos/$1"
+    },
+    {
       "source": "/admin/payments",
       "destination": "/api/index.js"
     },

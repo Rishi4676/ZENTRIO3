@@ -165,3 +165,12 @@
   pointer-events: none;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .global-bg-video {
+    display: none !important;
+  }
+  .global-bg-video-container {
+    background: #0f172a !important;
+  }
+}
+

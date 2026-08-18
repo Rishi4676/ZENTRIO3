@@ -69,6 +69,8 @@ app.use('/admin', express.static(path.join(__dirname, 'admin0', 'dist'), cacheCo
 app.use('/portal', express.static(path.join(__dirname, 'portal-login', 'dist'), cacheControlOptions));
 app.use('/publicity', express.static(path.join(__dirname, 'publicity'), cacheControlOptions));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), cacheControlOptions));
+app.use('/videos', express.static(path.join(__dirname, 'public', 'videos'), cacheControlOptions));
+app.use('/public/videos', express.static(path.join(__dirname, 'public', 'videos'), cacheControlOptions));
 
 
 // Mount API Routers

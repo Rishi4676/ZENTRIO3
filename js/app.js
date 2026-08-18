@@ -28,6 +28,7 @@ function initGlobalBackgroundVideo() {
   video.loop = true;
   video.muted = true;
   video.playsInline = true;
+  video.preload = 'metadata';
   video.setAttribute('aria-hidden', 'true');
 
   const source1 = document.createElement('source');

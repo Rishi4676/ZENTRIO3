@@ -572,4 +572,14 @@ html, body {
   pointer-events: none;
 }
 
+/* Accessibility: Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  .global-bg-video {
+    display: none !important;
+  }
+  .global-bg-video-container {
+    background: #0f172a !important;
+  }
+}
+
 
