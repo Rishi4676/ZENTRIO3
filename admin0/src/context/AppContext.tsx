@@ -596,6 +596,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     fetchAllData();
+
+    // Background live polling interval for real-time internal updates every 3 seconds
+    const interval = setInterval(async () => {
+      try {
+        const [msgsRes, tsksRes, prjsRes] = await Promise.all([
+          fetch('/api/messages').catch(() => null),
+          fetch('/api/tasks').catch(() => null),
+          fetch('/api/projects').catch(() => null)
+        ]);
+        if (msgsRes && msgsRes.ok) {
+          const mData = await msgsRes.json().catch(() => null);
+          if (mData?.success && mData.messages) setMessages(mData.messages);
+        }
+        if (tsksRes && tsksRes.ok) {
+          const tData = await tsksRes.json().catch(() => null);
+          if (tData?.success && tData.tasks) setTasks(tData.tasks);
+        }
+        if (prjsRes && prjsRes.ok) {
+          const pData = await prjsRes.json().catch(() => null);
+          if (pData?.success && pData.projects) setProjects(pData.projects);
+        }
+      } catch (e) {}
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
   const [notifications, setNotifications] = useState<{ id: string; text: string; type: 'info' | 'success' | 'warning'; timestamp: string }[]>([
     { id: 'not1', text: 'Welcome to Zentrio Admin Workspace. All secure session ports are open.', type: 'success', timestamp: new Date().toLocaleTimeString() }

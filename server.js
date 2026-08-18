@@ -90,6 +90,13 @@ app.use('/api/upload', require('./routes/upload'));
 app.use('/api/subscribe', require('./routes/subscribe'));
 app.use('/', require('./routes/admin_api'));
 
+app.get('/background%20video.mp4', (req, res) => {
+  res.sendFile(path.join(__dirname, 'background video.mp4'));
+});
+app.get('/background-video.mp4', (req, res) => {
+  res.sendFile(path.join(__dirname, 'background video.mp4'));
+});
+
 // Static Logo/Asset Endpoints
 app.get('/logo.png', (req, res) => {
   res.sendFile(path.join(__dirname, 'LOGOO.png'));

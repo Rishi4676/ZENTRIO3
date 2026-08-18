@@ -1,4 +1,12 @@
 /* Projects Page Layout */
+.project-detail-hero {
+  padding-top: calc(var(--navbar-height) + 3rem);
+  padding-bottom: 4rem;
+  background-color: transparent;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
 .projects-header {
   padding-top: calc(var(--navbar-height) + 4rem);
   text-align: center;

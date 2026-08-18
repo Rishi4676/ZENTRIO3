@@ -7,7 +7,7 @@
   justify-content: center;
   padding-top: var(--navbar-height);
   overflow: hidden;
-  background-color: var(--bg-primary);
+  background-color: transparent;
   z-index: 1;
 }
 

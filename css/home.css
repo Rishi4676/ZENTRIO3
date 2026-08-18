@@ -6,7 +6,7 @@
   align-items: center;
   justify-content: center;
   padding-top: var(--navbar-height);
-  background-color: var(--bg-primary);
+  background-color: transparent;
   z-index: 1;
 }
 

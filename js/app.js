@@ -10,8 +10,44 @@ document.addEventListener('DOMContentLoaded', () => {
   initChatbotScript(); // Dynamically inject the chatbot widget!
   initPortalDropdown(); // Initialize portal dropdown logic!
   initLoginInterceptor(); // Intercept actions for guest users!
+  initGlobalBackgroundVideo(); // Inject background video across all pages!
   initGlobalConstellation(); // Initialize the dynamic site-wide background animation!
 });
+
+// Dynamic Site-Wide Background Video Loader
+function initGlobalBackgroundVideo() {
+  if (document.getElementById('globalBgVideoContainer')) return;
+
+  const container = document.createElement('div');
+  container.id = 'globalBgVideoContainer';
+  container.className = 'global-bg-video-container';
+
+  const video = document.createElement('video');
+  video.className = 'global-bg-video';
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.playsInline = true;
+  video.setAttribute('aria-hidden', 'true');
+
+  const source = document.createElement('source');
+  source.src = '/background%20video.mp4';
+  source.type = 'video/mp4';
+
+  video.appendChild(source);
+  container.appendChild(video);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'global-bg-overlay';
+  container.appendChild(overlay);
+
+  document.body.prepend(container);
+
+  // Attempt autoplay safely
+  video.play().catch(err => {
+    console.warn('Background video autoplay restricted:', err);
+  });
+}
 
 // Dynamic Chatbot Script Loader
 function initChatbotScript() {

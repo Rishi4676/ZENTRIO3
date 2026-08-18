@@ -469,12 +469,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setError(null);
       try {
         // Trigger all requests simultaneously; /me returning 401 is NOT an error — it just means no session
-        const [usersRes, projectsRes, paymentsRes, messagesRes, authRes] = await Promise.all([
+        const [usersRes, projectsRes, paymentsRes, messagesRes, authRes, tasksRes] = await Promise.all([
           fetch('/api/users').catch(() => null),
           fetch('/api/projects').catch(() => null),
           fetch('/api/payments').catch(() => null),
           fetch('/api/messages').catch(() => null),
-          fetch('/api/auth/me').catch(() => null)
+          fetch('/api/auth/me').catch(() => null),
+          fetch('/api/tasks').catch(() => null)
         ]);
 
         // Validate critical APIs — if any non-auth endpoint is completely unreachable throw
@@ -484,13 +485,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         const safeJson = async (res: Response | null) => {
           try { return res && res.ok ? await res.json() : null; } catch { return null; }
         };
-        const [usersData, projectsData, paymentsData, messagesData, authData] = await Promise.all([
+        const [usersData, projectsData, paymentsData, messagesData, authData, tasksData] = await Promise.all([
           safeJson(usersRes),
           safeJson(projectsRes),
           safeJson(paymentsRes),
           safeJson(messagesRes),
           // For /me, parse JSON regardless of status so we can read the body
-          authRes ? authRes.json().catch(() => null) : Promise.resolve(null)
+          authRes ? authRes.json().catch(() => null) : Promise.resolve(null),
+          safeJson(tasksRes)
         ]);
 
         // Process Users — merge with existing seeded workers/admin
@@ -534,6 +536,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           setMessages(messagesData.messages);
         }
 
+        // Process Tasks
+        if (tasksData?.success && tasksData.tasks) {
+          setTasks(tasksData.tasks);
+        }
+
         // Process Restore Session from Backend Cookie — 401 just means no active session, not an error
         if (authData?.success && authData.user) {
           const { email, role, username, companyName, mobile, country, state } = authData.user;
@@ -574,6 +581,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     fetchAllData();
+
+    // Background live polling interval for real-time internal updates every 3 seconds
+    const interval = setInterval(async () => {
+      try {
+        const [msgsRes, tsksRes, prjsRes] = await Promise.all([
+          fetch('/api/messages').catch(() => null),
+          fetch('/api/tasks').catch(() => null),
+          fetch('/api/projects').catch(() => null)
+        ]);
+        if (msgsRes && msgsRes.ok) {
+          const mData = await msgsRes.json().catch(() => null);
+          if (mData?.success && mData.messages) setMessages(mData.messages);
+        }
+        if (tsksRes && tsksRes.ok) {
+          const tData = await tsksRes.json().catch(() => null);
+          if (tData?.success && tData.tasks) setTasks(tData.tasks);
+        }
+        if (prjsRes && prjsRes.ok) {
+          const pData = await prjsRes.json().catch(() => null);
+          if (pData?.success && pData.projects) setProjects(pData.projects);
+        }
+      } catch (e) {}
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
   const [notifications, setNotifications] = useState<{ id: string; text: string; type: 'info' | 'success' | 'warning'; timestamp: string }[]>([
     { id: 'not1', text: 'Welcome to Zentrio Admin Workspace. All secure session ports are open.', type: 'success', timestamp: new Date().toLocaleTimeString() }
@@ -1469,13 +1501,31 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
 
     setTasks(prev => [newTask, ...prev]);
+    fetch('/api/tasks', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': getCsrfToken()
+      },
+      body: JSON.stringify(newTask)
+    }).catch(err => console.error('Failed to save task to backend:', err));
+
     addNotification(`New task assigned to Worker ${taskData.workerId}.`, 'info');
   };
 
   const updateTaskStatus = (taskId: string, status: WorkerTask['status']) => {
     setTasks(prev => prev.map(t => {
       if (t.id === taskId) {
-        return { ...t, status };
+        const updated = { ...t, status };
+        fetch(`/api/tasks/${taskId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': getCsrfToken()
+          },
+          body: JSON.stringify(updated)
+        }).catch(err => console.error('Failed to update task in backend:', err));
+        return updated;
       }
       return t;
     }));
