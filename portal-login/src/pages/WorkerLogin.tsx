@@ -1,63 +1,34 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Lock, Eye, EyeOff, User as UserIcon, ArrowLeft } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
 
 export const WorkerLogin: React.FC = () => {
   const { login, users } = useApp();
-  const [workerId, setWorkerId] = useState('');
+  const [workerIdentifier, setWorkerIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [matchedWorker, setMatchedWorker] = useState<any>(null);
-
-  // Dynamically search for worker details to show avatar
-  useEffect(() => {
-    const idNorm = workerId.trim().toLowerCase();
-    const workerIdMap: Record<string, string> = {
-      'syedrashid_w1': 'syedrashid_W1', 'w1': 'syedrashid_W1', 'syed': 'syedrashid_W1',
-      'rishigesh_w2': 'rishigesh_W2', 'w2': 'rishigesh_W2', 'rishi': 'rishigesh_W2',
-      'pushparaj_w3': 'pushparaj_W3', 'w3': 'pushparaj_W3', 'pushpa': 'pushparaj_W3',
-      'rishigesh_w1': 'rishigesh_W2',
-      'pushparaj_w2': 'pushparaj_W3'
-    };
-    const canonicalId = workerIdMap[idNorm];
-    if (canonicalId) {
-      const worker = users.find(u => u.id === canonicalId && u.role === 'worker');
-      if (worker) {
-        let avatarUrl = worker.avatar;
-        if (canonicalId === 'syedrashid_W1') avatarUrl = '/assets/syed.jpg';
-        if (canonicalId === 'rishigesh_W2') avatarUrl = '/assets/rishi.png';
-        if (canonicalId === 'pushparaj_W3') avatarUrl = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80';
-        setMatchedWorker({
-          ...worker,
-          avatar: avatarUrl
-        });
-      } else {
-        setMatchedWorker(null);
-      }
-    } else {
-      setMatchedWorker(null);
-    }
-  }, [workerId, users]);
-
   const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Match worker dynamically
+  const matchedWorker = users.find(
+    u => u.role === 'worker' && (
+      u.id.toLowerCase() === workerIdentifier.trim().toLowerCase() ||
+      u.email.toLowerCase() === workerIdentifier.trim().toLowerCase()
+    )
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!workerId || !password) {
-      setErrorMessage('Please provide worker ID and password.');
-      return;
-    }
-
-    setLoading(true);
     setErrorMessage('');
     setSuccessMessage('');
+    setLoading(true);
 
-    const result = await login(workerId, password, 'worker');
+    const result = await login(workerIdentifier, password, 'worker');
     setLoading(false);
+
     if (!result.success) {
       setErrorMessage(result.error || 'Login failed. Invalid email or password.');
     } else {
@@ -89,8 +60,7 @@ export const WorkerLogin: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
-        <div className="w-full glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
+      <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10">
         
         {/* Dynamic avatar based on typed ID */}
         <div className="text-center mb-8">
@@ -191,10 +161,6 @@ export const WorkerLogin: React.FC = () => {
             Contact HR Department
           </a>
         </div>
-        </div>
-
-        {/* Right Side Video Panel */}
-        <RightSideVideoPanel />
       </div>
     </div>
   );

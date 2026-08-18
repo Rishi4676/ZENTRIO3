@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Shield, Lock, Eye, EyeOff, User as UserIcon, ArrowLeft } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
-import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
 
 export const AdminLogin: React.FC = () => {
   const { login } = useApp();
@@ -11,27 +10,22 @@ export const AdminLogin: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-
   const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!adminId || !password) {
-      setErrorMessage('Please fill in all security fields.');
-      return;
-    }
-
-    setLoading(true);
     setErrorMessage('');
     setSuccessMessage('');
+    setLoading(true);
 
     const result = await login(adminId, password, 'admin');
     setLoading(false);
+
     if (!result.success) {
-      setErrorMessage(result.error || 'Login failed. Invalid email or password.');
+      setErrorMessage(result.error || 'Login failed. Invalid administrator credentials.');
     } else {
-      setSuccessMessage('Login successful');
+      setSuccessMessage('Admin authentication successful');
       setTimeout(() => {
         window.location.href = '/admin/';
       }, 500);
@@ -41,9 +35,9 @@ export const AdminLogin: React.FC = () => {
   return (
     <div className="min-h-screen relative flex items-center justify-center px-4 py-12 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 transition-colors duration-300 overflow-hidden">
       
-      {/* Animated nodes for premium feel */}
-      <div className="absolute top-[-10%] left-[-10%] w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-[-10%] right-[-10%] w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-float-reverse"></div>
+      {/* Background elements */}
+      <div className="absolute top-[-10%] right-[-10%] w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-float"></div>
+      <div className="absolute bottom-[-10%] left-[-10%] w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-float-reverse"></div>
       
       <div className="absolute top-4 left-4 flex items-center space-x-2">
         <a
@@ -59,8 +53,7 @@ export const AdminLogin: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
-        <div className="w-full glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
+      <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10">
         
         {/* Logo and Welcome */}
         <div className="text-center mb-8">
@@ -161,10 +154,6 @@ export const AdminLogin: React.FC = () => {
           <span className="text-[10px] font-bold uppercase tracking-wider">SSL 256-Bit Encrypted Session</span>
         </div>
 
-        </div>
-
-        {/* Right Side Video Panel */}
-        <RightSideVideoPanel />
       </div>
     </div>
   );

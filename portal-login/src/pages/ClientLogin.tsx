@@ -3,7 +3,6 @@ import { useApp } from '../context/AppContext';
 import { Eye, EyeOff, Lock, Mail, ArrowLeft, Check } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 import { GoogleAuthButton } from '../components/GoogleAuthButton';
-import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
 
 export const ClientLogin: React.FC = () => {
   const { login, setCurrentPage, sendPasswordReset } = useApp();
@@ -80,8 +79,7 @@ export const ClientLogin: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
-        <div className="w-full glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
+      <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10">
         
         {/* Header */}
         <div className="text-center mb-6">
@@ -267,12 +265,8 @@ export const ClientLogin: React.FC = () => {
             </div>
           </>
         )}
-        </div>
 
-        {/* Right Side Video Panel */}
-        <RightSideVideoPanel />
       </div>
-
     </div>
   );
 };

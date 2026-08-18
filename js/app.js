@@ -10,54 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initChatbotScript(); // Dynamically inject the chatbot widget!
   initPortalDropdown(); // Initialize portal dropdown logic!
   initLoginInterceptor(); // Intercept actions for guest users!
-  initGlobalBackgroundVideo(); // Inject background video across all pages!
   initGlobalConstellation(); // Initialize the dynamic site-wide background animation!
 });
-
-// Dynamic Site-Wide Background Video Loader
-function initGlobalBackgroundVideo() {
-  if (document.getElementById('globalBgVideoContainer')) return;
-
-  const container = document.createElement('div');
-  container.id = 'globalBgVideoContainer';
-  container.className = 'global-bg-video-container';
-
-  const video = document.createElement('video');
-  video.className = 'global-bg-video';
-  video.autoplay = true;
-  video.loop = true;
-  video.muted = true;
-  video.playsInline = true;
-  video.preload = 'metadata';
-  video.setAttribute('aria-hidden', 'true');
-
-  const source1 = document.createElement('source');
-  source1.src = '/background-video.mp4';
-  source1.type = 'video/mp4';
-  video.appendChild(source1);
-
-  const source2 = document.createElement('source');
-  source2.src = '/assets/background-video.mp4';
-  source2.type = 'video/mp4';
-  video.appendChild(source2);
-
-  const source3 = document.createElement('source');
-  source3.src = '/background%20video.mp4';
-  source3.type = 'video/mp4';
-  video.appendChild(source3);
-  container.appendChild(video);
-
-  const overlay = document.createElement('div');
-  overlay.className = 'global-bg-overlay';
-  container.appendChild(overlay);
-
-  document.body.prepend(container);
-
-  // Attempt autoplay safely
-  video.play().catch(err => {
-    console.warn('Background video autoplay restricted:', err);
-  });
-}
 
 // Dynamic Chatbot Script Loader
 function initChatbotScript() {
