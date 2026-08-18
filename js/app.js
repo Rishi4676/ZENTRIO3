@@ -30,11 +30,20 @@ function initGlobalBackgroundVideo() {
   video.playsInline = true;
   video.setAttribute('aria-hidden', 'true');
 
-  const source = document.createElement('source');
-  source.src = '/background%20video.mp4';
-  source.type = 'video/mp4';
+  const source1 = document.createElement('source');
+  source1.src = '/background-video.mp4';
+  source1.type = 'video/mp4';
+  video.appendChild(source1);
 
-  video.appendChild(source);
+  const source2 = document.createElement('source');
+  source2.src = '/assets/background-video.mp4';
+  source2.type = 'video/mp4';
+  video.appendChild(source2);
+
+  const source3 = document.createElement('source');
+  source3.src = '/background%20video.mp4';
+  source3.type = 'video/mp4';
+  video.appendChild(source3);
   container.appendChild(video);
 
   const overlay = document.createElement('div');

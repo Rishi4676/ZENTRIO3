@@ -111,6 +111,8 @@ function App() {
     <AppProvider>
       <div className="global-bg-video-container">
         <video className="global-bg-video" autoPlay loop muted playsInline aria-hidden="true">
+          <source src="/background-video.mp4" type="video/mp4" />
+          <source src="/assets/background-video.mp4" type="video/mp4" />
           <source src="/background%20video.mp4" type="video/mp4" />
         </video>
         <div className="global-bg-overlay" />
