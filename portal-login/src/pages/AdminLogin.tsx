@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { Shield, Lock, Eye, EyeOff, User as UserIcon, ArrowLeft } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
 
 export const AdminLogin: React.FC = () => {
   const { login } = useApp();
@@ -58,7 +59,8 @@ export const AdminLogin: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10">
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
+        <div className="w-full glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
         
         {/* Logo and Welcome */}
         <div className="text-center mb-8">
@@ -92,7 +94,7 @@ export const AdminLogin: React.FC = () => {
               <input
                 type="text"
                 required
-                placeholder="ADMIN_ID"
+                placeholder="admin_ID or admin@zentrio.ai"
                 value={adminId}
                 onChange={(e) => setAdminId(e.target.value)}
                 className="w-full text-sm pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
@@ -102,9 +104,7 @@ export const AdminLogin: React.FC = () => {
 
           {/* Password Field */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Secret Password</label>
-            </div>
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Security Key</label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                 <Lock className="w-4 h-4" />
@@ -130,13 +130,13 @@ export const AdminLogin: React.FC = () => {
           {/* Remember Me */}
           <div className="flex items-center">
             <input
-              id="remember_me"
+              id="remember_admin"
               type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
               className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 bg-transparent"
             />
-            <label htmlFor="remember_me" className="ml-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+            <label htmlFor="remember_admin" className="ml-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
               Remember my session keys
             </label>
           </div>
@@ -161,6 +161,10 @@ export const AdminLogin: React.FC = () => {
           <span className="text-[10px] font-bold uppercase tracking-wider">SSL 256-Bit Encrypted Session</span>
         </div>
 
+        </div>
+
+        {/* Right Side Video Panel */}
+        <RightSideVideoPanel />
       </div>
     </div>
   );

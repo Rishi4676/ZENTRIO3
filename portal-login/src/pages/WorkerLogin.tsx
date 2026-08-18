@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { Lock, Eye, EyeOff, User as UserIcon, ArrowLeft } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
+import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
 
 export const WorkerLogin: React.FC = () => {
   const { login, users } = useApp();
@@ -88,7 +89,8 @@ export const WorkerLogin: React.FC = () => {
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10">
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
+        <div className="w-full glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
         
         {/* Dynamic avatar based on typed ID */}
         <div className="text-center mb-8">
@@ -99,38 +101,36 @@ export const WorkerLogin: React.FC = () => {
                 alt={matchedWorker.name}
                 className="w-16 h-16 rounded-full mx-auto object-cover border-2 border-indigo-500 shadow-md animate-pulse"
               />
-              <span className="absolute bottom-0 right-0 block h-3.5 w-3.5 rounded-full ring-2 ring-white dark:ring-slate-900 bg-emerald-500"></span>
+              <span className="absolute bottom-0 right-0 w-4 h-4 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
             </div>
           ) : (
-            <div className="w-14 h-14 rounded-xl bg-slate-100 dark:bg-slate-900/80 flex items-center justify-center text-slate-500 mx-auto border border-slate-200/40 dark:border-slate-850">
-              <UserIcon className="w-6 h-6" />
+            <div className="w-16 h-16 rounded-2xl bg-indigo-500/10 flex items-center justify-center mx-auto text-indigo-500 border border-indigo-500/20">
+              <UserIcon className="w-8 h-8" />
             </div>
           )}
-          
           <h2 className="mt-4 text-2xl font-extrabold tracking-tight">
-            {matchedWorker ? `Welcome, ${matchedWorker.name.split(' ')[0]}` : 'Worker Portal'}
+            {matchedWorker ? matchedWorker.name : 'Worker Terminal'}
           </h2>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1.5">
-            {matchedWorker ? `System Account: ${matchedWorker.id}` : 'Access your task list and mark daily attendance.'}
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-medium">
+            {matchedWorker ? `Role: ${matchedWorker.role.toUpperCase()}` : 'Enter your registered Worker ID or email address.'}
           </p>
         </div>
 
+        {errorMessage && (
+          <div className="mb-6 p-3.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold border border-rose-500/20 text-center">
+            {errorMessage}
+          </div>
+        )}
         {successMessage && (
-          <div className="mb-5 p-3.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20 text-center">
+          <div className="mb-6 p-3.5 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-semibold border border-emerald-500/20 text-center">
             {successMessage}
           </div>
         )}
 
-        {errorMessage && (
-          <div className="mb-5 p-3.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold border border-rose-500/20 text-center">
-            {errorMessage}
-          </div>
-        )}
-
         <form onSubmit={handleSubmit} className="space-y-5">
-          {/* Worker ID Field */}
+          {/* Worker ID / Email */}
           <div>
-            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Worker ID</label>
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Worker ID / Email</label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                 <UserIcon className="w-4 h-4" />
@@ -138,19 +138,17 @@ export const WorkerLogin: React.FC = () => {
               <input
                 type="text"
                 required
-                placeholder="worker_ID"
-                value={workerId}
-                onChange={(e) => setWorkerId(e.target.value)}
+                placeholder="e.g. WORKER001 or syed.r@zentrio.ai"
+                value={workerIdentifier}
+                onChange={(e) => setWorkerIdentifier(e.target.value)}
                 className="w-full text-sm pl-10 pr-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-slate-950/45 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
               />
             </div>
           </div>
 
-          {/* Password Field */}
+          {/* Password */}
           <div>
-            <div className="flex justify-between items-center mb-2">
-              <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider">Access Token Password</label>
-            </div>
+            <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Access Password</label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
                 <Lock className="w-4 h-4" />
@@ -166,23 +164,11 @@ export const WorkerLogin: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition"
+                className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-          </div>
-
-          {/* Remember Me */}
-          <div className="flex items-center">
-            <input
-              id="remember_worker"
-              type="checkbox"
-              className="w-4 h-4 text-indigo-600 border-slate-300 rounded focus:ring-indigo-500 bg-transparent"
-            />
-            <label htmlFor="remember_worker" className="ml-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
-              Keep worker session active
-            </label>
           </div>
 
           {/* Submit */}
@@ -205,7 +191,10 @@ export const WorkerLogin: React.FC = () => {
             Contact HR Department
           </a>
         </div>
+        </div>
 
+        {/* Right Side Video Panel */}
+        <RightSideVideoPanel />
       </div>
     </div>
   );
