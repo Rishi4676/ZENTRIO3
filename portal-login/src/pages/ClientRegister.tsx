@@ -11,6 +11,8 @@ const COUNTRIES = [
   'South Africa', 'New Zealand', 'Malaysia', 'Russia', 'Spain'
 ];
 
+import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
+
 export const ClientRegister: React.FC = () => {
   const { registerClient, setCurrentPage, routerParams, setRouterParams } = useApp();
   const isFromGoogle = routerParams?.fromGoogle === true;
@@ -268,7 +270,7 @@ export const ClientRegister: React.FC = () => {
       <div className="absolute top-[10%] left-[-5%] w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl animate-float"></div>
       <div className="absolute bottom-[10%] right-[-5%] w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-float-reverse"></div>
       
-      <div className="absolute top-4 left-4 flex items-center space-x-2">
+      <div className="absolute top-4 left-4 flex items-center space-x-2 z-20">
         <a
           href="/"
           className="flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold glass rounded-xl border border-slate-200/50 dark:border-slate-800/50 hover:bg-slate-100/50 dark:hover:bg-slate-900/50 transition text-slate-800 dark:text-slate-100"
@@ -278,11 +280,13 @@ export const ClientRegister: React.FC = () => {
         </a>
       </div>
 
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-lg glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10 my-8">
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10 my-8">
+        <RightSideVideoPanel />
+        <div className="w-full max-w-lg mx-auto glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
         
         {/* Title */}
         <div className="text-center mb-6">
@@ -570,6 +574,7 @@ export const ClientRegister: React.FC = () => {
           </div>
         </div>
 
+        </div>
       </div>
 
       {/* TERMS AND CONDITIONS MODAL */}

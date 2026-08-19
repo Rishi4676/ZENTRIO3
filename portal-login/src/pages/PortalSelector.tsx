@@ -39,6 +39,22 @@ export const PortalSelector: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col justify-between transition-colors duration-300 relative overflow-hidden">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        aria-hidden="true"
+        style={{ transform: 'translateZ(0)', willChange: 'transform' }}
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-20 pointer-events-none"
+      >
+        <source src="/background-video.mp4" type="video/mp4" />
+        <source src="/videos/background-video.mp4" type="video/mp4" />
+        <source src="/assets/videos/background-video.mp4" type="video/mp4" />
+      </video>
+
       {/* Background Glows */}
       <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none animate-float"></div>
       <div className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[140px] pointer-events-none animate-float-reverse"></div>

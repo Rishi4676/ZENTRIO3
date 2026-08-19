@@ -3,6 +3,8 @@ import { useApp } from '../context/AppContext';
 import { Shield, Lock, Eye, EyeOff, User as UserIcon, ArrowLeft } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
 
+import { RightSideVideoPanel } from '../components/RightSideVideoPanel';
+
 export const AdminLogin: React.FC = () => {
   const { login } = useApp();
   const [adminId, setAdminId] = useState('');
@@ -39,7 +41,7 @@ export const AdminLogin: React.FC = () => {
       <div className="absolute top-[-10%] right-[-10%] w-72 h-72 bg-purple-500/10 rounded-full blur-3xl animate-float"></div>
       <div className="absolute bottom-[-10%] left-[-10%] w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-float-reverse"></div>
       
-      <div className="absolute top-4 left-4 flex items-center space-x-2">
+      <div className="absolute top-4 left-4 flex items-center space-x-2 z-20">
         <a
           href="/"
           className="flex items-center space-x-1.5 px-3 py-2 text-xs font-semibold glass rounded-xl border border-slate-200/50 dark:border-slate-800/50 hover:bg-slate-100/50 dark:hover:bg-slate-900/50 transition text-slate-800 dark:text-slate-100"
@@ -49,11 +51,13 @@ export const AdminLogin: React.FC = () => {
         </a>
       </div>
 
-      <div className="absolute top-4 right-4">
+      <div className="absolute top-4 right-4 z-20">
         <ThemeToggle />
       </div>
 
-      <div className="w-full max-w-md glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl relative z-10">
+      <div className="w-full max-w-5xl grid lg:grid-cols-2 gap-8 items-center relative z-10">
+        <RightSideVideoPanel />
+        <div className="w-full max-w-md mx-auto glass-card rounded-3xl p-8 border border-slate-200/50 dark:border-slate-800/50 shadow-2xl">
         
         {/* Logo and Welcome */}
         <div className="text-center mb-8">
@@ -154,6 +158,7 @@ export const AdminLogin: React.FC = () => {
           <span className="text-[10px] font-bold uppercase tracking-wider">SSL 256-Bit Encrypted Session</span>
         </div>
 
+        </div>
       </div>
     </div>
   );
