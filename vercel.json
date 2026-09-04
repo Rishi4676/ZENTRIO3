@@ -3,7 +3,6 @@
   "buildCommand": "npm run build",
   "functions": {
     "api/index.js": {
-      "includeFiles": "database/backups/audit_logs.json",
       "excludeFiles": "{apps/admin/**,apps/portal/**}"
     }
   },

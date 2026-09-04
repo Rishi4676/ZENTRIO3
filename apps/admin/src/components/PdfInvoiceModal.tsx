@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { X, Printer, Download, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
+import { X, Printer, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
 import type { Project, User } from '../types';
 
 interface PdfInvoiceModalProps {
@@ -35,7 +35,7 @@ export const PdfInvoiceModal: React.FC<PdfInvoiceModalProps> = ({
   const defaultDueDate = invoiceData?.dueDate || new Date(Date.now() + 14 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
   
   const clientName = client?.name || project?.clientName || 'Valued Enterprise Partner';
-  const clientEmail = client?.email || project?.clientEmail || 'client@enterprise.com';
+  const clientEmail = client?.email || (project as any)?.clientEmail || 'client@enterprise.com';
   const clientCompany = client?.companyName || 'Corporate Client Inc.';
 
   const items = invoiceData?.items || [

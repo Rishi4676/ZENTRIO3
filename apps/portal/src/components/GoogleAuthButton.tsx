@@ -4,6 +4,7 @@ import { auth, googleProvider } from '../config/firebase';
 
 interface GoogleAuthButtonProps {
   mode?: 'signin' | 'signup';
+  role?: string;
 }
 
 export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'signin' }) => {

@@ -954,6 +954,8 @@ export const ClientDashboard: React.FC = () => {
 
           </div>
         </div>
+      )}
+
       {/* PDF Tax Invoice Modal */}
       <PdfInvoiceModal
         isOpen={isInvoiceModalOpen}

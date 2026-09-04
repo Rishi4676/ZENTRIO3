@@ -29,7 +29,7 @@ interface AppContextType {
   toggleTheme: () => void;
   currentUser: User | null;
   login: (id: string, password: string, role: UserRole) => Promise<{ success: boolean; error?: string }>;
-  loginWithGoogle: (googleUser: { name: string; email: string; picture: string }) => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: (googleUser: { uid?: string; name: string; email: string; picture: string }) => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   registerClient: (userData: Omit<User, 'role' | 'id'>) => Promise<{ success: boolean; error?: string }>;
   currentPage: string;
