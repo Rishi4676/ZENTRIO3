@@ -9,7 +9,23 @@ const { xssSanitizer, csrfInit } = require('./middleware/security');
 const { initializeFirestoreSync } = require('./database/db');
 
 // Interop Helper to extract Express Router whether bundled as CJS or ESM
-const getRouter = (mod) => (mod && mod.default ? mod.default : mod);
+const getRouter = (mod) => {
+  if (typeof mod === 'function') return mod;
+
+  if (mod && typeof mod.default === 'function') {
+    return mod.default;
+  }
+
+  if (
+    mod &&
+    mod.default &&
+    typeof mod.default.default === 'function'
+  ) {
+    return mod.default.default;
+  }
+
+  return mod;
+};
 
 const app = express();
 const PORT = process.env.PORT || 3000;
