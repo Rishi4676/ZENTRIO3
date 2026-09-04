@@ -1,0 +1,17 @@
+{
+  "watch": [
+    "server"
+  ],
+  "ext": "js",
+  "ignore": [
+    "node_modules/**",
+    "database/**",
+    "server/uploads/**",
+    "server/logs/**",
+    "apps/**",
+    "scripts/**",
+    "docs/**",
+    "*.log"
+  ],
+  "exec": "node server/server.js"
+}

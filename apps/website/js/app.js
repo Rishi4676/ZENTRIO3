@@ -10,8 +10,54 @@ document.addEventListener('DOMContentLoaded', () => {
   initChatbotScript(); // Dynamically inject the chatbot widget!
   initPortalDropdown(); // Initialize portal dropdown logic!
   initLoginInterceptor(); // Intercept actions for guest users!
+  initGlobalBackgroundVideo(); // Inject background video across all pages!
   initGlobalConstellation(); // Initialize the dynamic site-wide background animation!
 });
+
+// Dynamic Site-Wide Background Video Loader (Raw Video)
+function initGlobalBackgroundVideo() {
+  if (document.getElementById('globalBgVideoContainer')) return;
+
+  const container = document.createElement('div');
+  container.id = 'globalBgVideoContainer';
+  container.className = 'global-bg-video-container';
+
+  const video = document.createElement('video');
+  video.className = 'global-bg-video';
+  video.autoplay = true;
+  video.loop = true;
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = 'auto';
+  video.setAttribute('aria-hidden', 'true');
+
+  const source1 = document.createElement('source');
+  source1.src = '/background-video.mp4';
+  source1.type = 'video/mp4';
+  video.appendChild(source1);
+
+  const source2 = document.createElement('source');
+  source2.src = '/videos/background-video.mp4';
+  source2.type = 'video/mp4';
+  video.appendChild(source2);
+
+  const source3 = document.createElement('source');
+  source3.src = '/assets/videos/background-video.mp4';
+  source3.type = 'video/mp4';
+  video.appendChild(source3);
+
+  const source4 = document.createElement('source');
+  source4.src = '/assets/background-video.mp4';
+  source4.type = 'video/mp4';
+  video.appendChild(source4);
+
+  container.appendChild(video);
+  document.body.prepend(container);
+
+  video.play().catch(err => {
+    console.warn('Background video autoplay restricted:', err);
+  });
+}
 
 // Dynamic Chatbot Script Loader
 function initChatbotScript() {
@@ -514,97 +560,117 @@ function showLoginPromptModal(e, redirectUrl) {
     
     modal.innerHTML = `
       <div style="
-        background: rgba(18, 18, 22, 0.85);
+        background: rgba(18, 18, 22, 0.88);
         backdrop-filter: blur(20px) saturate(180%);
         -webkit-backdrop-filter: blur(20px) saturate(180%);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(0, 223, 216, 0.25);
         border-radius: 16px;
         padding: 2.5rem 2rem;
         max-width: 400px;
         width: 90%;
         text-align: center;
-        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 24px 48px rgba(0, 0, 0, 0.7);
         transform: translateY(20px);
         transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
+        overflow: hidden;
       ">
-        <button id="closePromptBtn" style="
-          position: absolute;
-          top: 16px;
-          right: 18px;
-          background: none;
-          border: none;
-          color: rgba(255, 255, 255, 0.4);
-          font-size: 1.75rem;
-          cursor: pointer;
-          line-height: 1;
-          transition: color 0.2s;
-        " onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
-        
+        <!-- Subtle Futuristic AI Robot Background Image Layer & Dark Overlay -->
         <div style="
-          width: 56px;
-          height: 56px;
-          background: rgba(0, 223, 216, 0.1);
-          border: 1px solid rgba(0, 223, 216, 0.2);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 1.25rem auto;
-          color: #00dfd8;
-        ">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        </div>
-        
-        <h3 style="
-          font-family: 'Outfit', sans-serif;
-          font-size: 1.45rem;
-          font-weight: 700;
-          color: white;
-          margin-bottom: 0.5rem;
-        ">Portal Login Required</h3>
-        
-        <p style="
-          font-family: 'Inter', sans-serif;
-          font-size: 0.9rem;
-          color: rgba(255, 255, 255, 0.6);
-          line-height: 1.5;
-          margin-bottom: 2rem;
-        ">Please log in to your portal to continue with this action.</p>
-        
-        <div style="display: flex; flex-direction: column; gap: 10px;">
-          <a href="/portal/client-login" style="
-            display: block;
-            width: 100%;
-            padding: 12px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.95rem;
-            background: linear-gradient(135deg, #00dfd8 0%, #0072ff 100%);
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.60) 0%, rgba(10, 15, 30, 0.75) 100%), url('/assets/robot-auth-bg.webp');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.85;
+          pointer-events: none;
+          z-index: 0;
+        "></div>
+
+        <div style="position: relative; z-index: 1;">
+          <button id="closePromptBtn" style="
+            position: absolute;
+            top: -24px;
+            right: -14px;
+            background: none;
             border: none;
-            border-radius: 8px;
-            color: white;
-            text-decoration: none;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 1.75rem;
             cursor: pointer;
-            box-shadow: 0 4px 12px rgba(0, 223, 216, 0.25);
-            transition: opacity 0.2s, transform 0.1s;
-          " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'" onclick="document.getElementById('globalLoginPromptModal').style.display='none'">Login to Portal</a>
+            line-height: 1;
+            transition: color 0.2s;
+          " onmouseover="this.style.color='white'" onmouseout="this.style.color='rgba(255,255,255,0.4)'">&times;</button>
           
-          <a href="/portal/client-register" style="
-            display: block;
-            width: 100%;
-            padding: 12px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            font-size: 0.95rem;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 8px;
+          <div style="
+            width: 56px;
+            height: 56px;
+            background: rgba(0, 223, 216, 0.12);
+            border: 1px solid rgba(0, 223, 216, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem auto;
+            color: #00dfd8;
+            box-shadow: 0 0 16px rgba(0, 223, 216, 0.2);
+          ">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          </div>
+          
+          <h3 style="
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.45rem;
+            font-weight: 700;
             color: white;
-            text-decoration: none;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
-          " onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(255, 255, 255, 0.08)'" onclick="document.getElementById('globalLoginPromptModal').style.display='none'">Register Account</a>
+            margin-bottom: 0.5rem;
+          ">Portal Login Required</h3>
+          
+          <p style="
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+            margin-bottom: 2rem;
+          ">Please log in to your portal to continue with this action.</p>
+          
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a href="/portal/client-login" style="
+              display: block;
+              width: 100%;
+              padding: 12px;
+              font-family: 'Inter', sans-serif;
+              font-weight: 600;
+              font-size: 0.95rem;
+              background: linear-gradient(135deg, #00dfd8 0%, #0072ff 100%);
+              border: none;
+              border-radius: 8px;
+              color: white;
+              text-decoration: none;
+              cursor: pointer;
+              box-shadow: 0 4px 12px rgba(0, 223, 216, 0.25);
+              transition: opacity 0.2s, transform 0.1s;
+            " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'" onclick="document.getElementById('globalLoginPromptModal').style.display='none'">Login to Portal</a>
+            
+            <a href="/portal/client-register" style="
+              display: block;
+              width: 100%;
+              padding: 12px;
+              font-family: 'Inter', sans-serif;
+              font-weight: 600;
+              font-size: 0.95rem;
+              background: rgba(255, 255, 255, 0.04);
+              border: 1px solid rgba(255, 255, 255, 0.12);
+              border-radius: 8px;
+              color: white;
+              text-decoration: none;
+              cursor: pointer;
+              transition: background 0.2s, border-color 0.2s;
+            " onmouseover="this.style.background='rgba(255, 255, 255, 0.08)'; this.style.borderColor='rgba(255, 255, 255, 0.2)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.04)'; this.style.borderColor='rgba(255, 255, 255, 0.12)'" onclick="document.getElementById('globalLoginPromptModal').style.display='none'">Register Account</a>
+          </div>
         </div>
       </div>
     `;

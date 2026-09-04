@@ -1,0 +1,197 @@
+require('dotenv').config(); // Trigger sync reboot
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { xssSanitizer, csrfInit } = require('./middleware/security');
+const { initializeFirestoreSync } = require('./database/db');
+
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Initialize Firestore Sync (only when not running on Vercel serverless to avoid cold-start timeouts)
+if (!process.env.VERCEL) {
+  initializeFirestoreSync().catch(err => {
+    console.error('❌ Failed to run initial Firestore sync:', err.message);
+  });
+}
+
+// Production HTTPS enforcement
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'production' && req.headers['x-forwarded-proto'] !== 'https') {
+    return res.redirect(`https://${req.headers.host}${req.url}`);
+  }
+  next();
+});
+
+// Secure HTTP Headers (Helmet)
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false
+}));
+
+// API endpoints Rate Limiter
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many operations. Please wait a short while and try again.' }
+});
+app.use('/api/', apiLimiter);
+
+// Parse JSON request payloads and capture rawBody buffer for signatures verify checks
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf.toString();
+  }
+}));
+
+app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log(`📡 [${req.method}] ${req.url} | HasTokenCookie: ${!!(req.cookies && req.cookies.token)}`);
+  next();
+});
+app.use(xssSanitizer);
+app.use(csrfInit);
+
+// Static Files - serve with production caching headers to boost load speeds and avoid roundtrip jank
+const cacheControlOptions = {
+  maxAge: '1d',
+  etag: true,
+  lastModified: true
+};
+app.use('/css', express.static(path.join(__dirname, '..', 'apps', 'website', 'css'), cacheControlOptions));
+app.use('/js', express.static(path.join(__dirname, '..', 'apps', 'website', 'js'), cacheControlOptions));
+app.use('/assets', express.static(path.join(__dirname, '..', 'apps', 'website', 'assets'), { ...cacheControlOptions, maxAge: '7d' }));
+app.use('/admin', express.static(path.join(__dirname, '..', 'apps', 'admin', 'dist'), cacheControlOptions));
+app.use('/portal', express.static(path.join(__dirname, '..', 'apps', 'portal', 'dist'), cacheControlOptions));
+app.use('/publicity', express.static(path.join(__dirname, '..', 'apps', 'website', 'publicity'), cacheControlOptions));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'), cacheControlOptions));
+app.use('/videos', express.static(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos'), cacheControlOptions));
+app.use('/public/videos', express.static(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos'), cacheControlOptions));
+
+
+// Mount API Routers
+app.use('/api/auth', require('./routes/auth'));
+app.use('/api/projects', require('./routes/projects'));
+app.use('/api/payments', require('./routes/payments'));
+app.use('/api/messages', require('./routes/messages'));
+app.use('/api/email', require('./routes/email'));
+app.use('/api/chat', require('./routes/chat'));
+app.use('/api/contact', require('./routes/contact'));
+app.use('/api/feedback', require('./routes/feedback'));
+app.use('/api/users', require('./routes/users'));
+app.use('/api/tasks', require('./routes/tasks'));
+app.use('/api/leaves', require('./routes/leaves'));
+app.use('/api/payroll', require('./routes/payroll'));
+// SEO Dynamic Endpoints
+const seoService = require('./services/seoService');
+
+app.get('/sitemap.xml', (req, res) => {
+  res.header('Content-Type', 'application/xml');
+  res.send(seoService.generateSitemap());
+});
+
+app.get('/robots.txt', (req, res) => {
+  res.header('Content-Type', 'text/plain');
+  res.send(seoService.generateRobotsTxt());
+});
+
+app.use('/api/ai', require('./routes/ai'));
+app.use('/api/payment', require('./routes/payment_api'));
+app.use('/api/upload', require('./routes/upload'));
+app.use('/api/subscribe', require('./routes/subscribe'));
+app.use('/', require('./routes/admin_api'));
+
+// Static Logo/Asset Endpoints
+app.get('/logo.png', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
+});
+app.get('/LOGO.png', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
+});
+app.get('/LOGOO.png', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
+});
+app.get('/syed.jpg', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'syed.jpg'));
+});
+app.get('/rishi.png', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'rishi.png'));
+});
+
+// Page Routing
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'index.html'));
+});
+
+app.get('/projects', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'project.html'));
+});
+
+app.get('/feedback', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'feedback.html'));
+});
+
+app.get('/pricing', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'pricing.html'));
+});
+
+app.get('/contact', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'contact.html'));
+});
+
+app.get('/login', (req, res) => {
+  res.redirect('/portal/');
+});
+
+app.get('/signup', (req, res) => {
+  res.redirect('/portal/');
+});
+
+app.get('/preview-bg', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'preview-bg.html'));
+});
+
+// Admin SPA Fallback
+app.get('/admin*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'admin', 'dist', 'index.html'));
+});
+
+// Portal Login SPA Fallback (serves client-login, worker-login, admin-login, register, portal-selector)
+app.get('/portal*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'portal', 'dist', 'index.html'));
+});
+
+
+
+// Wildcard Redirect fallback
+app.get('*', (req, res) => {
+  res.redirect('/');
+});
+
+// Centralized Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error(`❌ [RUNTIME ERROR] ${req.method} ${req.path}
+  Stack Trace: ${err.stack || err}
+  Query: ${JSON.stringify(req.query)}
+  Body: ${JSON.stringify(req.body)}`);
+
+  res.status(500).json({
+    success: false,
+    message: process.env.NODE_ENV === 'production' 
+      ? 'Internal server error occurred.' 
+      : err.message || 'Unknown error'
+  });
+});
+
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Zentrio AI Startup Server running on http://localhost:${PORT}`);
+  });
+}
+
+module.exports = app;

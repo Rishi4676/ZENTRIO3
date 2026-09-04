@@ -10,29 +10,29 @@ node_modules/
 # Logs
 *.log
 npm-debug.log*
+server/logs/
 
 # OS files
 .DS_Store
 Thumbs.db
 
-# JSON databases (local data - auto-generated, not needed in repo)
+# JSON databases & backups (local data - auto-generated, not needed in repo)
+database/backups/
+server/uploads/
 users_db.json
 otp_db.json
 reset_db.json
 audit_logs.json
+*_db_backup.json
 
-# Ignore built directories since Vercel now builds them dynamically
+# Ignore built directories since Vercel builds them dynamically
+apps/admin/dist/
+apps/portal/dist/
 admin0/dist/
 portal-login/dist/
 
 # Firebase Admin SDK service account keys - NEVER commit these
 *-firebase-adminsdk-*.json
 
-# Payment & data backup files - contain sensitive records
-*_db_backup.json
-payments_db_backup.json
-users_db_backup.json
-
-# Scratch directories
+# Scratch & script temp directories
 scratch/
-

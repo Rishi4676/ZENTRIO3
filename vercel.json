@@ -3,14 +3,22 @@
   "buildCommand": "npm run build",
   "functions": {
     "api/index.js": {
-      "includeFiles": "audit_logs.json",
-      "excludeFiles": "{admin0/**,portal-login/**}"
+      "includeFiles": "database/backups/audit_logs.json",
+      "excludeFiles": "{apps/admin/**,apps/portal/**}"
     }
   },
   "rewrites": [
     {
       "source": "/videos/(.*)",
-      "destination": "/public/videos/$1"
+      "destination": "/apps/website/public/videos/$1"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/api/index.js"
     },
     {
       "source": "/admin/payments",
@@ -30,71 +38,71 @@
     },
     {
       "source": "/admin/assets/(.*)",
-      "destination": "/admin0/dist/assets/$1"
+      "destination": "/apps/admin/dist/assets/$1"
     },
     {
       "source": "/admin/favicon.svg",
-      "destination": "/admin0/dist/favicon.svg"
+      "destination": "/apps/admin/dist/favicon.svg"
     },
     {
       "source": "/admin/icons.svg",
-      "destination": "/admin0/dist/icons.svg"
+      "destination": "/apps/admin/dist/icons.svg"
     },
     {
       "source": "/admin(.*)",
-      "destination": "/admin0/dist/index.html"
+      "destination": "/apps/admin/dist/index.html"
     },
     {
       "source": "/portal/assets/(.*)",
-      "destination": "/portal-login/dist/assets/$1"
+      "destination": "/apps/portal/dist/assets/$1"
     },
     {
       "source": "/portal/favicon.svg",
-      "destination": "/portal-login/dist/favicon.svg"
+      "destination": "/apps/portal/dist/favicon.svg"
     },
     {
       "source": "/portal/icons.svg",
-      "destination": "/portal-login/dist/icons.svg"
+      "destination": "/apps/portal/dist/icons.svg"
     },
     {
       "source": "/portal(.*)",
-      "destination": "/portal-login/dist/index.html"
+      "destination": "/apps/portal/dist/index.html"
     },
     {
       "source": "/login",
-      "destination": "/portal-login/dist/index.html"
+      "destination": "/apps/portal/dist/index.html"
     },
     {
       "source": "/signup",
-      "destination": "/portal-login/dist/index.html"
+      "destination": "/apps/portal/dist/index.html"
     },
     {
       "source": "/projects",
-      "destination": "/project.html"
+      "destination": "/apps/website/pages/project.html"
     },
     {
       "source": "/feedback",
-      "destination": "/feedback.html"
+      "destination": "/apps/website/pages/feedback.html"
     },
     {
       "source": "/pricing",
-      "destination": "/pricing.html"
+      "destination": "/apps/website/pages/pricing.html"
     },
     {
       "source": "/contact",
-      "destination": "/contact.html"
+      "destination": "/apps/website/pages/contact.html"
     },
     {
       "source": "/privacy-policy",
-      "destination": "/privacy-policy.html"
+      "destination": "/apps/website/pages/privacy-policy.html"
     },
     {
       "source": "/refund-policy",
-      "destination": "/refund-policy.html"
+      "destination": "/apps/website/pages/refund-policy.html"
     },
     {
       "source": "/terms-of-service",
-      "destination": "/terms-of-service.html"
+      "destination": "/apps/website/pages/terms-of-service.html"
     },
     {
       "source": "/api/(.*)",
