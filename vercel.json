@@ -4,10 +4,31 @@
   "outputDirectory": ".",
   "functions": {
     "api/index.js": {
+      "includeFiles": "apps/website/**",
       "excludeFiles": "{apps/admin/**,apps/portal/**}"
     }
   },
   "rewrites": [
+    {
+      "source": "/",
+      "destination": "/apps/website/index.html"
+    },
+    {
+      "source": "/css/(.*)",
+      "destination": "/apps/website/css/$1"
+    },
+    {
+      "source": "/js/(.*)",
+      "destination": "/apps/website/js/$1"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/apps/website/assets/$1"
+    },
+    {
+      "source": "/publicity/(.*)",
+      "destination": "/apps/website/publicity/$1"
+    },
     {
       "source": "/videos/(.*)",
       "destination": "/apps/website/public/videos/$1"
