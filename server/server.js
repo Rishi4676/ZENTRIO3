@@ -8,6 +8,9 @@ const rateLimit = require('express-rate-limit');
 const { xssSanitizer, csrfInit } = require('./middleware/security');
 const { initializeFirestoreSync } = require('./database/db');
 
+// Interop Helper to extract Express Router whether bundled as CJS or ESM
+const getRouter = (mod) => (mod && mod.default ? mod.default : mod);
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -74,19 +77,39 @@ app.use('/videos', express.static(path.join(__dirname, '..', 'apps', 'website', 
 app.use('/public/videos', express.static(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos'), cacheControlOptions));
 
 
+// Explicit Top-Level Route Imports using getRouter for CJS/ESM interop
+const authRoutes = getRouter(require('./routes/auth'));
+const projectsRoutes = getRouter(require('./routes/projects'));
+const paymentsRoutes = getRouter(require('./routes/payments'));
+const messagesRoutes = getRouter(require('./routes/messages'));
+const emailRoutes = getRouter(require('./routes/email'));
+const chatRoutes = getRouter(require('./routes/chat'));
+const contactRoutes = getRouter(require('./routes/contact'));
+const feedbackRoutes = getRouter(require('./routes/feedback'));
+const usersRoutes = getRouter(require('./routes/users'));
+const tasksRoutes = getRouter(require('./routes/tasks'));
+const leavesRoutes = getRouter(require('./routes/leaves'));
+const payrollRoutes = getRouter(require('./routes/payroll'));
+const aiRoutes = getRouter(require('./routes/ai'));
+const paymentApiRoutes = getRouter(require('./routes/payment_api'));
+const uploadRoutes = getRouter(require('./routes/upload'));
+const subscribeRoutes = getRouter(require('./routes/subscribe'));
+const adminApiRoutes = getRouter(require('./routes/admin_api'));
+
 // Mount API Routers
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/projects', require('./routes/projects'));
-app.use('/api/payments', require('./routes/payments'));
-app.use('/api/messages', require('./routes/messages'));
-app.use('/api/email', require('./routes/email'));
-app.use('/api/chat', require('./routes/chat'));
-app.use('/api/contact', require('./routes/contact'));
-app.use('/api/feedback', require('./routes/feedback'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/tasks', require('./routes/tasks'));
-app.use('/api/leaves', require('./routes/leaves'));
-app.use('/api/payroll', require('./routes/payroll'));
+app.use('/api/auth', authRoutes);
+app.use('/api/projects', projectsRoutes);
+app.use('/api/payments', paymentsRoutes);
+app.use('/api/messages', messagesRoutes);
+app.use('/api/email', emailRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/contact', contactRoutes);
+app.use('/api/feedback', feedbackRoutes);
+app.use('/api/users', usersRoutes);
+app.use('/api/tasks', tasksRoutes);
+app.use('/api/leaves', leavesRoutes);
+app.use('/api/payroll', payrollRoutes);
+
 // SEO Dynamic Endpoints
 const seoService = require('./services/seoService');
 
@@ -100,11 +123,11 @@ app.get('/robots.txt', (req, res) => {
   res.send(seoService.generateRobotsTxt());
 });
 
-app.use('/api/ai', require('./routes/ai'));
-app.use('/api/payment', require('./routes/payment_api'));
-app.use('/api/upload', require('./routes/upload'));
-app.use('/api/subscribe', require('./routes/subscribe'));
-app.use('/', require('./routes/admin_api'));
+app.use('/api/ai', aiRoutes);
+app.use('/api/payment', paymentApiRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/subscribe', subscribeRoutes);
+app.use('/', adminApiRoutes);
 
 // Static Logo/Asset Endpoints
 app.get('/logo.png', (req, res) => {
