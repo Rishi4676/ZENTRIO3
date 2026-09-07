@@ -4,8 +4,10 @@
   "outputDirectory": ".",
   "functions": {
     "api/index.js": {
-      "includeFiles": "apps/website/**",
-      "excludeFiles": "{apps/admin/**,apps/portal/**}"
+      "includeFiles": [
+        "apps/website/**",
+        "database/backups/**"
+      ]
     }
   },
   "rewrites": [
@@ -204,6 +206,10 @@
     {
       "source": "/contact",
       "destination": "/apps/website/pages/contact.html"
+    },
+    {
+      "source": "/preview-bg",
+      "destination": "/apps/website/pages/preview-bg.html"
     },
     {
       "source": "/privacy-policy",
