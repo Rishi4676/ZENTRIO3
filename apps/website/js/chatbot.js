@@ -133,12 +133,20 @@ function initChatbot() {
             <span class="chatbot-status">Online • 24/7 Support</span>
           </div>
         </div>
-        <button class="chatbot-close-btn" id="chatbotCloseBtn" aria-label="Close Chat" type="button">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg>
-        </button>
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <button class="chatbot-voice-btn" id="chatbotSpeakerBtn" aria-label="Toggle Voice Read Aloud" title="Toggle Voice Response" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          </button>
+          <button class="chatbot-close-btn" id="chatbotCloseBtn" aria-label="Close Chat" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
       </div>
 
       <!-- Messages Body with data-lenis-prevent -->
@@ -149,7 +157,14 @@ function initChatbot() {
       <div class="chatbot-input-footer">
         <form id="chatbotInputForm" onsubmit="event.preventDefault();">
           <div class="chatbot-input-wrapper">
-            <input type="text" class="chatbot-input-field" id="chatbotInputField" placeholder="Ask me anything..." autocomplete="off">
+            <input type="text" class="chatbot-input-field" id="chatbotInputField" placeholder="Ask or speak your query..." autocomplete="off">
+            <button type="button" class="chatbot-mic-btn" id="chatbotMicBtn" aria-label="Voice Input" title="Click to Speak">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="22"></line>
+              </svg>
+            </button>
             <button type="submit" class="chatbot-send-btn" id="chatbotSendBtn" aria-label="Send Message" disabled>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -178,10 +193,96 @@ function initChatbot() {
   const triggerBadge = document.getElementById('chatbotTriggerBadge');
   const chatWindow = document.getElementById('chatbotWindow');
   const closeBtn = document.getElementById('chatbotCloseBtn');
+  const speakerBtn = document.getElementById('chatbotSpeakerBtn');
+  const micBtn = document.getElementById('chatbotMicBtn');
   const messagesBody = document.getElementById('chatbotMessagesBody');
   const inputField = document.getElementById('chatbotInputField');
   const sendBtn = document.getElementById('chatbotSendBtn');
   const inputForm = document.getElementById('chatbotInputForm');
+
+  // --- Voice AI Speech Engine (Web Speech API) ---
+  let ttsEnabled = false;
+  let isListening = false;
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      isListening = true;
+      if (micBtn) micBtn.classList.add('listening');
+      if (inputField) inputField.placeholder = 'Listening... Speak now!';
+    };
+
+    recognition.onresult = (event) => {
+      isListening = false;
+      if (micBtn) micBtn.classList.remove('listening');
+      const transcript = event.results[0][0].transcript;
+      if (inputField) {
+        inputField.value = transcript;
+        inputField.placeholder = 'Ask or speak your query...';
+        sendBtn.disabled = false;
+        handleFormSubmit();
+      }
+    };
+
+    recognition.onerror = () => {
+      isListening = false;
+      if (micBtn) micBtn.classList.remove('listening');
+      if (inputField) inputField.placeholder = 'Voice not caught. Type below...';
+    };
+
+    recognition.onend = () => {
+      isListening = false;
+      if (micBtn) micBtn.classList.remove('listening');
+      if (inputField) inputField.placeholder = 'Ask or speak your query...';
+    };
+  }
+
+  if (micBtn) {
+    micBtn.addEventListener('click', () => {
+      if (!SpeechRecognition) {
+        alert('Voice input is supported in Google Chrome, Microsoft Edge, and modern browsers.');
+        return;
+      }
+      if (isListening) {
+        recognition.stop();
+      } else {
+        try {
+          recognition.start();
+        } catch (e) {
+          recognition.stop();
+        }
+      }
+    });
+  }
+
+  if (speakerBtn) {
+    speakerBtn.addEventListener('click', () => {
+      ttsEnabled = !ttsEnabled;
+      speakerBtn.classList.toggle('active', ttsEnabled);
+      if (!ttsEnabled && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    });
+  }
+
+  function speakText(text) {
+    if (!ttsEnabled || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+      const cleanText = text.replace(/[*_#`~]/g, '').replace(/<[^>]*>/g, '');
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      window.speechSynthesis.speak(utterance);
+    } catch (e) {}
+  }
+
 
   // Load chat history & lead collection status from sessionStorage
   let chatHistory = [];
@@ -491,6 +592,9 @@ function initChatbot() {
     } catch (e) {}
     
     appendMessageToDOM(text, sender, time);
+    if (sender === 'bot') {
+      speakText(text);
+    }
   }
 
   function appendMessageToDOM(text, sender, time) {
