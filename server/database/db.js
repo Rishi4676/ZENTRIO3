@@ -48,7 +48,26 @@ const auth = isInitialized ? getAuth() : null;
 const bucket = isInitialized ? getStorage().bucket() : null;
 
 // Paths
-const MOCK_DIR = process.env.VERCEL ? '/tmp' : path.resolve(__dirname, '../../database/backups');
+const BACKUP_DIR = path.resolve(__dirname, '../../database/backups');
+const MOCK_DIR = process.env.VERCEL ? '/tmp' : BACKUP_DIR;
+
+// On Vercel serverless, populate /tmp directory from committed repository backups if not present
+if (process.env.VERCEL) {
+  const filesToCopy = [
+    'users_db_backup.json', 'otp_db_backup.json', 'reset_db_backup.json',
+    'projects_db_backup.json', 'payments_db_backup.json', 'messages_db_backup.json',
+    'enquiries_db_backup.json', 'tasks_db_backup.json', 'leaves_db_backup.json',
+    'payslips_db_backup.json', 'feedbacks_db_backup.json', 'audit_logs.json'
+  ];
+  for (const file of filesToCopy) {
+    const src = path.join(BACKUP_DIR, file);
+    const dest = path.join('/tmp', file);
+    if (fs.existsSync(src) && !fs.existsSync(dest)) {
+      try { fs.copyFileSync(src, dest); } catch (e) {}
+    }
+  }
+}
+
 const USERS_FILE = path.join(MOCK_DIR, 'users_db_backup.json');
 const OTPs_FILE = path.join(MOCK_DIR, 'otp_db_backup.json');
 const RESETS_FILE = path.join(MOCK_DIR, 'reset_db_backup.json');
@@ -72,10 +91,18 @@ try {
 const readJsonFile = (filePath, fallbackVal) => {
   if (fs.existsSync(filePath)) {
     try {
-      return JSON.parse(fs.readFileSync(filePath, 'utf8'));
-    } catch (e) {
-      return fallbackVal;
-    }
+      const parsed = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (typeof parsed === 'object' && parsed !== null) return parsed;
+    } catch (e) {}
+  }
+  // Try reading from original BACKUP_DIR if file in MOCK_DIR was missing or empty
+  const filename = path.basename(filePath);
+  const repoBackupFile = path.join(BACKUP_DIR, filename);
+  if (fs.existsSync(repoBackupFile)) {
+    try {
+      return JSON.parse(fs.readFileSync(repoBackupFile, 'utf8'));
+    } catch (e) {}
   }
   return fallbackVal;
 };
@@ -101,22 +128,28 @@ let localLeaves = readJsonFile(LEAVES_FILE, []);
 let localPayslips = readJsonFile(PAYSLIPS_FILE, []);
 let localFeedbacks = readJsonFile(FEEDBACKS_FILE, []);
 
-// Sync initial seed data if files are empty
-if (localUsers.length === 0) {
-  const adminPass = bcrypt.hashSync('admin@zentrio', 10);
-  const worker1Pass = bcrypt.hashSync('syed@zentrio', 10);
-  const worker2Pass = bcrypt.hashSync('rishi@zentrio', 10);
-  const worker3Pass = bcrypt.hashSync('pushpa@zentrio', 10);
-  const clientPass = bcrypt.hashSync('Client@2026#', 10);
+// Sync initial default accounts if list lacks core users
+const adminPass = bcrypt.hashSync('admin@zentrio', 10);
+const worker1Pass = bcrypt.hashSync('syed@zentrio', 10);
+const worker2Pass = bcrypt.hashSync('rishi@zentrio', 10);
+const worker3Pass = bcrypt.hashSync('pushpa@zentrio', 10);
+const clientPass = bcrypt.hashSync('Client@2026#', 10);
 
-  localUsers = [
-    { id: 'admin_owner', username: 'Admin Owner', email: 'admin@zentrio.ai', password: adminPass, role: 'admin' },
-    { id: 'syedrashid_W1', username: 'Syed Rashid', email: 'syed.r@zentrio.ai', password: worker1Pass, role: 'worker' },
-    { id: 'rishigesh_W2', username: 'Rishigesh', email: 'rishi@zentrio.ai', password: worker2Pass, role: 'worker' },
-    { id: 'pushparaj_W3', username: 'Pushparaj', email: 'pushpa.r@zentrio.ai', password: worker3Pass, role: 'worker' }
-  ];
-  writeJsonFile(USERS_FILE, localUsers);
+const defaultSystemAccounts = [
+  { id: 'admin_owner', username: 'Admin Owner', email: 'admin@zentrio.ai', password: adminPass, role: 'admin' },
+  { id: 'syedrashid_W1', username: 'Syed Rashid', email: 'syed.r@zentrio.ai', password: worker1Pass, role: 'worker' },
+  { id: 'rishigesh_W2', username: 'Rishigesh', email: 'rishi@zentrio.ai', password: worker2Pass, role: 'worker' },
+  { id: 'pushparaj_W3', username: 'Pushparaj', email: 'pushpa.r@zentrio.ai', password: worker3Pass, role: 'worker' },
+  { id: 'client@company.com', username: 'Alex Rivers (Client)', email: 'client@company.com', password: clientPass, role: 'client' }
+];
+
+for (const sysAcc of defaultSystemAccounts) {
+  if (!localUsers.some(u => u.id === sysAcc.id || u.email === sysAcc.email)) {
+    localUsers.push(sysAcc);
+  }
 }
+writeJsonFile(USERS_FILE, localUsers);
+
 
 if (false && localProjects.length === 0) {
   localProjects = [

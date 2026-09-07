@@ -35,6 +35,11 @@ if (!process.env.VERCEL) {
   initializeFirestoreSync().catch(err => {
     console.error('❌ Failed to run initial Firestore sync:', err.message);
   });
+} else {
+  // Non-blocking async background sync on Vercel serverless
+  setTimeout(() => {
+    initializeFirestoreSync().catch(() => {});
+  }, 10);
 }
 
 // Production HTTPS enforcement
