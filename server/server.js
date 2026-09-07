@@ -91,6 +91,7 @@ app.use('/publicity', express.static(path.join(__dirname, '..', 'apps', 'website
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'), cacheControlOptions));
 app.use('/videos', express.static(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos'), cacheControlOptions));
 app.use('/public/videos', express.static(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos'), cacheControlOptions));
+app.use(express.static(path.join(__dirname, '..', 'apps', 'website'), cacheControlOptions));
 
 
 // Explicit Top-Level Route Imports using getRouter for CJS/ESM interop
@@ -139,12 +140,6 @@ app.get('/robots.txt', (req, res) => {
   res.send(seoService.generateRobotsTxt());
 });
 
-app.use('/api/ai', aiRoutes);
-app.use('/api/payment', paymentApiRoutes);
-app.use('/api/upload', uploadRoutes);
-app.use('/api/subscribe', subscribeRoutes);
-app.use('/', adminApiRoutes);
-
 // Static Logo/Asset Endpoints
 app.get('/logo.png', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
@@ -161,6 +156,18 @@ app.get('/syed.jpg', (req, res) => {
 app.get('/rishi.png', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'rishi.png'));
 });
+app.get('/mobile_app.jpg', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'mobile_app.jpg'));
+});
+app.get('/background-video.mp4', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos', 'background-video.mp4'));
+});
+
+app.use('/api/ai', aiRoutes);
+app.use('/api/payment', paymentApiRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/subscribe', subscribeRoutes);
+app.use('/', adminApiRoutes);
 
 // Page Routing
 app.get('/', (req, res) => {
