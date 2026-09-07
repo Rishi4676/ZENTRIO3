@@ -45,6 +45,13 @@ app.use((req, res, next) => {
   next();
 });
 
+// Global SEO & Search Indexing Response Headers
+app.use((req, res, next) => {
+  res.setHeader('X-Robots-Tag', 'index, follow');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  next();
+});
+
 // Secure HTTP Headers (Helmet)
 app.use(helmet({
   contentSecurityPolicy: false,
