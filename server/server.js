@@ -197,20 +197,16 @@ app.get('/contact', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'contact.html'));
 });
 
-app.get('/login', (req, res) => {
-  res.redirect('/portal/');
-});
-
-app.get('/signup', (req, res) => {
-  res.redirect('/portal/');
+app.get(['/login', '/signup', '/client-login', '/worker-login', '/admin-login', '/client-register', '/portal-selector', '/reset-password', '/verify-email'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'portal', 'dist', 'index.html'));
 });
 
 app.get('/preview-bg', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'preview-bg.html'));
 });
 
-// Admin SPA Fallback
-app.get('/admin*', (req, res) => {
+// Admin & Role Workspace SPA Fallback
+app.get(['/admin*', '/client*', '/worker*'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'admin', 'dist', 'index.html'));
 });
 

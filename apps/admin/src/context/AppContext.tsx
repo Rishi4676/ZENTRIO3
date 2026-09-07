@@ -397,10 +397,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setCurrentUser(clientUser);
         localStorage.setItem('current_user', JSON.stringify(clientUser));
       } else {
-        const saved = sessionStorage.getItem('current_user');
+        const saved = sessionStorage.getItem('current_user') || localStorage.getItem('current_user');
         if (saved) {
           const u = JSON.parse(saved);
-          if (u.role === 'worker' || u.role === 'admin') {
+          if (u.role === 'worker' || u.role === 'admin' || u.role === 'client') {
             setCurrentUser(u);
             return;
           }
@@ -420,10 +420,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Custom single page router
   const [currentPage, setCurrentPage] = useState<string>(() => {
-    const savedUser = sessionStorage.getItem('current_user');
+    const savedUser = sessionStorage.getItem('current_user') || localStorage.getItem('current_user');
     if (savedUser) {
-      const u = JSON.parse(savedUser) as User;
-      return `${u.role}-dashboard`;
+      try {
+        const u = JSON.parse(savedUser) as User;
+        if (u && u.role) {
+          return `${u.role}-dashboard`;
+        }
+      } catch (e) {}
     }
     
     // Parse pathname for direct routing
@@ -583,9 +587,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           // Always route authenticated user to their role dashboard
           setCurrentPage(`${role}-dashboard`);
         } else {
-          // No valid backend session — clear stale session completely
-          setCurrentUser(null);
-          localStorage.removeItem('current_user');
+          // If no valid backend session cookie, check if we have a valid client/local session before clearing
+          const localSaved = sessionStorage.getItem('current_user') || localStorage.getItem('current_user');
+          if (localSaved) {
+            try {
+              const u = JSON.parse(localSaved);
+              if (u && u.role) {
+                setCurrentUser(u);
+              } else {
+                setCurrentUser(null);
+              }
+            } catch (e) {
+              setCurrentUser(null);
+            }
+          } else if (!userProfile && !user) {
+            setCurrentUser(null);
+          }
         }
       } catch (err: any) {
         console.error('Failed to fetch data from API:', err);

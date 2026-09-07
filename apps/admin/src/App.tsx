@@ -103,7 +103,6 @@ function App() {
     <AppProvider>
       <div className="global-bg-video-container">
         <video 
-          src="/background-video.mp4" 
           className="global-bg-video" 
           autoPlay 
           loop 
@@ -116,6 +115,7 @@ function App() {
         >
           <source src="/background-video.mp4" type="video/mp4" />
           <source src="/videos/background-video.mp4" type="video/mp4" />
+          <source src="/assets/videos/background-video.mp4" type="video/mp4" />
         </video>
       </div>
       <AppContent />

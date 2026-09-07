@@ -24,7 +24,6 @@ function initGlobalBackgroundVideo() {
 
   const video = document.createElement('video');
   video.className = 'global-bg-video';
-  video.src = '/background-video.mp4';
   video.autoplay = true;
   video.loop = true;
   video.muted = true;
@@ -41,6 +40,11 @@ function initGlobalBackgroundVideo() {
   source2.src = '/videos/background-video.mp4';
   source2.type = 'video/mp4';
   video.appendChild(source2);
+
+  const source3 = document.createElement('source');
+  source3.src = '/assets/videos/background-video.mp4';
+  source3.type = 'video/mp4';
+  video.appendChild(source3);
 
   container.appendChild(video);
   document.body.prepend(container);

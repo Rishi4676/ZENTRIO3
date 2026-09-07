@@ -6,6 +6,8 @@
     "api/index.js": {
       "includeFiles": [
         "apps/website/**",
+        "apps/admin/dist/**",
+        "apps/portal/dist/**",
         "database/backups/**"
       ]
     }
@@ -16,36 +18,44 @@
       "destination": "/apps/website/index.html"
     },
     {
-      "source": "/background-video.mp4",
+      "source": "/(.*)background-video.mp4",
       "destination": "/apps/website/public/videos/background-video.mp4"
     },
     {
-      "source": "/background%20video.mp4",
+      "source": "/(.*)background%20video.mp4",
       "destination": "/apps/website/public/videos/background-video.mp4"
     },
     {
-      "source": "/LOGOO.png",
+      "source": "/(.*)LOGOO.png",
       "destination": "/apps/website/assets/images/LOGOO.png"
     },
     {
-      "source": "/logo.png",
+      "source": "/(.*)logo.png",
       "destination": "/apps/website/assets/images/LOGOO.png"
     },
     {
-      "source": "/LOGO.png",
+      "source": "/(.*)LOGO.png",
       "destination": "/apps/website/assets/images/LOGOO.png"
     },
     {
-      "source": "/syed.jpg",
+      "source": "/(.*)syed.jpg",
       "destination": "/apps/website/assets/syed.jpg"
     },
     {
-      "source": "/rishi.png",
+      "source": "/(.*)rishi.png",
       "destination": "/apps/website/assets/rishi.png"
     },
     {
-      "source": "/mobile_app.jpg",
+      "source": "/(.*)mobile_app.jpg",
       "destination": "/apps/website/assets/mobile_app.jpg"
+    },
+    {
+      "source": "/(.*)robot-auth-bg.webp",
+      "destination": "/apps/website/assets/robot-auth-bg.webp"
+    },
+    {
+      "source": "/(.*)robot-auth-bg.jpg",
+      "destination": "/apps/website/assets/robot-auth-bg.jpg"
     },
     {
       "source": "/css/(.*)",
@@ -92,34 +102,6 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/admin/background-video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
-    },
-    {
-      "source": "/admin/background%20video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
-    },
-    {
-      "source": "/admin/videos/(.*)",
-      "destination": "/apps/website/public/videos/$1"
-    },
-    {
-      "source": "/admin/LOGOO.png",
-      "destination": "/apps/website/assets/images/LOGOO.png"
-    },
-    {
-      "source": "/admin/logo.png",
-      "destination": "/apps/website/assets/images/LOGOO.png"
-    },
-    {
-      "source": "/admin/syed.jpg",
-      "destination": "/apps/website/assets/syed.jpg"
-    },
-    {
-      "source": "/admin/rishi.png",
-      "destination": "/apps/website/assets/rishi.png"
-    },
-    {
       "source": "/admin/assets/(.*)",
       "destination": "/apps/admin/dist/assets/$1"
     },
@@ -130,42 +112,6 @@
     {
       "source": "/admin/icons.svg",
       "destination": "/apps/admin/dist/icons.svg"
-    },
-    {
-      "source": "/admin(.*)",
-      "destination": "/apps/admin/dist/index.html"
-    },
-    {
-      "source": "/portal/background-video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
-    },
-    {
-      "source": "/portal/background%20video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
-    },
-    {
-      "source": "/portal/videos/(.*)",
-      "destination": "/apps/website/public/videos/$1"
-    },
-    {
-      "source": "/portal/LOGOO.png",
-      "destination": "/apps/website/assets/images/LOGOO.png"
-    },
-    {
-      "source": "/portal/logo.png",
-      "destination": "/apps/website/assets/images/LOGOO.png"
-    },
-    {
-      "source": "/portal/syed.jpg",
-      "destination": "/apps/website/assets/syed.jpg"
-    },
-    {
-      "source": "/portal/rishi.png",
-      "destination": "/apps/website/assets/rishi.png"
-    },
-    {
-      "source": "/portal/mobile_app.jpg",
-      "destination": "/apps/website/assets/mobile_app.jpg"
     },
     {
       "source": "/portal/assets/(.*)",
@@ -180,8 +126,20 @@
       "destination": "/apps/portal/dist/icons.svg"
     },
     {
+      "source": "/admin(.*)",
+      "destination": "/apps/admin/dist/index.html"
+    },
+    {
       "source": "/portal(.*)",
       "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/client(.*)",
+      "destination": "/apps/admin/dist/index.html"
+    },
+    {
+      "source": "/worker(.*)",
+      "destination": "/apps/admin/dist/index.html"
     },
     {
       "source": "/login",
@@ -190,6 +148,46 @@
     {
       "source": "/signup",
       "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/client-login",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/worker-login",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/admin-login",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/client-register",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/portal-selector",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/verify-email",
+      "destination": "/apps/portal/dist/index.html"
+    },
+    {
+      "source": "/client-dashboard",
+      "destination": "/apps/admin/dist/index.html"
+    },
+    {
+      "source": "/worker-dashboard",
+      "destination": "/apps/admin/dist/index.html"
+    },
+    {
+      "source": "/admin-dashboard",
+      "destination": "/apps/admin/dist/index.html"
     },
     {
       "source": "/projects",
