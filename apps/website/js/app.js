@@ -24,6 +24,7 @@ function initGlobalBackgroundVideo() {
 
   const video = document.createElement('video');
   video.className = 'global-bg-video';
+  video.src = '/background-video.mp4';
   video.autoplay = true;
   video.loop = true;
   video.muted = true;
@@ -41,22 +42,15 @@ function initGlobalBackgroundVideo() {
   source2.type = 'video/mp4';
   video.appendChild(source2);
 
-  const source3 = document.createElement('source');
-  source3.src = '/assets/videos/background-video.mp4';
-  source3.type = 'video/mp4';
-  video.appendChild(source3);
-
-  const source4 = document.createElement('source');
-  source4.src = '/assets/background-video.mp4';
-  source4.type = 'video/mp4';
-  video.appendChild(source4);
-
   container.appendChild(video);
   document.body.prepend(container);
 
-  video.play().catch(err => {
-    console.warn('Background video autoplay restricted:', err);
-  });
+  const tryPlay = () => {
+    video.play().catch(() => {});
+  };
+  video.addEventListener('canplay', tryPlay);
+  video.addEventListener('loadeddata', tryPlay);
+  tryPlay();
 }
 
 // Dynamic Chatbot Script Loader

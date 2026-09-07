@@ -110,11 +110,20 @@ function App() {
   return (
     <AppProvider>
       <div className="global-bg-video-container">
-        <video className="global-bg-video" autoPlay loop muted playsInline preload="auto" aria-hidden="true">
+        <video 
+          src="/background-video.mp4" 
+          className="global-bg-video" 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          preload="auto" 
+          aria-hidden="true"
+          onCanPlay={(e) => e.currentTarget.play().catch(() => {})}
+          onLoadedData={(e) => e.currentTarget.play().catch(() => {})}
+        >
           <source src="/background-video.mp4" type="video/mp4" />
           <source src="/videos/background-video.mp4" type="video/mp4" />
-          <source src="/assets/videos/background-video.mp4" type="video/mp4" />
-          <source src="/assets/background-video.mp4" type="video/mp4" />
         </video>
       </div>
       <AppContent />
