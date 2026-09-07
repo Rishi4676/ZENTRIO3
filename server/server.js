@@ -148,27 +148,22 @@ app.get('/robots.txt', (req, res) => {
 });
 
 // Static Logo/Asset Endpoints
-app.get('/logo.png', (req, res) => {
+app.get(['/logo.png', '/LOGO.png', '/LOGOO.png', '/portal/logo.png', '/portal/LOGOO.png', '/admin/logo.png', '/admin/LOGOO.png'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
 });
-app.get('/LOGO.png', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
-});
-app.get('/LOGOO.png', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'images', 'LOGOO.png'));
-});
-app.get('/syed.jpg', (req, res) => {
+app.get(['/syed.jpg', '/portal/syed.jpg', '/admin/syed.jpg'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'syed.jpg'));
 });
-app.get('/rishi.png', (req, res) => {
+app.get(['/rishi.png', '/portal/rishi.png', '/admin/rishi.png'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'rishi.png'));
 });
-app.get('/mobile_app.jpg', (req, res) => {
+app.get(['/mobile_app.jpg', '/portal/mobile_app.jpg', '/admin/mobile_app.jpg'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'assets', 'mobile_app.jpg'));
 });
-app.get('/background-video.mp4', (req, res) => {
+app.get(['/background-video.mp4', '/portal/background-video.mp4', '/admin/background-video.mp4', '/videos/background-video.mp4', '/assets/videos/background-video.mp4'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'public', 'videos', 'background-video.mp4'));
 });
+
 
 app.use('/api/ai', aiRoutes);
 app.use('/api/payment', paymentApiRoutes);

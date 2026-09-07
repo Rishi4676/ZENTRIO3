@@ -18,6 +18,10 @@
       "destination": "/apps/website/public/videos/background-video.mp4"
     },
     {
+      "source": "/background%20video.mp4",
+      "destination": "/apps/website/public/videos/background-video.mp4"
+    },
+    {
       "source": "/LOGOO.png",
       "destination": "/apps/website/assets/images/LOGOO.png"
     },
@@ -86,6 +90,34 @@
       "destination": "/api/index.js"
     },
     {
+      "source": "/admin/background-video.mp4",
+      "destination": "/apps/website/public/videos/background-video.mp4"
+    },
+    {
+      "source": "/admin/background%20video.mp4",
+      "destination": "/apps/website/public/videos/background-video.mp4"
+    },
+    {
+      "source": "/admin/videos/(.*)",
+      "destination": "/apps/website/public/videos/$1"
+    },
+    {
+      "source": "/admin/LOGOO.png",
+      "destination": "/apps/website/assets/images/LOGOO.png"
+    },
+    {
+      "source": "/admin/logo.png",
+      "destination": "/apps/website/assets/images/LOGOO.png"
+    },
+    {
+      "source": "/admin/syed.jpg",
+      "destination": "/apps/website/assets/syed.jpg"
+    },
+    {
+      "source": "/admin/rishi.png",
+      "destination": "/apps/website/assets/rishi.png"
+    },
+    {
       "source": "/admin/assets/(.*)",
       "destination": "/apps/admin/dist/assets/$1"
     },
@@ -100,6 +132,38 @@
     {
       "source": "/admin(.*)",
       "destination": "/apps/admin/dist/index.html"
+    },
+    {
+      "source": "/portal/background-video.mp4",
+      "destination": "/apps/website/public/videos/background-video.mp4"
+    },
+    {
+      "source": "/portal/background%20video.mp4",
+      "destination": "/apps/website/public/videos/background-video.mp4"
+    },
+    {
+      "source": "/portal/videos/(.*)",
+      "destination": "/apps/website/public/videos/$1"
+    },
+    {
+      "source": "/portal/LOGOO.png",
+      "destination": "/apps/website/assets/images/LOGOO.png"
+    },
+    {
+      "source": "/portal/logo.png",
+      "destination": "/apps/website/assets/images/LOGOO.png"
+    },
+    {
+      "source": "/portal/syed.jpg",
+      "destination": "/apps/website/assets/syed.jpg"
+    },
+    {
+      "source": "/portal/rishi.png",
+      "destination": "/apps/website/assets/rishi.png"
+    },
+    {
+      "source": "/portal/mobile_app.jpg",
+      "destination": "/apps/website/assets/mobile_app.jpg"
     },
     {
       "source": "/portal/assets/(.*)",
