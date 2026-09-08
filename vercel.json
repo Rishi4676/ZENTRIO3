@@ -32,23 +32,23 @@
     },
     {
       "source": "/background-video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
+      "destination": "/background-video.mp4"
     },
     {
       "source": "/videos/background-video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
+      "destination": "/background-video.mp4"
     },
     {
       "source": "/assets/videos/background-video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
+      "destination": "/background-video.mp4"
     },
     {
       "source": "/(.*)background-video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
+      "destination": "/background-video.mp4"
     },
     {
       "source": "/(.*)background%20video.mp4",
-      "destination": "/apps/website/public/videos/background-video.mp4"
+      "destination": "/background-video.mp4"
     },
     {
       "source": "/(.*)LOGOO.png",

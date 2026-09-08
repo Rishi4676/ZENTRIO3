@@ -27,34 +27,47 @@ function initGlobalBackgroundVideo() {
   video.autoplay = true;
   video.loop = true;
   video.muted = true;
+  video.defaultMuted = true;
   video.playsInline = true;
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', '');
+  video.setAttribute('muted', '');
   video.preload = 'auto';
   video.setAttribute('aria-hidden', 'true');
 
-  const source1 = document.createElement('source');
-  source1.src = '/background-video.mp4';
-  source1.type = 'video/mp4';
-  video.appendChild(source1);
-
-  const source2 = document.createElement('source');
-  source2.src = '/videos/background-video.mp4';
-  source2.type = 'video/mp4';
-  video.appendChild(source2);
-
-  const source3 = document.createElement('source');
-  source3.src = '/assets/videos/background-video.mp4';
-  source3.type = 'video/mp4';
-  video.appendChild(source3);
+  video.src = '/background-video.mp4';
 
   container.appendChild(video);
   document.body.prepend(container);
 
-  const tryPlay = () => {
-    video.play().catch(() => {});
+  const attemptPlay = () => {
+    video.muted = true;
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.then === 'function') {
+      playPromise.catch(() => {
+        if (!video.dataset.triedFallback) {
+          video.dataset.triedFallback = 'true';
+          video.src = '/assets/videos/background-video.mp4';
+          video.load();
+          video.play().catch(() => {});
+        }
+      });
+    }
   };
-  video.addEventListener('canplay', tryPlay);
-  video.addEventListener('loadeddata', tryPlay);
-  tryPlay();
+
+  video.addEventListener('canplay', attemptPlay);
+  video.addEventListener('loadeddata', attemptPlay);
+  video.addEventListener('error', () => {
+    if (!video.dataset.triedFallback) {
+      video.dataset.triedFallback = 'true';
+      video.src = '/assets/videos/background-video.mp4';
+      video.load();
+      video.play().catch(() => {});
+    }
+  });
+
+  video.load();
+  attemptPlay();
 }
 
 // Dynamic Chatbot Script Loader
