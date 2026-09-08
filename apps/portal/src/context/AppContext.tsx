@@ -143,6 +143,16 @@ const DEFAULT_USERS: User[] = [
     joinedDate: '2024-11-01'
   },
   {
+    id: 'ai_worker_agent',
+    name: 'Zentrio AI Autonomous Agent',
+    email: 'ai.agent@zentrio.ai',
+    role: 'worker',
+    avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=200',
+    performanceScore: 99,
+    salary: 0,
+    joinedDate: '2026-01-01'
+  },
+  {
     id: 'client@company.com',
     name: 'John Smith',
     email: 'client@company.com',
