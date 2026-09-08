@@ -38,15 +38,23 @@ export const PortalSelector: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col justify-between transition-colors duration-300 relative overflow-hidden">
+    <div className="min-h-screen bg-slate-950/80 text-slate-800 dark:text-slate-100 flex flex-col justify-between transition-colors duration-300 relative overflow-hidden">
       {/* Background Video */}
       <video
+        ref={(el) => {
+          if (el) {
+            el.muted = true;
+            el.play().catch(() => {});
+          }
+        }}
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
         aria-hidden="true"
+        onCanPlay={(e) => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
+        onLoadedData={(e) => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
         style={{ transform: 'translateZ(0)', willChange: 'transform' }}
         className="absolute inset-0 w-full h-full object-cover z-0 opacity-55 filter contrast-125 brightness-90 pointer-events-none"
       >

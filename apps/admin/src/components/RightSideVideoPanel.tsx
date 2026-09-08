@@ -6,12 +6,20 @@ export const RightSideVideoPanel: React.FC = () => {
     <div className="relative hidden lg:flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/50 dark:border-slate-800/50 p-8 min-h-[540px] shadow-2xl z-10 group">
       {/* Background Video */}
       <video
+        ref={(el) => {
+          if (el) {
+            el.muted = true;
+            el.play().catch(() => {});
+          }
+        }}
         autoPlay
         loop
         muted
         playsInline
-        preload="metadata"
+        preload="auto"
         aria-hidden="true"
+        onCanPlay={(e) => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
+        onLoadedData={(e) => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
         className="absolute inset-0 w-full h-full object-cover z-0 scale-105 group-hover:scale-100 transition-transform duration-700 pointer-events-none"
       >
         <source src="/videos/background-video.mp4" type="video/mp4" />
