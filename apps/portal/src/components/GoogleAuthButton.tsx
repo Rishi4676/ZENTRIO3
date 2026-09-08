@@ -8,7 +8,7 @@ interface GoogleAuthButtonProps {
 }
 
 export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'signin' }) => {
-  const { currentUser, logout, loginWithGoogle } = useApp();
+  const { currentUser, logout, loginWithGoogle, addNotification } = useApp();
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState('');
 
@@ -48,6 +48,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
 
       setLoading(false);
       if (res.success) {
+        if (addNotification) addNotification('Login successful', 'success');
         window.location.href = '/admin/';
       } else {
         setAuthError(res.error || 'Failed to complete Google authentication session.');
@@ -59,10 +60,10 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
       let userFriendlyMsg = 'Google Sign-In failed. Please try again.';
       const errorCode = err.code || '';
 
-      if (errorCode === 'auth/popup-closed-by-user' || err.message?.includes('popup-closed-by-user')) {
-        userFriendlyMsg = 'Sign in was cancelled by user.';
+      if (errorCode === 'auth/popup-closed-by-user' || err.message?.includes('popup-closed-by-user') || err.message?.includes('cancelled')) {
+        userFriendlyMsg = 'Google sign-in was cancelled';
       } else if (errorCode === 'auth/popup-blocked' || err.message?.includes('popup-blocked')) {
-        userFriendlyMsg = 'Sign-in popup was blocked by your browser. Please allow popups for this website.';
+        userFriendlyMsg = 'Please allow popups and try again.';
       } else if (errorCode === 'auth/network-request-failed') {
         userFriendlyMsg = 'Network error. Please check your internet connection and try again.';
       } else if (errorCode === 'auth/unauthorized-domain') {

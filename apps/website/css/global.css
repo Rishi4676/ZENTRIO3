@@ -536,12 +536,61 @@ img, svg {
 }
 
 /* ==========================================================================
-   FOOTER Responsive Overrides (canonical — do not duplicate in HTML files)
+   CANONICAL FOOTER STYLES (High Visibility & Z-Index)
    ========================================================================== */
+footer {
+  position: relative !important;
+  z-index: 20 !important;
+  background: rgba(4, 7, 17, 0.96) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-color);
+  color: #f1f5f9;
+  width: 100%;
+}
+
+footer a {
+  color: #cbd5e1 !important;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+footer a:hover {
+  color: var(--accent-cyan) !important;
+}
+
+footer h4 {
+  color: #ffffff !important;
+}
+
+footer p {
+  color: #cbd5e1 !important;
+}
+
+.footer-bottom span,
+.footer-bottom a {
+  color: #94a3b8 !important;
+}
+
+.footer-bottom a:hover {
+  color: #ffffff !important;
+}
+
 @media (max-width: 992px) {
   .footer-grid {
     grid-template-columns: 1fr 1fr !important;
+    gap: 2.5rem !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
     gap: 2rem !important;
+  }
+  .footer-bottom {
+    flex-direction: column !important;
+    gap: 1rem !important;
+    text-align: center !important;
   }
 }
 

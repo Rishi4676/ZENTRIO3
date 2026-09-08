@@ -197,6 +197,18 @@ app.get('/contact', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'contact.html'));
 });
 
+app.get(['/privacy-policy', '/privacy-policy.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'privacy-policy.html'));
+});
+
+app.get(['/terms-of-service', '/terms-of-service.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'terms-of-service.html'));
+});
+
+app.get(['/refund-policy', '/refund-policy.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'apps', 'website', 'pages', 'refund-policy.html'));
+});
+
 app.get(['/login', '/signup', '/client-login', '/worker-login', '/admin-login', '/client-register', '/portal-selector', '/reset-password', '/verify-email'], (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'apps', 'portal', 'dist', 'index.html'));
 });

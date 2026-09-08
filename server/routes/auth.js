@@ -665,17 +665,20 @@ router.post('/google-onboard', signupLimiter, csrfCheck, async (req, res) => {
         id: uid || email,
         uid: uid || email,
         username: name,
+        name: name,
         email,
         password: hashedPassword,
         photoURL: photoURL || '',
         provider: 'google',
+        emailVerified: true,
         companyName: companyName || '',
         mobile: mobile || '',
         country: country || '',
         state: state || '',
         role: 'client',
         createdAt: nowIso,
-        lastLogin: nowIso
+        lastLogin: nowIso,
+        lastLoginAt: nowIso
       };
       await dbHelper.users.save(user.id, user);
       await writeAuditLog(email, email, 'USER_SIGNUP_GOOGLE', 'Signed up with Google OAuth', req);
@@ -689,8 +692,12 @@ router.post('/google-onboard', signupLimiter, csrfCheck, async (req, res) => {
       }
     } else {
       user.lastLogin = nowIso;
+      user.lastLoginAt = nowIso;
+      if (name && !user.name) user.name = name;
+      if (name && !user.username) user.username = name;
       if (photoURL && !user.photoURL) user.photoURL = photoURL;
       if (!user.provider) user.provider = 'google';
+      if (user.emailVerified === undefined) user.emailVerified = true;
       if (!user.uid && uid) user.uid = uid;
       if (companyName && !user.companyName) user.companyName = companyName;
       if (mobile && !user.mobile) user.mobile = mobile;
@@ -730,7 +737,8 @@ router.post('/google-onboard', signupLimiter, csrfCheck, async (req, res) => {
         country: user.country || '',
         state: user.state || '',
         createdAt: user.createdAt,
-        lastLogin: user.lastLogin
+        lastLogin: user.lastLogin,
+        lastLoginAt: user.lastLoginAt || user.lastLogin
       }
     });
   } catch (error) {

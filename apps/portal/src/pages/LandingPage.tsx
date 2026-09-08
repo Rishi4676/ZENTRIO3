@@ -609,25 +609,29 @@ export const LandingPage: React.FC = () => {
               <span className="font-extrabold text-lg tracking-tight">Zentrio</span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-              Modern engineering suite and project delivery workspace for fast-moving enterprise companies.
+              Constructing enterprise-tier digital architectures, custom intelligence nodes, and premium user experiences.
             </p>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-4">Support & Media</h4>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-4">Company</h4>
             <ul className="space-y-2 text-xs font-medium text-slate-500 dark:text-slate-400">
-              <li><a href="#" className="hover:text-indigo-500">Security Credentials</a></li>
-              <li><a href="#" className="hover:text-indigo-500">Razorpay Integration</a></li>
-              <li><a href="#" className="hover:text-indigo-500">Status Check</a></li>
+              <li><a href="/" className="hover:text-indigo-500">Home</a></li>
+              <li><a href="/projects" className="hover:text-indigo-500">Projects</a></li>
+              <li><a href="/feedback" className="hover:text-indigo-500">Feedback</a></li>
+              <li><a href="/pricing" className="hover:text-indigo-500">Pricing</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-4">Portals</h4>
+            <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-widest mb-4">Resources & Legal</h4>
             <ul className="space-y-2 text-xs font-medium text-slate-500 dark:text-slate-400">
-              <li><button onClick={() => setCurrentPage('client-login')} className="hover:text-indigo-500">Client Workspace</button></li>
-              <li><button onClick={() => setCurrentPage('worker-login')} className="hover:text-indigo-500">Worker Terminal</button></li>
-              <li><button onClick={() => setCurrentPage('admin-login')} className="hover:text-indigo-500">Admin Central</button></li>
+              <li><a href="/contact" className="hover:text-indigo-500">Contact</a></li>
+              <li><a href="/privacy-policy" className="hover:text-indigo-500">Privacy Policy</a></li>
+              <li><a href="/terms-of-service" className="hover:text-indigo-500">Terms of Service</a></li>
+              <li><a href="/refund-policy" className="hover:text-indigo-500">Refund Policy</a></li>
+              <li><button onClick={() => setCurrentPage('client-login')} className="hover:text-indigo-500">Log In</button></li>
+              <li><button onClick={() => setCurrentPage('client-register')} className="hover:text-indigo-500">Sign Up</button></li>
             </ul>
           </div>
 
@@ -636,25 +640,18 @@ export const LandingPage: React.FC = () => {
             <ul className="space-y-3 text-xs font-medium text-slate-500 dark:text-slate-400">
               <li className="flex items-center space-x-2">
                 <Mail className="w-4 h-4 text-indigo-500" />
-                <span>contact@zentrio.ai</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <Phone className="w-4 h-4 text-indigo-500" />
-                <span>+1 (555) 234-5678</span>
-              </li>
-              <li className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4 text-indigo-500 shrink-0" />
-                <span>100 Pine St, San Francisco, CA</span>
+                <span>zentriotechnology3@gmail.com</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-slate-200/50 dark:border-slate-800/40 text-center flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-medium">
-          <div>© {new Date().getFullYear()} Zentrio AI. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} Zentrio AI Corp. All rights reserved.</div>
           <div className="flex space-x-6 mt-4 sm:mt-0">
-            <a href="#" className="hover:text-indigo-500">Terms of Service</a>
-            <a href="#" className="hover:text-indigo-500">Privacy Policy</a>
+            <a href="/privacy-policy" className="hover:text-indigo-500">Privacy Policy</a>
+            <a href="/terms-of-service" className="hover:text-indigo-500">Terms of Service</a>
+            <a href="/refund-policy" className="hover:text-indigo-500">Refund Policy</a>
           </div>
         </div>
       </footer>

@@ -121,8 +121,13 @@ export const PortalSelector: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full text-center py-8 text-[10px] text-slate-500 font-semibold z-10 border-t border-slate-200/20 dark:border-slate-900/20">
-        <div>© {new Date().getFullYear()} Zentrio AI. All rights reserved.</div>
+      <footer className="w-full text-center py-6 text-xs text-slate-400 font-medium z-10 border-t border-slate-200/20 dark:border-slate-900/20 flex flex-col sm:flex-row items-center justify-between px-8 max-w-7xl mx-auto gap-4">
+        <div>© {new Date().getFullYear()} Zentrio AI Corp. All rights reserved.</div>
+        <div className="flex space-x-6">
+          <a href="/privacy-policy" className="hover:text-indigo-400">Privacy Policy</a>
+          <a href="/terms-of-service" className="hover:text-indigo-400">Terms of Service</a>
+          <a href="/refund-policy" className="hover:text-indigo-400">Refund Policy</a>
+        </div>
       </footer>
     </div>
   );

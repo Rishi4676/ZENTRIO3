@@ -1002,7 +1002,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       setCurrentUser(clientUser);
       setUsers(prev => [...prev.filter(u => u.email !== clientUser.email), clientUser]);
       setCurrentPage('client-dashboard');
-      addNotification('Successfully registered', 'success');
+      addNotification('Login successful', 'success');
       return { success: true };
     } catch (err: any) {
       return { success: false, error: err.message || 'Google sign-in failed.' };
