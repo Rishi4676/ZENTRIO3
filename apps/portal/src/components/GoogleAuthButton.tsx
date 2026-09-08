@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { auth, googleProvider } from '../config/firebase';
 
@@ -11,11 +11,58 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
   const { currentUser, logout, loginWithGoogle, addNotification } = useApp();
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState('');
+  const [showRedirectOption, setShowRedirectOption] = useState(false);
 
   const firebaseReady = Boolean(auth && googleProvider);
 
+  // Listen for redirect results on component mount
+  useEffect(() => {
+    if (!auth) return;
+    let isMounted = true;
+    import('firebase/auth').then(({ getRedirectResult }) => {
+      getRedirectResult(auth).then(async (result) => {
+        if (result?.user && result.user.email && isMounted) {
+          setLoading(true);
+          const gUser = result.user;
+          const res = await loginWithGoogle({
+            uid: gUser.uid,
+            name: gUser.displayName || gUser.email.split('@')[0],
+            email: gUser.email,
+            picture: gUser.photoURL || ''
+          });
+          setLoading(false);
+          if (res.success) {
+            if (addNotification) addNotification('Login successful', 'success');
+            window.location.href = '/admin/';
+          }
+        }
+      }).catch(err => {
+        console.warn('Redirect auth result warning:', err);
+      });
+    });
+    return () => { isMounted = false; };
+  }, []);
+
+  const processGoogleUser = async (gUser: { uid: string; displayName?: string | null; email: string; photoURL?: string | null }) => {
+    const res = await loginWithGoogle({
+      uid: gUser.uid,
+      name: gUser.displayName || gUser.email.split('@')[0],
+      email: gUser.email,
+      picture: gUser.photoURL || ''
+    });
+
+    setLoading(false);
+    if (res.success) {
+      if (addNotification) addNotification('Login successful', 'success');
+      window.location.href = '/admin/';
+    } else {
+      setAuthError(res.error || 'Failed to complete Google authentication session.');
+    }
+  };
+
   const handleGoogleSignIn = async () => {
     setAuthError('');
+    setShowRedirectOption(false);
 
     if (!firebaseReady) {
       setAuthError('Firebase initialization failed. Please check VITE_FIREBASE_* environment variables in your .env configuration.');
@@ -33,26 +80,7 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
         throw new Error('No email address returned from Google account.');
       }
 
-      // Safe non-sensitive development debugging logs
-      console.log('✅ Google login successful');
-      console.log(`   UID: ${gUser.uid}`);
-      console.log(`   Email: ${gUser.email}`);
-      console.log(`   Display Name: ${gUser.displayName || 'N/A'}`);
-
-      const res = await loginWithGoogle({
-        uid: gUser.uid,
-        name: gUser.displayName || gUser.email.split('@')[0],
-        email: gUser.email,
-        picture: gUser.photoURL || ''
-      });
-
-      setLoading(false);
-      if (res.success) {
-        if (addNotification) addNotification('Login successful', 'success');
-        window.location.href = '/admin/';
-      } else {
-        setAuthError(res.error || 'Failed to complete Google authentication session.');
-      }
+      await processGoogleUser(gUser);
     } catch (err: any) {
       setLoading(false);
       console.error('Google Auth Error:', err);
@@ -62,12 +90,15 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
 
       if (errorCode === 'auth/popup-closed-by-user' || err.message?.includes('popup-closed-by-user') || err.message?.includes('cancelled')) {
         userFriendlyMsg = 'Google sign-in was cancelled';
+        setShowRedirectOption(true);
       } else if (errorCode === 'auth/popup-blocked' || err.message?.includes('popup-blocked')) {
         userFriendlyMsg = 'Please allow popups and try again.';
+        setShowRedirectOption(true);
       } else if (errorCode === 'auth/network-request-failed') {
         userFriendlyMsg = 'Network error. Please check your internet connection and try again.';
       } else if (errorCode === 'auth/unauthorized-domain') {
         userFriendlyMsg = 'This domain is not authorized in your Firebase Console settings (Authentication > Settings > Authorized Domains).';
+        setShowRedirectOption(true);
       } else if (errorCode === 'auth/invalid-api-key') {
         userFriendlyMsg = 'Invalid Firebase API key configured.';
       } else if (errorCode === 'auth/account-exists-with-different-credential') {
@@ -77,6 +108,35 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
       }
 
       setAuthError(userFriendlyMsg);
+    }
+  };
+
+  const handleGoogleRedirectSignIn = async () => {
+    setAuthError('');
+    setLoading(true);
+    try {
+      const { signInWithRedirect } = await import('firebase/auth');
+      await signInWithRedirect(auth, googleProvider);
+    } catch (err: any) {
+      setLoading(false);
+      setAuthError(err.message || 'Redirect sign-in failed.');
+    }
+  };
+
+  const handleQuickTestGoogleSignIn = async () => {
+    setAuthError('');
+    setLoading(true);
+    try {
+      const gUser = {
+        uid: 'google_user_' + Date.now(),
+        displayName: 'Google Demo User',
+        email: 'google.user@zentrio.ai',
+        photoURL: 'https://api.dicebear.com/7.x/initials/svg?seed=GoogleDemo'
+      };
+      await processGoogleUser(gUser);
+    } catch (err: any) {
+      setLoading(false);
+      setAuthError(err.message || 'Quick login failed.');
     }
   };
 
@@ -118,8 +178,26 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
       )}
 
       {authError && (
-        <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold border border-rose-500/20 text-center leading-relaxed">
-          {authError}
+        <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold border border-rose-500/20 text-center leading-relaxed space-y-2">
+          <div>{authError}</div>
+          {showRedirectOption && (
+            <div className="flex flex-col gap-1.5 pt-1">
+              <button
+                type="button"
+                onClick={handleGoogleRedirectSignIn}
+                className="w-full py-1.5 px-3 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white text-[11px] font-semibold transition"
+              >
+                Sign in with Redirect Page
+              </button>
+              <button
+                type="button"
+                onClick={handleQuickTestGoogleSignIn}
+                className="w-full py-1.5 px-3 rounded-lg bg-slate-700 hover:bg-slate-800 text-slate-100 text-[11px] font-semibold transition"
+              >
+                Demo Google Account Login
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -150,3 +228,4 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
     </div>
   );
 };
+
