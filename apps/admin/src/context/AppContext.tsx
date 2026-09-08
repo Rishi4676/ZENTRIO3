@@ -155,14 +155,14 @@ export const DEFAULT_USERS: User[] = [
     joinedDate: '2024-11-01'
   },
   {
-    id: 'ai_worker_agent',
-    name: 'Zentrio AI Autonomous Agent',
-    email: 'ai.agent@zentrio.ai',
+    id: 'zenora_w4',
+    name: 'Zenora',
+    email: 'zenora@zentrio.ai',
     role: 'worker',
-    avatar: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=200',
+    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200',
     performanceScore: 99,
-    salary: 0,
-    joinedDate: '2026-01-01'
+    salary: 18500,
+    joinedDate: '2011-04-12'
   },
   {
     id: 'client@company.com',
@@ -353,6 +353,17 @@ const DEFAULT_TASKS: WorkerTask[] = [
     priority: 'high',
     status: 'completed',
     deadline: '2026-07-05'
+  },
+  {
+    id: 'TSK-104',
+    workerId: 'zenora_w4',
+    projectId: 'PRJ-8012',
+    projectTitle: 'AI Neural Core Architecture',
+    title: 'Lead AI Systems Engineering & 15-Yr Pipeline Optimization',
+    description: 'Lead architect designing high-throughput neural automation pipelines, real-time socket clusters, and 99.99% SLA resilience.',
+    priority: 'high',
+    status: 'in_progress',
+    deadline: '2026-09-30'
   }
 ];
 

@@ -38,7 +38,10 @@ const LOCAL_CREDENTIALS: Record<string, { email: string; name: string; role: 'ad
   'rishi@zentrio.ai': { email: 'rishi@zentrio.ai', name: 'Rishigesh', role: 'worker', passwords: ['rishi@zentrio', 'Worker@2026#'] },
   'pushparaj_w3': { email: 'pushpa.r@zentrio.ai', name: 'Pushparaj', role: 'worker', passwords: ['pushpa@zentrio', 'Worker@2026#'] },
   'w3': { email: 'pushpa.r@zentrio.ai', name: 'Pushparaj', role: 'worker', passwords: ['pushpa@zentrio', 'Worker@2026#'] },
-  'pushpa.r@zentrio.ai': { email: 'pushpa.r@zentrio.ai', name: 'Pushparaj', role: 'worker', passwords: ['pushpa@zentrio', 'Worker@2026#'] }
+  'pushpa.r@zentrio.ai': { email: 'pushpa.r@zentrio.ai', name: 'Pushparaj', role: 'worker', passwords: ['pushpa@zentrio', 'Worker@2026#'] },
+  'zenora_w4': { email: 'zenora@zentrio.ai', name: 'Zenora', role: 'worker', passwords: ['zenora@zentrio', 'Worker@2026#'] },
+  'w4': { email: 'zenora@zentrio.ai', name: 'Zenora', role: 'worker', passwords: ['zenora@zentrio', 'Worker@2026#'] },
+  'zenora@zentrio.ai': { email: 'zenora@zentrio.ai', name: 'Zenora', role: 'worker', passwords: ['zenora@zentrio', 'Worker@2026#'] }
 };
 
 export const AuthService = {
