@@ -4,7 +4,7 @@
   "outputDirectory": ".",
   "functions": {
     "api/index.js": {
-      "includeFiles": "{apps/website/**,apps/admin/dist/**,apps/portal/dist/**,database/backups/**}"
+      "includeFiles": "apps/**"
     }
   },
   "headers": [
