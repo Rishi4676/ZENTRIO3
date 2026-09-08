@@ -222,6 +222,34 @@ export const DEFAULT_PROJECTS: Project[] = [
     ]
   },
   {
+    id: 'PRJ-9901',
+    title: 'Market.in Rapid Marketplace Platform',
+    category: 'Rapid 1-Day Full-Stack Deployment',
+    description: 'High-speed 1-day deployment of Market.in marketplace platform by Principal Architect Zenora. Features real-time catalog, payment gateway integration, responsive UI, and automated CI/CD pipeline.',
+    techRequired: ['React', 'TypeScript', 'Node.js', 'Tailwind CSS', 'Razorpay', 'Vercel'],
+    budget: 18000,
+    deadline: '2026-09-08',
+    clientId: 'client@company.com',
+    clientName: 'John Smith',
+    clientCompany: 'NexusCorp',
+    assignedWorkerId: 'zenora_w4',
+    assignedWorkerName: 'Zenora (Principal AI Architect)',
+    status: 'completed',
+    progress: 100,
+    createdAt: '2026-09-08',
+    milestones: [
+      { id: 'm1', title: '1-Day Rapid Architecture & DB Schema', status: 'completed' },
+      { id: 'm2', title: 'Frontend Marketplace UI & Product Catalog', status: 'completed' },
+      { id: 'm3', title: 'Payment Gateway & Order Checkout Sync', status: 'completed' },
+      { id: 'm4', title: 'Production Vercel Cloud Deployment', status: 'completed' }
+    ],
+    deliverables: [
+      { id: 'd1', name: 'Market.in Production Source Package (Build_v1.0.zip)', url: 'https://github.com/Rishi4676/ZENTRIO3', uploadedAt: '2026-09-08', uploadedBy: 'Zenora' },
+      { id: 'd2', name: 'Live Market.in Staging Deployment Link', url: 'http://localhost:3000', uploadedAt: '2026-09-08', uploadedBy: 'Zenora' }
+    ],
+    additionalNotes: '1-Day Single-Day Delivery executed by Zenora (15+ Years Seniority).'
+  },
+  {
     id: 'PRJ-3199',
     title: 'Apex Mobile Analytics App',
     category: 'Mobile App Development',
