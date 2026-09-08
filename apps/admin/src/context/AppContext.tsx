@@ -380,22 +380,24 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     if (!authLoading) {
-      if (user && userProfile) {
+      if (user) {
+        const uEmail = user.email || userProfile?.email || '';
+        const uName = user.displayName || userProfile?.username || uEmail.split('@')[0] || 'Google User';
+        const uRole = (userProfile?.role as UserRole) || 'client';
         const clientUser: User = {
-          id: userProfile.role === 'admin' ? 'ADMIN001' : userProfile.email,
-          name: userProfile.username,
-          email: userProfile.email,
-          role: userProfile.role as UserRole,
-          companyName: userProfile.companyName || '',
-          clientId: userProfile.companyName || '',
-          mobile: userProfile.mobile || '',
-          country: userProfile.country || '',
-          state: userProfile.state || '',
-          city: userProfile.city || '',
-          avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(userProfile.username)}`
+          id: uRole === 'admin' ? 'ADMIN001' : uEmail,
+          name: uName,
+          email: uEmail,
+          role: uRole,
+          companyName: userProfile?.companyName || '',
+          clientId: userProfile?.companyName || '',
+          mobile: userProfile?.mobile || '',
+          country: userProfile?.country || '',
+          state: userProfile?.state || '',
+          city: userProfile?.city || '',
+          avatar: user.photoURL || `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(uName)}`
         };
         setCurrentUser(clientUser);
-        localStorage.setItem('current_user', JSON.stringify(clientUser));
       } else {
         const saved = sessionStorage.getItem('current_user') || localStorage.getItem('current_user');
         if (saved) {

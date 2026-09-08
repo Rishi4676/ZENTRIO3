@@ -56,7 +56,7 @@ export const PortalSelector: React.FC = () => {
         onCanPlay={(e) => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
         onLoadedData={(e) => { e.currentTarget.muted = true; e.currentTarget.play().catch(() => {}); }}
         style={{ transform: 'translateZ(0)', willChange: 'transform' }}
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-55 filter contrast-125 brightness-90 pointer-events-none"
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-100 pointer-events-none"
       >
         <source src="/background-video.mp4" type="video/mp4" />
         <source src="/videos/background-video.mp4" type="video/mp4" />

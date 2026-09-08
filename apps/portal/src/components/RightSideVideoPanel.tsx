@@ -27,8 +27,8 @@ export const RightSideVideoPanel: React.FC = () => {
         <source src="/background-video.mp4" type="video/mp4" />
       </video>
 
-      {/* Dark Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/50 to-slate-950/30 z-10 pointer-events-none" />
+      {/* Clear Video View Without Gradient */}
+      <div className="absolute inset-0 z-10 pointer-events-none" />
 
       {/* Top Header Badge */}
       <div className="relative z-20 flex items-center justify-between">

@@ -8,19 +8,23 @@ interface GoogleAuthButtonProps {
 }
 
 export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'signin' }) => {
-  const { loginWithGoogle } = useApp();
+  const { currentUser, logout, loginWithGoogle } = useApp();
   const [loading, setLoading] = useState(false);
   const [authError, setAuthError] = useState('');
 
+  const firebaseReady = Boolean(auth && googleProvider);
+
   const handleGoogleSignIn = async () => {
     setAuthError('');
+
+    if (!firebaseReady) {
+      setAuthError('Firebase initialization failed. Please check VITE_FIREBASE_* environment variables in your .env configuration.');
+      return;
+    }
+
     setLoading(true);
 
     try {
-      if (!auth || !googleProvider) {
-        throw new Error('Firebase Authentication is not initialized. Please verify VITE_FIREBASE_* environment variables in .env');
-      }
-
       const { signInWithPopup } = await import('firebase/auth');
       const userCredential = await signInWithPopup(auth, googleProvider);
       const gUser = userCredential.user;
@@ -28,6 +32,12 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
       if (!gUser || !gUser.email) {
         throw new Error('No email address returned from Google account.');
       }
+
+      // Safe non-sensitive development debugging logs
+      console.log('✅ Google login successful');
+      console.log(`   UID: ${gUser.uid}`);
+      console.log(`   Email: ${gUser.email}`);
+      console.log(`   Display Name: ${gUser.displayName || 'N/A'}`);
 
       const res = await loginWithGoogle({
         uid: gUser.uid,
@@ -69,8 +79,43 @@ export const GoogleAuthButton: React.FC<GoogleAuthButtonProps> = ({ mode = 'sign
     }
   };
 
+  if (currentUser) {
+    return (
+      <div className="w-full max-w-xs sm:max-w-sm mx-auto p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md space-y-3 overflow-hidden">
+        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+          <div className="flex items-center space-x-2 text-indigo-600 dark:text-indigo-400 font-bold text-xs uppercase tracking-wider">
+            <span className="shrink-0">👤</span>
+            <span className="truncate">Google Account</span>
+          </div>
+          {currentUser.id && (
+            <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 truncate max-w-[140px]">
+              ID: {currentUser.id}
+            </span>
+          )}
+        </div>
+        <div className="space-y-0.5 text-left min-w-0">
+          <div className="font-bold text-sm text-slate-800 dark:text-slate-100 truncate">{currentUser.name}</div>
+          <div className="text-xs text-slate-500 dark:text-slate-400 font-mono truncate break-all">{currentUser.email}</div>
+        </div>
+        <button
+          type="button"
+          onClick={() => logout()}
+          className="w-full py-2 px-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-500/30 text-xs font-bold transition duration-200 cursor-pointer"
+        >
+          Logout
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full max-w-xs mx-auto space-y-2">
+      {!firebaseReady && (
+        <div className="p-3 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 text-xs font-medium border border-amber-500/20 text-center leading-relaxed">
+          ⚠️ Firebase initialization failed. Please check VITE_FIREBASE_* environment variables.
+        </div>
+      )}
+
       {authError && (
         <div className="p-2.5 rounded-xl bg-rose-500/10 text-rose-600 dark:text-rose-400 text-xs font-semibold border border-rose-500/20 text-center leading-relaxed">
           {authError}
